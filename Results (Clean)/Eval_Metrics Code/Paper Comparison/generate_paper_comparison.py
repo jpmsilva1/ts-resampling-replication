@@ -4,15 +4,8 @@ that publishes a checkable number, compute this project's own equivalent
 from Results Data/raw_iterations_by_dataset_v2/*.csv and set it beside the
 paper's published value.
 
-This is a comparison against the CURRENT run (pre- optimal-parameter-fix,
-i.e. still using the #EXAMPLE PARAMETRIZATION placeholder in
-src/adapted/Exps.R at the time this was generated -- the fix has been
-landed in Exps.R but the cluster rerun that would produce corrected data
-has not happened yet). Re-running this generator after that rerun is what
-will show whether the parameter fix closed the gap; see CLAUDE.md
-2026-09-03 and CHANGES.md Section 10.
-
-Output: one .tex + one .txt per comparison, in
+Output: one .tex (booktabs table, matching the F1/RMSE/SERA table style)
+and one .txt (plain-text dump, unchanged) per comparison, in
         Results (Clean)/Evaluation Metrics/Latex Tables/Paper Comparison/
 """
 import sys
@@ -21,7 +14,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from tables_common import FAMILY_LABELS, LATEX_DIR
+from tables_common import FAMILY_LABELS, LATEX_DIR, table_star
 
 from paired_comparisons import ALPHA, DATA_DIR, dataset_ids, wl_vs_reference, _load_all
 
@@ -42,53 +35,31 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 N_OURS = len(list(DATA_DIR.glob("DS??_*.csv")))
 
 
-def _fmt_cell(ours, paper, n_ours=N_OURS, n_paper=TOTAL_DATASETS_PAPER):
+def _wl_cell(wl, n) -> str:
+    """One Win/Loss/sig cell: 'W(sigW)/L(sigL) [P%W]'. Shared by every
+    table below so ours/paper cells render identically side by side."""
+    w, sw, l, sl, _ = wl
+    return rf"{w}({sw})/{l}({sl}) [{100*w/n:.0f}\%W]" if n else "--"
+
+
+def _tex(code: str) -> str:
+    """Strategy codes (U_B, O_TPhi, ...) contain a literal underscore --
+    escape it for LaTeX text mode (\\texttt{U_B} is a compile error)."""
+    return code.replace("_", r"\_")
+
+
+def _txt_cell(ours, paper, n_ours=N_OURS, n_paper=TOTAL_DATASETS_PAPER):
     ow, osw, ol, osl, _ = ours
     pw, psw, pl, psl = paper
     return (f"{ow}({osw})/{ol}({osl}) [{100*ow/n_ours:.0f}%W]  vs.  "
             f"paper {pw}({psw})/{pl}({psl}) [{100*pw/n_paper:.0f}%W]")
 
 
-def _latex_escape(s: str) -> str:
-    for ch in "&%#_":
-        s = s.replace(ch, "\\" + ch)
-    return s
+def _write_txt(name: str, lines: list[str]):
+    (OUT_DIR / f"{name}.txt").write_text("\n".join(lines) + "\n")
 
 
-# Report text width (letterpaper, 1in margins) and the measured advance width of
-# one `newtxtt` character as a fraction of the font size -- calibrated against a
-# real overfull-hbox report from the report build, not guessed.  The size ladder
-# is largest-first; the first size whose widest line still fits is used, so a
-# 153-column dump lands on \tiny and a 90-column one stays readable.
-_TEXTWIDTH_PT = 469.0
-_TT_EM_FRACTION = 0.60
-_SIZE_LADDER = [(10.0, r"\small"), (9.0, r"\footnotesize"),
-                (8.0, r"\scriptsize"), (5.0, r"\tiny")]
-
-
-def _fitting_size(lines: list[str]) -> str:
-    widest = max((len(ln) for ln in lines), default=0)
-    for pt, cmd in _SIZE_LADDER:
-        if widest * pt * _TT_EM_FRACTION <= _TEXTWIDTH_PT:
-            return cmd
-    return _SIZE_LADDER[-1][1]
-
-
-def _write(name: str, title: str, lines: list[str]):
-    txt = "\n".join(lines) + "\n"
-    (OUT_DIR / f"{name}.txt").write_text(txt)
-
-    # NOT a float: these bodies run to 150 verbatim lines, which no float can
-    # hold.  `\captionof` (caption package) still gives a numbered, referencable
-    # caption, and the verbatim body is then free to break across pages.
-    tex = (
-        r"\begingroup" "\n"
-        rf"\captionof{{table}}{{{_latex_escape(title)}}}" "\n"
-        rf"\label{{tab:exp002_cmp_{name}}}" "\n"
-        f"{_fitting_size(lines)}\n"
-        r"\begin{verbatim}" "\n" + "\n".join(lines) + "\n" r"\end{verbatim}" "\n"
-        r"\endgroup" "\n"
-    )
+def _write_tex(name: str, tex: str):
     (OUT_DIR / f"{name}.tex").write_text(tex)
     print(f"Wrote {OUT_DIR / (name + '.tex')} and .txt")
 
@@ -98,16 +69,42 @@ def _write(name: str, title: str, lines: list[str]):
 # ---------------------------------------------------------------------------
 def gen_table3():
     lines = [f"Table 3 equivalent -- resampling vs. baseline, ours ({N_OURS} datasets) vs. paper ({TOTAL_DATASETS_PAPER})  [alpha={ALPHA}]", ""]
-    for code, suffix in STRATEGY_CODE_MAP.items():
-        if code not in TABLE3:
-            continue
+    codes = [c for c in STRATEGY_CODE_MAP if c in TABLE3]
+    cells = {}  # (code, fam) -> (ours_wl, paper_wl)
+    for code in codes:
+        suffix = STRATEGY_CODE_MAP[code]
         lines.append(f"{code}:")
         for fam in FAMILIES:
             ours = wl_vs_reference(fam, suffix, None)
             paper = TABLE3[code][fam]
-            lines.append(f"  {FAMILY_LABELS[fam]:24s} {_fmt_cell(ours, paper)}")
+            cells[(code, fam)] = (ours, paper)
+            lines.append(f"  {FAMILY_LABELS[fam]:24s} {_txt_cell(ours, paper)}")
         lines.append("")
-    _write("cmp_table3", "Table 3 replication check: resampling vs. baseline", lines)
+    _write_txt("cmp_table3", lines)
+
+    header = (r"\textbf{Family} & " + " & ".join(
+        rf"\multicolumn{{2}}{{c}}{{\textbf{{{_tex(code)}}}}}" for code in codes))
+    subheader = " & " + " & ".join(r"Ours & Paper" for _ in codes)
+    rows = []
+    for fam in FAMILIES:
+        cols = []
+        for code in codes:
+            ours, paper = cells[(code, fam)]
+            pw, psw, pl, psl = paper
+            cols.append(_wl_cell(ours, N_OURS))
+            cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+        rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
+    body = subheader + r" \\" + "\n" + "\n".join(rows)
+    tex = table_star(
+        caption=r"\textbf{Table 3 replication check --- resampling vs.\ baseline}, "
+                rf"Win(sigWin)/Loss(sigLoss) [\%W] per family, ours ({N_OURS} datasets) "
+                rf"vs.\ the paper ({TOTAL_DATASETS_PAPER}), $\alpha={ALPHA}$.",
+        label="tab:exp002_cmp_cmp_table3",
+        col_spec="l" + "cc" * len(codes),
+        header=header,
+        body=body,
+    )
+    _write_tex("cmp_table3", tex)
 
 
 # ---------------------------------------------------------------------------
@@ -115,6 +112,7 @@ def gen_table3():
 # ---------------------------------------------------------------------------
 def gen_table4():
     lines = [f"Table 4 equivalent -- biased variant vs. its own biased base, ours vs. paper  [alpha={ALPHA}]", ""]
+    cells = {}  # (variant, fam) -> (ours_wl, paper_wl)
     for variant, base_code in TABLE4_BASE.items():
         variant_suffix = STRATEGY_CODE_MAP[variant]
         base_suffix = STRATEGY_CODE_MAP[base_code]
@@ -122,9 +120,57 @@ def gen_table4():
         for fam in FAMILIES:
             ours = wl_vs_reference(fam, variant_suffix, base_suffix)
             paper = TABLE4[variant][fam]
-            lines.append(f"  {FAMILY_LABELS[fam]:24s} {_fmt_cell(ours, paper)}")
+            cells[(variant, fam)] = (ours, paper)
+            lines.append(f"  {FAMILY_LABELS[fam]:24s} {_txt_cell(ours, paper)}")
         lines.append("")
-    _write("cmp_table4", "Table 4 replication check: biased variants vs. biased base", lines)
+    _write_txt("cmp_table4", lines)
+
+    # One table per resampling family (Under/Over/SMOTE), each with its two
+    # biased variants (T, TPhi) side by side -- keeps every table the same
+    # width as Table 3's rather than one 13-column table.
+    groups = [("Undersampling", ["U_T", "U_TPhi"], "U_B"),
+              ("Oversampling", ["O_T", "O_TPhi"], "O_B"),
+              ("SMOTE", ["SM_T", "SM_TPhi"], "SM_B")]
+    group_tex = []
+    for group_name, variants, base_code in groups:
+        header = (r"\textbf{Family} & " + " & ".join(
+            rf"\multicolumn{{2}}{{c}}{{\textbf{{{_tex(v)}}} vs.\ {_tex(base_code)}}}" for v in variants))
+        subheader = " & " + " & ".join(r"Ours & Paper" for _ in variants)
+        rows = []
+        for fam in FAMILIES:
+            cols = []
+            for v in variants:
+                ours, paper = cells[(v, fam)]
+                pw, psw, pl, psl = paper
+                cols.append(_wl_cell(ours, N_OURS))
+                cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+            rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
+        body = subheader + r" \\" + "\n" + "\n".join(rows)
+        tex = table_star(
+            caption=rf"\textbf{{Table 4 replication check --- {group_name}}}, "
+                    r"biased variant vs.\ its own biased base, Win(sigWin)/Loss(sigLoss) "
+                    rf"[\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
+            label=f"tab:exp002_cmp_cmp_table4_{group_name.lower()}",
+            col_spec="l" + "cc" * len(variants),
+            header=header,
+            body=body,
+            resize=None,
+        )
+        if group_name == groups[0][0]:
+            # Backward-compat: the report's prose \ref's the whole Table 4
+            # group under one bare label -- carry it on the first sub-table.
+            tex = tex.replace(
+                f"\\label{{tab:exp002_cmp_cmp_table4_{group_name.lower()}}}",
+                f"\\label{{tab:exp002_cmp_cmp_table4_{group_name.lower()}}}\n"
+                r"\label{tab:exp002_cmp_cmp_table4}",
+            )
+        group_tex.append(tex)
+
+    # A single combined .tex (all three groups stacked) keeps one \input site
+    # working for callers that expect one file, matching the Wins_Loss
+    # f1_sera_table_best_counts.tex convention of stacked table* blocks.
+    combined = "\n\n".join(group_tex)
+    _write_tex("cmp_table4", combined)
 
 
 # ---------------------------------------------------------------------------
@@ -133,6 +179,7 @@ def gen_table4():
 def gen_table5():
     lines = [f"Table 5 equivalent -- every strategy vs. ARIMA / BDES, ours vs. paper  [alpha={ALPHA}]",
              "Never checked before this audit.", ""]
+    cells = {}  # (fam, code, ref) -> (ours_wl, paper_wl)
     for fam in FAMILIES:
         lines.append(f"{FAMILY_LABELS[fam]}:")
         for code, suffix in STRATEGY_CODE_MAP.items():
@@ -143,9 +190,46 @@ def gen_table5():
             for ref_name, ref_wf_full in (("ARIMA", "arima"), ("BDES", "BDES")):
                 ours = _wl_vs_fixed_workflow(fam, suffix, ref_wf_full)
                 paper = TABLE5[fam][code][ref_name]
-                lines.append(f"  {code:10s} vs {ref_name:6s} {_fmt_cell(ours, paper)}")
+                cells[(fam, code, ref_name)] = (ours, paper)
+                lines.append(f"  {code:10s} vs {ref_name:6s} {_txt_cell(ours, paper)}")
         lines.append("")
-    _write("cmp_table5", "Table 5 replication check: every strategy vs. ARIMA/BDES", lines)
+    _write_txt("cmp_table5", lines)
+
+    codes = [c for c in STRATEGY_CODE_MAP if c in TABLE5["lm"]]
+    header = r"\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}}"
+    subheader = r" & Ours & Paper & Ours & Paper"
+    per_family_tex = []
+    for fam in FAMILIES:
+        rows = []
+        for code in codes:
+            cols = []
+            for ref in ("ARIMA", "BDES"):
+                ours, paper = cells[(fam, code, ref)]
+                pw, psw, pl, psl = paper
+                cols.append(_wl_cell(ours, N_OURS))
+                cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+            rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
+        body = subheader + r" \\" + "\n" + "\n".join(rows)
+        tex = table_star(
+            caption=rf"\textbf{{Table 5 replication check --- {FAMILY_LABELS[fam]}}}, "
+                    r"every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, "
+                    rf"Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
+            label=f"tab:exp002_cmp_cmp_table5_{fam}",
+            col_spec="lcccc",
+            header=header,
+            body=body,
+            resize=None,
+        )
+        if fam == FAMILIES[0]:
+            # Backward-compat: the report's prose \ref's the whole Table 5
+            # group under one bare label -- carry it on the first sub-table.
+            tex = tex.replace(
+                f"\\label{{tab:exp002_cmp_cmp_table5_{fam}}}",
+                f"\\label{{tab:exp002_cmp_cmp_table5_{fam}}}\n"
+                r"\label{tab:exp002_cmp_cmp_table5}",
+            )
+        per_family_tex.append(tex)
+    _write_tex("cmp_table5", "\n\n".join(per_family_tex))
 
 
 def _wl_vs_fixed_workflow(family: str, target_suffix: str, ref_workflow_family: str):
@@ -182,16 +266,44 @@ def gen_table6():
         "",
     ]
     df = _load_all()
+    row_vals = {}  # code -> {ds: (ours, paper)}
     for code, values in TABLE6_SVM_F1.items():
         wf = "mc.svm" if code == "svm" else f"mc.svm_{STRATEGY_CODE_MAP[code]}"
         row = [f"  {code:10s}"]
+        row_vals[code] = {}
         for ds in ("DS04", "DS10", "DS12"):
             sub = df[(df.dataset_id == ds) & (df.workflow == wf)]
             ours_mean = sub["F1"].mean() if len(sub) else float("nan")
             paper_val = values[ds]
+            row_vals[code][ds] = (ours_mean, paper_val)
             row.append(f"{ds}: ours={ours_mean:.3f} paper={paper_val:.3f}")
         lines.append("  ".join(row))
-    _write("cmp_table6", "Table 6 replication check: absolute SVM F1 on DS4/DS10/DS12", lines)
+    _write_txt("cmp_table6", lines)
+
+    header = (r"\textbf{Strategy} & \multicolumn{2}{c}{\textbf{DS04}} & "
+              r"\multicolumn{2}{c}{\textbf{DS10}} & \multicolumn{2}{c}{\textbf{DS12}}")
+    subheader = r" & Ours & Paper & Ours & Paper & Ours & Paper"
+    rows = []
+    for code, vals in row_vals.items():
+        cols = []
+        for ds in ("DS04", "DS10", "DS12"):
+            ours_mean, paper_val = vals[ds]
+            cols.append(f"{ours_mean:.3f}")
+            cols.append(f"{paper_val:.3f}")
+        rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
+    body = subheader + r" \\" + "\n" + "\n".join(rows)
+    tex = table_star(
+        caption=r"\textbf{Table 6 replication check --- absolute SVM $F_1^\phi$} on "
+                r"DS04/DS10/DS12, ours vs.\ paper (paper jointly optimizes "
+                r"hyperparameters \emph{and} resampling percentages over 10 MC reps; "
+                r"anchors magnitude, not an exact target).",
+        label="tab:exp002_cmp_cmp_table6",
+        col_spec="lcccccc",
+        header=header,
+        body=body,
+        resize=None,
+    )
+    _write_tex("cmp_table6", tex)
 
 
 # ---------------------------------------------------------------------------
@@ -210,6 +322,7 @@ def gen_precision_recall():
         "",
     ]
     df = _load_all()
+    rows = []
     for fam in FAMILIES:
         fam_df = df[df.workflow.str.startswith(f"mc.{fam}")]
         base = fam_df[fam_df.workflow == f"mc.{fam}"]
@@ -224,7 +337,29 @@ def gen_precision_recall():
             f"mean resampled delta: prec={d_prec:+.3f} rec={d_rec:+.3f} | "
             f"baseline prec~0 in {n_zero}/{len(zero_prec_ds)} datasets"
         )
-    _write("cmp_precision_recall", "Precision/recall delta check vs. paper Sec 5.1 claim", lines)
+        rows.append((FAMILY_LABELS[fam], base_prec, base_rec, d_prec, d_rec, n_zero, len(zero_prec_ds)))
+    _write_txt("cmp_precision_recall", lines)
+
+    header = (r"\textbf{Family} & \textbf{Baseline Prec} & \textbf{Baseline Rec} & "
+              r"\textbf{$\Delta$Prec} & \textbf{$\Delta$Rec} & \textbf{Baseline $\approx$0 (of 24)}")
+    body_rows = []
+    for fam_label, base_prec, base_rec, d_prec, d_rec, n_zero, n_total in rows:
+        body_rows.append(
+            rf"{fam_label} & {base_prec:.3f} & {base_rec:.3f} & "
+            rf"{d_prec:+.3f} & {d_rec:+.3f} & {n_zero}/{n_total} \\"
+        )
+    tex = table_star(
+        caption=r"\textbf{Precision/recall delta vs.\ baseline, by family} --- checks "
+                r"the paper's claim (Sec.\ 5.1) that $\Fphi$ gains come chiefly from "
+                r"precision. Delta = resampled mean $-$ baseline mean, averaged over "
+                rf"all 9 strategies and {N_OURS} datasets.",
+        label="tab:exp002_cmp_cmp_precision_recall",
+        col_spec="lccccc",
+        header=header,
+        body="\n".join(body_rows),
+        resize=None,
+    )
+    _write_tex("cmp_precision_recall", tex)
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +377,27 @@ def gen_pct_rare():
     lines.append("test_phi_matches_paper_pct_rare, MAE 0.99pp post-fix -- not recomputed")
     lines.append("here to avoid a second phi implementation; this file is the reference")
     lines.append("values only.)")
-    _write("cmp_pct_rare", "Table 1 %Rare reference values (see SERA Metric for the check)", lines)
+    _write_txt("cmp_pct_rare", lines)
+
+    # Two 12-row columns side by side (Dataset | %Rare, twice) rather than one
+    # long 24-row column -- same space-saving convention as the datasets table.
+    ids = sorted(PCT_RARE)
+    left, right = ids[:12], ids[12:]
+    header = r"\textbf{Dataset} & \textbf{Paper \%Rare} & \textbf{Dataset} & \textbf{Paper \%Rare}"
+    rows = []
+    for l, r in zip(left, right):
+        rows.append(rf"{l} & {PCT_RARE[l]:.1f}\% & {r} & {PCT_RARE[r]:.1f}\% \\")
+    tex = table_star(
+        caption=r"\textbf{Table 1 \%Rare reference values} (paper) --- regression guard "
+                r"for the relevance function $\phi$; see SERA Metric's own test for the "
+                r"reconstructed-$\phi$ comparison (MAE 0.99pp).",
+        label="tab:exp002_cmp_cmp_pct_rare",
+        col_spec="lclc",
+        header=header,
+        body="\n".join(rows),
+        resize=None,
+    )
+    _write_tex("cmp_pct_rare", tex)
 
 
 # ---------------------------------------------------------------------------
@@ -281,6 +436,7 @@ def gen_sensitivity():
         "",
     ]
 
+    loo_rows = []  # (family, code, full, paper_pct, lo, hi, worst_ds, worst_val)
     for fam in FAMILIES:
         lines.append(f"{FAMILY_LABELS[fam]}:")
         for code in _BASELINE_STRATEGIES:
@@ -289,38 +445,116 @@ def gen_sensitivity():
             loo = {ds: _win_pct(fam, suffix, frozenset({ds})) for ds in ids}
             worst = max(loo, key=lambda d: abs(loo[d] - full))
             paper_w, _, _, _ = TABLE3[code][fam]
+            paper_pct = 100 * paper_w / TOTAL_DATASETS_PAPER
             lines.append(
-                f"  {code:7s} full={full:5.1f}%W  (paper {100*paper_w/TOTAL_DATASETS_PAPER:5.1f}%W)  "
+                f"  {code:7s} full={full:5.1f}%W  (paper {paper_pct:5.1f}%W)  "
                 f"LOO range [{min(loo.values()):5.1f}, {max(loo.values()):5.1f}]  "
                 f"most influential: {worst} -> {loo[worst]:5.1f}%W ({loo[worst]-full:+.1f}pp)"
             )
+            loo_rows.append((FAMILY_LABELS[fam], code, full, paper_pct,
+                              min(loo.values()), max(loo.values()), worst, loo[worst] - full))
         lines.append("")
 
     lines += ["", "Leave-one-SOURCE-out (the defensible cut -- whole correlated group removed):", ""]
     sources = sorted({SOURCE_MAP[ds] for ds in ids})
+    source_rows = []  # (family, code, full, {source: pct})
     for fam in FAMILIES:
         lines.append(f"{FAMILY_LABELS[fam]}:")
         for code in _BASELINE_STRATEGIES:
             suffix = STRATEGY_CODE_MAP[code]
             full = _win_pct(fam, suffix, None)
             cells = []
+            src_vals = {}
             for src in sources:
                 drop = frozenset(d for d in ids if SOURCE_MAP[d] == src)
-                cells.append(f"{src}={_win_pct(fam, suffix, drop):.0f}")
+                v = _win_pct(fam, suffix, drop)
+                src_vals[src] = v
+                cells.append(f"{src}={v:.0f}")
             lines.append(f"  {code:7s} full={full:5.1f}%W  " + "  ".join(cells))
+            source_rows.append((FAMILY_LABELS[fam], code, full, src_vals))
         lines.append("")
 
     lines += ["", "Per-dataset detail, SVM only (the family whose Table 3 row still disagrees):", ""]
+    svm_full = {code: _win_pct("svm", STRATEGY_CODE_MAP[code], None) for code in _BASELINE_STRATEGIES}
+    svm_detail = {ds: {} for ds in ids}  # ds -> {code: (pct, shift)}
     for code in _BASELINE_STRATEGIES:
         suffix = STRATEGY_CODE_MAP[code]
-        full = _win_pct("svm", suffix, None)
+        full = svm_full[code]
         lines.append(f"  {code} (full {full:.1f}%W):")
         for ds in ids:
             w = _win_pct("svm", suffix, frozenset({ds}))
+            svm_detail[ds][code] = (w, w - full)
             lines.append(f"    drop {ds}: {w:5.1f}%W ({w-full:+.1f}pp)  [{SOURCE_MAP[ds]}]")
         lines.append("")
+    _write_txt("cmp_sensitivity", lines)
 
-    _write("cmp_sensitivity", "Leave-one-out sensitivity of the Table 3 baseline comparison", lines)
+    # (a) Leave-one-dataset-out summary
+    header_a = (r"\textbf{Family} & \textbf{Strategy} & \textbf{Full \%W} & "
+                r"\textbf{Paper \%W} & \textbf{LOO Range} & \textbf{Most Influential}")
+    rows_a = []
+    for fam_label, code, full, paper_pct, lo, hi, worst, shift in loo_rows:
+        rows_a.append(
+            rf"{fam_label} & \texttt{{{_tex(code)}}} & {full:.1f} & {paper_pct:.1f} & "
+            rf"[{lo:.1f}, {hi:.1f}] & {worst} ({shift:+.1f}pp) \\"
+        )
+    tex_a = table_star(
+        caption=r"\textbf{Leave-one-dataset-out sensitivity of Table 3's baseline "
+                r"comparison} --- diagnostic only, datasets are source-correlated so "
+                r"this is not a variance estimate (see leave-one-source-out below for "
+                r"the defensible cut).",
+        label="tab:exp002_cmp_cmp_sensitivity_loo",
+        col_spec="llcccc",
+        header=header_a,
+        body="\n".join(rows_a),
+    )
+    # Backward-compat: the report's prose \ref's the whole sensitivity
+    # analysis under one bare label -- carry it on this first sub-table.
+    tex_a = tex_a.replace(
+        r"\label{tab:exp002_cmp_cmp_sensitivity_loo}",
+        r"\label{tab:exp002_cmp_cmp_sensitivity_loo}" "\n"
+        r"\label{tab:exp002_cmp_cmp_sensitivity}",
+    )
+
+    # (b) Leave-one-source-out
+    header_b = (r"\textbf{Family} & \textbf{Strategy} & \textbf{Full \%W} & " +
+                " & ".join(rf"\textbf{{{s.replace('_', ' ').title()}}}" for s in sources))
+    rows_b = []
+    for fam_label, code, full, src_vals in source_rows:
+        cells = " & ".join(f"{src_vals[s]:.0f}" for s in sources)
+        rows_b.append(rf"{fam_label} & \texttt{{{_tex(code)}}} & {full:.1f} & {cells} \\")
+    tex_b = table_star(
+        caption=r"\textbf{Leave-one-source-out sensitivity of Table 3's baseline "
+                r"comparison} --- \%W with each of the 7 correlated dataset sources "
+                r"dropped in turn; the clean cut (independent draws), unlike the "
+                r"per-dataset table above.",
+        label="tab:exp002_cmp_cmp_sensitivity_source",
+        col_spec="llc" + "c" * len(sources),
+    header=header_b,
+        body="\n".join(rows_b),
+    )
+
+    # (c) Per-dataset SVM-only detail, one row per dataset, 3 strategies as columns
+    header_c = (r"\textbf{Dataset} & \textbf{Source} & " + " & ".join(
+        rf"\textbf{{{_tex(code)}}} \%W (shift)" for code in _BASELINE_STRATEGIES))
+    rows_c = []
+    for ds in ids:
+        cells = []
+        for code in _BASELINE_STRATEGIES:
+            w, shift = svm_detail[ds][code]
+            cells.append(f"{w:.1f} ({shift:+.1f}pp)")
+        rows_c.append(f"{ds} & {SOURCE_MAP[ds].replace('_', ' ').title()} & " + " & ".join(cells) + r" \\")
+    tex_c = table_star(
+        caption=r"\textbf{Per-dataset detail, SVM only} --- \%W and shift from the "
+                r"full-sample value when that single dataset is excluded, for the "
+                r"three baseline-comparison strategies (the family whose Table 3 row "
+                r"is fragile, per Section~\ref{sec:paper-comparison}).",
+        label="tab:exp002_cmp_cmp_sensitivity_svm",
+        col_spec="llccc",
+        header=header_c,
+        body="\n".join(rows_c),
+    )
+
+    _write_tex("cmp_sensitivity", tex_a + "\n\n" + tex_b + "\n\n" + tex_c)
 
 
 if __name__ == "__main__":

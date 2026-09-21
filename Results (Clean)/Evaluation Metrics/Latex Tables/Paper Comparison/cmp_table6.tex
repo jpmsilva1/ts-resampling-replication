@@ -1,23 +1,26 @@
-\begingroup
-\captionof{table}{Table 6 replication check: absolute SVM F1 on DS4/DS10/DS12}
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 6 replication check --- absolute SVM $F_1^\phi$} on DS04/DS10/DS12, ours vs.\ paper (paper jointly optimizes hyperparameters \emph{and} resampling percentages over 10 MC reps; anchors magnitude, not an exact target).}
 \label{tab:exp002_cmp_cmp_table6}
-\tiny
-\begin{verbatim}
-Table 6 equivalent -- absolute SVM F1_phi, DS4/DS10/DS12, ours vs. paper.
-CAVEAT: paper's Table 6 jointly optimizes cost/gamma AND resampling
-percentages per dataset, using 10 MC reps (not 50) -- anchors magnitude,
-not an exact target. Our numbers use the single per-dataset Table 7
-cost/gamma (not further tuned) and default balanced resampling, 50 reps.
-
-  svm         DS04: ours=0.557 paper=0.584  DS10: ours=0.617 paper=0.638  DS12: ours=0.151 paper=0.554
-  U_B         DS04: ours=0.452 paper=0.668  DS10: ours=0.564 paper=0.652  DS12: ours=0.484 paper=0.610
-  U_T         DS04: ours=0.456 paper=0.659  DS10: ours=0.573 paper=0.643  DS12: ours=0.493 paper=0.614
-  U_TPhi      DS04: ours=0.457 paper=0.651  DS10: ours=0.613 paper=0.647  DS12: ours=0.492 paper=0.630
-  O_B         DS04: ours=0.442 paper=0.653  DS10: ours=0.584 paper=0.651  DS12: ours=0.418 paper=0.611
-  O_T         DS04: ours=0.433 paper=0.650  DS10: ours=0.597 paper=0.652  DS12: ours=0.423 paper=0.615
-  O_TPhi      DS04: ours=0.432 paper=0.651  DS10: ours=0.597 paper=0.652  DS12: ours=0.425 paper=0.611
-  SM_B        DS04: ours=0.423 paper=0.662  DS10: ours=0.583 paper=0.675  DS12: ours=0.461 paper=0.609
-  SM_T        DS04: ours=0.448 paper=0.656  DS10: ours=0.580 paper=0.698  DS12: ours=0.478 paper=0.600
-  SM_TPhi     DS04: ours=0.439 paper=0.649  DS10: ours=0.604 paper=0.721  DS12: ours=0.495 paper=0.620
-\end{verbatim}
-\endgroup
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{DS04}} & \multicolumn{2}{c}{\textbf{DS10}} & \multicolumn{2}{c}{\textbf{DS12}} \\
+\midrule
+ & Ours & Paper & Ours & Paper & Ours & Paper \\
+\texttt{svm} & 0.557 & 0.584 & 0.617 & 0.638 & 0.151 & 0.554 \\
+\texttt{U\_B} & 0.452 & 0.668 & 0.564 & 0.652 & 0.484 & 0.610 \\
+\texttt{U\_T} & 0.456 & 0.659 & 0.573 & 0.643 & 0.493 & 0.614 \\
+\texttt{U\_TPhi} & 0.457 & 0.651 & 0.613 & 0.647 & 0.492 & 0.630 \\
+\texttt{O\_B} & 0.442 & 0.653 & 0.584 & 0.651 & 0.418 & 0.611 \\
+\texttt{O\_T} & 0.433 & 0.650 & 0.597 & 0.652 & 0.423 & 0.615 \\
+\texttt{O\_TPhi} & 0.432 & 0.651 & 0.597 & 0.652 & 0.425 & 0.611 \\
+\texttt{SM\_B} & 0.423 & 0.662 & 0.583 & 0.675 & 0.461 & 0.609 \\
+\texttt{SM\_T} & 0.448 & 0.656 & 0.580 & 0.698 & 0.478 & 0.600 \\
+\texttt{SM\_TPhi} & 0.439 & 0.649 & 0.604 & 0.721 & 0.495 & 0.620 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

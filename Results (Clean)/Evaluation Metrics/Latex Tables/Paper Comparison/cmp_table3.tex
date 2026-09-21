@@ -1,30 +1,23 @@
-\begingroup
-\captionof{table}{Table 3 replication check: resampling vs. baseline}
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 3 replication check --- resampling vs.\ baseline}, Win(sigWin)/Loss(sigLoss) [\%W] per family, ours (24 datasets) vs.\ the paper (24), $\alpha=0.05$.}
 \label{tab:exp002_cmp_cmp_table3}
-\scriptsize
-\begin{verbatim}
-Table 3 equivalent -- resampling vs. baseline, ours (24 datasets) vs. paper (24)  [alpha=0.05]
-
-U_B:
-  Linear Model (LM)        18(18)/6(4) [75%W]  vs.  paper 19(18)/5(4) [79%W]
-  SVM                      9(6)/15(9) [38%W]  vs.  paper 8(6)/16(8) [33%W]
-  MARS                     14(11)/10(7) [58%W]  vs.  paper 15(12)/9(7) [62%W]
-  Random Forest (RF)       17(16)/7(4) [71%W]  vs.  paper 18(17)/6(2) [75%W]
-  CART (RPART)             12(9)/12(2) [50%W]  vs.  paper 12(8)/12(3) [50%W]
-
-O_B:
-  Linear Model (LM)        19(18)/5(3) [79%W]  vs.  paper 18(17)/6(3) [75%W]
-  SVM                      8(7)/16(10) [33%W]  vs.  paper 7(6)/17(10) [29%W]
-  MARS                     16(15)/8(5) [67%W]  vs.  paper 17(17)/7(4) [71%W]
-  Random Forest (RF)       19(13)/5(3) [79%W]  vs.  paper 20(15)/4(1) [83%W]
-  CART (RPART)             11(8)/13(7) [46%W]  vs.  paper 11(9)/13(8) [46%W]
-
-SM_B:
-  Linear Model (LM)        19(19)/5(3) [79%W]  vs.  paper 19(18)/5(3) [79%W]
-  SVM                      7(7)/17(9) [29%W]  vs.  paper 7(6)/17(10) [29%W]
-  MARS                     17(17)/7(4) [71%W]  vs.  paper 18(17)/6(4) [75%W]
-  Random Forest (RF)       19(19)/5(2) [79%W]  vs.  paper 20(20)/4(1) [83%W]
-  CART (RPART)             10(9)/14(5) [42%W]  vs.  paper 10(10)/14(7) [42%W]
-
-\end{verbatim}
-\endgroup
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Family} & \multicolumn{2}{c}{\textbf{U\_B}} & \multicolumn{2}{c}{\textbf{O\_B}} & \multicolumn{2}{c}{\textbf{SM\_B}} \\
+\midrule
+ & Ours & Paper & Ours & Paper & Ours & Paper \\
+Linear Model (LM) & 18(18)/6(4) [75\%W] & 19(18)/5(4) [79\%W] & 19(18)/5(3) [79\%W] & 18(17)/6(3) [75\%W] & 19(19)/5(3) [79\%W] & 19(18)/5(3) [79\%W] \\
+SVM & 9(6)/15(9) [38\%W] & 8(6)/16(8) [33\%W] & 8(7)/16(10) [33\%W] & 7(6)/17(10) [29\%W] & 7(7)/17(9) [29\%W] & 7(6)/17(10) [29\%W] \\
+MARS & 14(11)/10(7) [58\%W] & 15(12)/9(7) [62\%W] & 16(15)/8(5) [67\%W] & 17(17)/7(4) [71\%W] & 17(17)/7(4) [71\%W] & 18(17)/6(4) [75\%W] \\
+Random Forest (RF) & 17(16)/7(4) [71\%W] & 18(17)/6(2) [75\%W] & 19(13)/5(3) [79\%W] & 20(15)/4(1) [83\%W] & 19(19)/5(2) [79\%W] & 20(20)/4(1) [83\%W] \\
+CART (RPART) & 12(9)/12(2) [50\%W] & 12(8)/12(3) [50\%W] & 11(8)/13(7) [46\%W] & 11(9)/13(8) [46\%W] & 10(9)/14(5) [42\%W] & 10(10)/14(7) [42\%W] \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}

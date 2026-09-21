@@ -1,156 +1,110 @@
-\begingroup
-\captionof{table}{Leave-one-out sensitivity of the Table 3 baseline comparison}
+\begin{table*}[t]
+\centering
+\caption{\textbf{Leave-one-dataset-out sensitivity of Table 3's baseline comparison} --- diagnostic only, datasets are source-correlated so this is not a variance estimate (see leave-one-source-out below for the defensible cut).}
+\label{tab:exp002_cmp_cmp_sensitivity_loo}
 \label{tab:exp002_cmp_cmp_sensitivity}
-\tiny
-\begin{verbatim}
-Leave-one-out sensitivity of the Table 3 baseline comparison  [alpha=0.05, N=24]
-
-DIAGNOSTIC ONLY -- this is NOT a jackknife and implies no standard error.
-The datasets are source-clustered (7 sources over 24 datasets: e.g. DS14-20
-are seven indices from one exchange), so leave-one-DATASET-out values are not
-independent and their spread must not be read as a variance estimate. Dropping
-one dataset while its siblings remain damps the apparent effect, so 'little
-movement' is weak evidence. The leave-one-SOURCE-out block below is the clean
-cut; the causal module's jackknife (Eval_Metrics Code/Causal) uses that unit
-for exactly this reason.
-
-Question this answers: is our residual SVM disagreement with the paper spread
-across datasets (systemic -- something is still wrong in the pipeline), or
-carried by one or two (local -- a dataset-specific discrepancy)?
-
-Linear Model (LM):
-  U_B     full= 75.0%W  (paper  79.2%W)  LOO range [ 73.9,  78.3]  most influential: DS04 ->  78.3%W (+3.3pp)
-  O_B     full= 79.2%W  (paper  75.0%W)  LOO range [ 78.3,  82.6]  most influential: DS04 ->  82.6%W (+3.4pp)
-  SM_B    full= 79.2%W  (paper  79.2%W)  LOO range [ 78.3,  82.6]  most influential: DS04 ->  82.6%W (+3.4pp)
-
-SVM:
-  U_B     full= 37.5%W  (paper  33.3%W)  LOO range [ 34.8,  39.1]  most influential: DS02 ->  34.8%W (-2.7pp)
-  O_B     full= 33.3%W  (paper  29.2%W)  LOO range [ 30.4,  34.8]  most influential: DS02 ->  30.4%W (-2.9pp)
-  SM_B    full= 29.2%W  (paper  29.2%W)  LOO range [ 26.1,  30.4]  most influential: DS02 ->  26.1%W (-3.1pp)
-
-MARS:
-  U_B     full= 58.3%W  (paper  62.5%W)  LOO range [ 56.5,  60.9]  most influential: DS04 ->  60.9%W (+2.5pp)
-  O_B     full= 66.7%W  (paper  70.8%W)  LOO range [ 65.2,  69.6]  most influential: DS04 ->  69.6%W (+2.9pp)
-  SM_B    full= 70.8%W  (paper  75.0%W)  LOO range [ 69.6,  73.9]  most influential: DS04 ->  73.9%W (+3.1pp)
-
-Random Forest (RF):
-  U_B     full= 70.8%W  (paper  75.0%W)  LOO range [ 69.6,  73.9]  most influential: DS04 ->  73.9%W (+3.1pp)
-  O_B     full= 79.2%W  (paper  83.3%W)  LOO range [ 78.3,  82.6]  most influential: DS13 ->  82.6%W (+3.4pp)
-  SM_B    full= 79.2%W  (paper  83.3%W)  LOO range [ 78.3,  82.6]  most influential: DS04 ->  82.6%W (+3.4pp)
-
-CART (RPART):
-  U_B     full= 50.0%W  (paper  50.0%W)  LOO range [ 47.8,  52.2]  most influential: DS01 ->  47.8%W (-2.2pp)
-  O_B     full= 45.8%W  (paper  45.8%W)  LOO range [ 43.5,  47.8]  most influential: DS01 ->  43.5%W (-2.4pp)
-  SM_B    full= 41.7%W  (paper  41.7%W)  LOO range [ 39.1,  43.5]  most influential: DS01 ->  39.1%W (-2.5pp)
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Family} & \textbf{Strategy} & \textbf{Full \%W} & \textbf{Paper \%W} & \textbf{LOO Range} & \textbf{Most Influential} \\
+\midrule
+Linear Model (LM) & \texttt{U\_B} & 75.0 & 79.2 & [73.9, 78.3] & DS04 (+3.3pp) \\
+Linear Model (LM) & \texttt{O\_B} & 79.2 & 75.0 & [78.3, 82.6] & DS04 (+3.4pp) \\
+Linear Model (LM) & \texttt{SM\_B} & 79.2 & 79.2 & [78.3, 82.6] & DS04 (+3.4pp) \\
+SVM & \texttt{U\_B} & 37.5 & 33.3 & [34.8, 39.1] & DS02 (-2.7pp) \\
+SVM & \texttt{O\_B} & 33.3 & 29.2 & [30.4, 34.8] & DS02 (-2.9pp) \\
+SVM & \texttt{SM\_B} & 29.2 & 29.2 & [26.1, 30.4] & DS02 (-3.1pp) \\
+MARS & \texttt{U\_B} & 58.3 & 62.5 & [56.5, 60.9] & DS04 (+2.5pp) \\
+MARS & \texttt{O\_B} & 66.7 & 70.8 & [65.2, 69.6] & DS04 (+2.9pp) \\
+MARS & \texttt{SM\_B} & 70.8 & 75.0 & [69.6, 73.9] & DS04 (+3.1pp) \\
+Random Forest (RF) & \texttt{U\_B} & 70.8 & 75.0 & [69.6, 73.9] & DS04 (+3.1pp) \\
+Random Forest (RF) & \texttt{O\_B} & 79.2 & 83.3 & [78.3, 82.6] & DS13 (+3.4pp) \\
+Random Forest (RF) & \texttt{SM\_B} & 79.2 & 83.3 & [78.3, 82.6] & DS04 (+3.4pp) \\
+CART (RPART) & \texttt{U\_B} & 50.0 & 50.0 & [47.8, 52.2] & DS01 (-2.2pp) \\
+CART (RPART) & \texttt{O\_B} & 45.8 & 45.8 & [43.5, 47.8] & DS01 (-2.4pp) \\
+CART (RPART) & \texttt{SM\_B} & 41.7 & 41.7 & [39.1, 43.5] & DS01 (-2.5pp) \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}
 
 
-Leave-one-SOURCE-out (the defensible cut -- whole correlated group removed):
+\begin{table*}[t]
+\centering
+\caption{\textbf{Leave-one-source-out sensitivity of Table 3's baseline comparison} --- \%W with each of the 7 correlated dataset sources dropped in turn; the clean cut (independent draws), unlike the per-dataset table above.}
+\label{tab:exp002_cmp_cmp_sensitivity_source}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{llcccccccc}
+\toprule
+\textbf{Family} & \textbf{Strategy} & \textbf{Full \%W} & \textbf{Australian Electricity} & \textbf{Bike Daily} & \textbf{Bike Hourly} & \textbf{Icelandic River} & \textbf{Istanbul Stock} & \textbf{Porto Water} & \textbf{Porto Weather} \\
+\midrule
+Linear Model (LM) & \texttt{U\_B} & 75.0 & 77 & 75 & 80 & 78 & 65 & 77 & 70 \\
+Linear Model (LM) & \texttt{O\_B} & 79.2 & 82 & 80 & 85 & 83 & 71 & 77 & 75 \\
+Linear Model (LM) & \texttt{SM\_B} & 79.2 & 82 & 80 & 80 & 83 & 71 & 82 & 75 \\
+SVM & \texttt{U\_B} & 37.5 & 41 & 40 & 30 & 35 & 41 & 36 & 40 \\
+SVM & \texttt{O\_B} & 33.3 & 32 & 35 & 25 & 35 & 35 & 36 & 35 \\
+SVM & \texttt{SM\_B} & 29.2 & 27 & 30 & 20 & 30 & 35 & 32 & 30 \\
+MARS & \texttt{U\_B} & 58.3 & 64 & 55 & 50 & 57 & 65 & 59 & 60 \\
+MARS & \texttt{O\_B} & 66.7 & 73 & 65 & 60 & 70 & 59 & 73 & 65 \\
+MARS & \texttt{SM\_B} & 70.8 & 77 & 70 & 65 & 70 & 65 & 77 & 70 \\
+Random Forest (RF) & \texttt{U\_B} & 70.8 & 77 & 70 & 65 & 70 & 71 & 73 & 70 \\
+Random Forest (RF) & \texttt{O\_B} & 79.2 & 86 & 75 & 75 & 78 & 76 & 82 & 80 \\
+Random Forest (RF) & \texttt{SM\_B} & 79.2 & 86 & 80 & 75 & 78 & 71 & 82 & 80 \\
+CART (RPART) & \texttt{U\_B} & 50.0 & 50 & 50 & 40 & 52 & 59 & 50 & 50 \\
+CART (RPART) & \texttt{O\_B} & 45.8 & 45 & 45 & 40 & 48 & 47 & 41 & 55 \\
+CART (RPART) & \texttt{SM\_B} & 41.7 & 45 & 40 & 30 & 43 & 47 & 41 & 45 \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}
 
-Linear Model (LM):
-  U_B     full= 75.0%W  australian_electricity=77  bike_daily=75  bike_hourly=80  icelandic_river=78  istanbul_stock=65  porto_water=77  porto_weather=70
-  O_B     full= 79.2%W  australian_electricity=82  bike_daily=80  bike_hourly=85  icelandic_river=83  istanbul_stock=71  porto_water=77  porto_weather=75
-  SM_B    full= 79.2%W  australian_electricity=82  bike_daily=80  bike_hourly=80  icelandic_river=83  istanbul_stock=71  porto_water=82  porto_weather=75
 
-SVM:
-  U_B     full= 37.5%W  australian_electricity=41  bike_daily=40  bike_hourly=30  icelandic_river=35  istanbul_stock=41  porto_water=36  porto_weather=40
-  O_B     full= 33.3%W  australian_electricity=32  bike_daily=35  bike_hourly=25  icelandic_river=35  istanbul_stock=35  porto_water=36  porto_weather=35
-  SM_B    full= 29.2%W  australian_electricity=27  bike_daily=30  bike_hourly=20  icelandic_river=30  istanbul_stock=35  porto_water=32  porto_weather=30
-
-MARS:
-  U_B     full= 58.3%W  australian_electricity=64  bike_daily=55  bike_hourly=50  icelandic_river=57  istanbul_stock=65  porto_water=59  porto_weather=60
-  O_B     full= 66.7%W  australian_electricity=73  bike_daily=65  bike_hourly=60  icelandic_river=70  istanbul_stock=59  porto_water=73  porto_weather=65
-  SM_B    full= 70.8%W  australian_electricity=77  bike_daily=70  bike_hourly=65  icelandic_river=70  istanbul_stock=65  porto_water=77  porto_weather=70
-
-Random Forest (RF):
-  U_B     full= 70.8%W  australian_electricity=77  bike_daily=70  bike_hourly=65  icelandic_river=70  istanbul_stock=71  porto_water=73  porto_weather=70
-  O_B     full= 79.2%W  australian_electricity=86  bike_daily=75  bike_hourly=75  icelandic_river=78  istanbul_stock=76  porto_water=82  porto_weather=80
-  SM_B    full= 79.2%W  australian_electricity=86  bike_daily=80  bike_hourly=75  icelandic_river=78  istanbul_stock=71  porto_water=82  porto_weather=80
-
-CART (RPART):
-  U_B     full= 50.0%W  australian_electricity=50  bike_daily=50  bike_hourly=40  icelandic_river=52  istanbul_stock=59  porto_water=50  porto_weather=50
-  O_B     full= 45.8%W  australian_electricity=45  bike_daily=45  bike_hourly=40  icelandic_river=48  istanbul_stock=47  porto_water=41  porto_weather=55
-  SM_B    full= 41.7%W  australian_electricity=45  bike_daily=40  bike_hourly=30  icelandic_river=43  istanbul_stock=47  porto_water=41  porto_weather=45
-
-
-Per-dataset detail, SVM only (the family whose Table 3 row still disagrees):
-
-  U_B (full 37.5%W):
-    drop DS01:  39.1%W (+1.6pp)  [bike_daily]
-    drop DS02:  34.8%W (-2.7pp)  [bike_daily]
-    drop DS03:  39.1%W (+1.6pp)  [bike_daily]
-    drop DS04:  39.1%W (+1.6pp)  [bike_daily]
-    drop DS05:  34.8%W (-2.7pp)  [bike_hourly]
-    drop DS06:  34.8%W (-2.7pp)  [bike_hourly]
-    drop DS07:  34.8%W (-2.7pp)  [bike_hourly]
-    drop DS08:  39.1%W (+1.6pp)  [bike_hourly]
-    drop DS09:  34.8%W (-2.7pp)  [icelandic_river]
-    drop DS10:  39.1%W (+1.6pp)  [porto_weather]
-    drop DS11:  39.1%W (+1.6pp)  [porto_weather]
-    drop DS12:  34.8%W (-2.7pp)  [porto_weather]
-    drop DS13:  39.1%W (+1.6pp)  [porto_weather]
-    drop DS14:  34.8%W (-2.7pp)  [istanbul_stock]
-    drop DS15:  39.1%W (+1.6pp)  [istanbul_stock]
-    drop DS16:  39.1%W (+1.6pp)  [istanbul_stock]
-    drop DS17:  34.8%W (-2.7pp)  [istanbul_stock]
-    drop DS18:  39.1%W (+1.6pp)  [istanbul_stock]
-    drop DS19:  39.1%W (+1.6pp)  [istanbul_stock]
-    drop DS20:  39.1%W (+1.6pp)  [istanbul_stock]
-    drop DS21:  39.1%W (+1.6pp)  [australian_electricity]
-    drop DS22:  39.1%W (+1.6pp)  [australian_electricity]
-    drop DS23:  34.8%W (-2.7pp)  [porto_water]
-    drop DS24:  39.1%W (+1.6pp)  [porto_water]
-
-  O_B (full 33.3%W):
-    drop DS01:  34.8%W (+1.4pp)  [bike_daily]
-    drop DS02:  30.4%W (-2.9pp)  [bike_daily]
-    drop DS03:  34.8%W (+1.4pp)  [bike_daily]
-    drop DS04:  34.8%W (+1.4pp)  [bike_daily]
-    drop DS05:  30.4%W (-2.9pp)  [bike_hourly]
-    drop DS06:  30.4%W (-2.9pp)  [bike_hourly]
-    drop DS07:  30.4%W (-2.9pp)  [bike_hourly]
-    drop DS08:  34.8%W (+1.4pp)  [bike_hourly]
-    drop DS09:  34.8%W (+1.4pp)  [icelandic_river]
-    drop DS10:  34.8%W (+1.4pp)  [porto_weather]
-    drop DS11:  34.8%W (+1.4pp)  [porto_weather]
-    drop DS12:  30.4%W (-2.9pp)  [porto_weather]
-    drop DS13:  34.8%W (+1.4pp)  [porto_weather]
-    drop DS14:  34.8%W (+1.4pp)  [istanbul_stock]
-    drop DS15:  30.4%W (-2.9pp)  [istanbul_stock]
-    drop DS16:  34.8%W (+1.4pp)  [istanbul_stock]
-    drop DS17:  30.4%W (-2.9pp)  [istanbul_stock]
-    drop DS18:  34.8%W (+1.4pp)  [istanbul_stock]
-    drop DS19:  34.8%W (+1.4pp)  [istanbul_stock]
-    drop DS20:  34.8%W (+1.4pp)  [istanbul_stock]
-    drop DS21:  30.4%W (-2.9pp)  [australian_electricity]
-    drop DS22:  34.8%W (+1.4pp)  [australian_electricity]
-    drop DS23:  34.8%W (+1.4pp)  [porto_water]
-    drop DS24:  34.8%W (+1.4pp)  [porto_water]
-
-  SM_B (full 29.2%W):
-    drop DS01:  30.4%W (+1.3pp)  [bike_daily]
-    drop DS02:  26.1%W (-3.1pp)  [bike_daily]
-    drop DS03:  30.4%W (+1.3pp)  [bike_daily]
-    drop DS04:  30.4%W (+1.3pp)  [bike_daily]
-    drop DS05:  26.1%W (-3.1pp)  [bike_hourly]
-    drop DS06:  26.1%W (-3.1pp)  [bike_hourly]
-    drop DS07:  26.1%W (-3.1pp)  [bike_hourly]
-    drop DS08:  30.4%W (+1.3pp)  [bike_hourly]
-    drop DS09:  30.4%W (+1.3pp)  [icelandic_river]
-    drop DS10:  30.4%W (+1.3pp)  [porto_weather]
-    drop DS11:  30.4%W (+1.3pp)  [porto_weather]
-    drop DS12:  26.1%W (-3.1pp)  [porto_weather]
-    drop DS13:  30.4%W (+1.3pp)  [porto_weather]
-    drop DS14:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS15:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS16:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS17:  26.1%W (-3.1pp)  [istanbul_stock]
-    drop DS18:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS19:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS20:  30.4%W (+1.3pp)  [istanbul_stock]
-    drop DS21:  26.1%W (-3.1pp)  [australian_electricity]
-    drop DS22:  30.4%W (+1.3pp)  [australian_electricity]
-    drop DS23:  30.4%W (+1.3pp)  [porto_water]
-    drop DS24:  30.4%W (+1.3pp)  [porto_water]
-
-\end{verbatim}
-\endgroup
+\begin{table*}[t]
+\centering
+\caption{\textbf{Per-dataset detail, SVM only} --- \%W and shift from the full-sample value when that single dataset is excluded, for the three baseline-comparison strategies (the family whose Table 3 row is fragile, per Section~\ref{sec:paper-comparison}).}
+\label{tab:exp002_cmp_cmp_sensitivity_svm}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+\textbf{Dataset} & \textbf{Source} & \textbf{U\_B} \%W (shift) & \textbf{O\_B} \%W (shift) & \textbf{SM\_B} \%W (shift) \\
+\midrule
+DS01 & Bike Daily & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS02 & Bike Daily & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS03 & Bike Daily & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS04 & Bike Daily & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS05 & Bike Hourly & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS06 & Bike Hourly & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS07 & Bike Hourly & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS08 & Bike Hourly & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS09 & Icelandic River & 34.8 (-2.7pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS10 & Porto Weather & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS11 & Porto Weather & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS12 & Porto Weather & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS13 & Porto Weather & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS14 & Istanbul Stock & 34.8 (-2.7pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS15 & Istanbul Stock & 39.1 (+1.6pp) & 30.4 (-2.9pp) & 30.4 (+1.3pp) \\
+DS16 & Istanbul Stock & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS17 & Istanbul Stock & 34.8 (-2.7pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS18 & Istanbul Stock & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS19 & Istanbul Stock & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS20 & Istanbul Stock & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS21 & Australian Electricity & 39.1 (+1.6pp) & 30.4 (-2.9pp) & 26.1 (-3.1pp) \\
+DS22 & Australian Electricity & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS23 & Porto Water & 34.8 (-2.7pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+DS24 & Porto Water & 39.1 (+1.6pp) & 34.8 (+1.4pp) & 30.4 (+1.3pp) \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}

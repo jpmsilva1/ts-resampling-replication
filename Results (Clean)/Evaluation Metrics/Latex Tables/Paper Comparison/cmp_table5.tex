@@ -1,110 +1,134 @@
-\begingroup
-\captionof{table}{Table 5 replication check: every strategy vs. ARIMA/BDES}
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 5 replication check --- Linear Model (LM)}, every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha=0.05$.}
+\label{tab:exp002_cmp_cmp_table5_lm}
 \label{tab:exp002_cmp_cmp_table5}
-\footnotesize
-\begin{verbatim}
-Table 5 equivalent -- every strategy vs. ARIMA / BDES, ours vs. paper  [alpha=0.05]
-Never checked before this audit.
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}} \\
+\midrule
+ & Ours & Paper & Ours & Paper \\
+\texttt{U\_B} & 19(19)/5(3) [79\%W] & 18(18)/6(3) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{U\_T} & 19(19)/5(3) [79\%W] & 18(18)/6(3) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{U\_TPhi} & 19(19)/5(4) [79\%W] & 18(18)/6(5) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_B} & 22(20)/2(2) [92\%W] & 21(18)/3(2) [88\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_T} & 19(19)/5(3) [79\%W] & 18(18)/6(3) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_TPhi} & 19(19)/5(3) [79\%W] & 18(18)/6(3) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_B} & 20(19)/4(3) [83\%W] & 20(18)/4(3) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_T} & 19(19)/5(4) [79\%W] & 18(17)/6(5) [75\%W] & 22(21)/2(2) [92\%W] & 22(20)/2(2) [92\%W] \\
+\texttt{SM\_TPhi} & 19(19)/5(4) [79\%W] & 18(18)/6(5) [75\%W] & 22(21)/2(2) [92\%W] & 22(20)/2(2) [92\%W] \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
-Linear Model (LM):
-  U_B        vs ARIMA  19(19)/5(3) [79%W]  vs.  paper 18(18)/6(3) [75%W]
-  U_B        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  U_T        vs ARIMA  19(19)/5(3) [79%W]  vs.  paper 18(18)/6(3) [75%W]
-  U_T        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  U_TPhi     vs ARIMA  19(19)/5(4) [79%W]  vs.  paper 18(18)/6(5) [75%W]
-  U_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_B        vs ARIMA  22(20)/2(2) [92%W]  vs.  paper 21(18)/3(2) [88%W]
-  O_B        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_T        vs ARIMA  19(19)/5(3) [79%W]  vs.  paper 18(18)/6(3) [75%W]
-  O_T        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_TPhi     vs ARIMA  19(19)/5(3) [79%W]  vs.  paper 18(18)/6(3) [75%W]
-  O_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_B       vs ARIMA  20(19)/4(3) [83%W]  vs.  paper 20(18)/4(3) [83%W]
-  SM_B       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_T       vs ARIMA  19(19)/5(4) [79%W]  vs.  paper 18(17)/6(5) [75%W]
-  SM_T       vs BDES   22(21)/2(2) [92%W]  vs.  paper 22(20)/2(2) [92%W]
-  SM_TPhi    vs ARIMA  19(19)/5(4) [79%W]  vs.  paper 18(18)/6(5) [75%W]
-  SM_TPhi    vs BDES   22(21)/2(2) [92%W]  vs.  paper 22(20)/2(2) [92%W]
 
-SVM:
-  U_B        vs ARIMA  21(21)/3(2) [88%W]  vs.  paper 21(21)/3(3) [88%W]
-  U_B        vs BDES   22(22)/2(1) [92%W]  vs.  paper 22(22)/2(1) [92%W]
-  U_T        vs ARIMA  21(21)/3(2) [88%W]  vs.  paper 21(21)/3(3) [88%W]
-  U_T        vs BDES   22(22)/2(1) [92%W]  vs.  paper 22(22)/2(1) [92%W]
-  U_TPhi     vs ARIMA  20(20)/4(3) [83%W]  vs.  paper 20(20)/4(4) [83%W]
-  U_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_B        vs ARIMA  21(20)/3(1) [88%W]  vs.  paper 21(21)/3(1) [88%W]
-  O_B        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_T        vs ARIMA  21(20)/3(2) [88%W]  vs.  paper 21(21)/3(3) [88%W]
-  O_T        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_TPhi     vs ARIMA  21(20)/3(2) [88%W]  vs.  paper 21(21)/3(3) [88%W]
-  O_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_B       vs ARIMA  19(19)/5(1) [79%W]  vs.  paper 19(19)/5(1) [79%W]
-  SM_B       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_T       vs ARIMA  20(19)/4(2) [83%W]  vs.  paper 20(20)/4(3) [83%W]
-  SM_T       vs BDES   22(21)/2(2) [92%W]  vs.  paper 20(20)/4(2) [83%W]
-  SM_TPhi    vs ARIMA  19(18)/5(3) [79%W]  vs.  paper 19(19)/5(4) [79%W]
-  SM_TPhi    vs BDES   22(21)/2(2) [92%W]  vs.  paper 22(20)/2(2) [92%W]
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 5 replication check --- SVM}, every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha=0.05$.}
+\label{tab:exp002_cmp_cmp_table5_svm}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}} \\
+\midrule
+ & Ours & Paper & Ours & Paper \\
+\texttt{U\_B} & 21(21)/3(2) [88\%W] & 21(21)/3(3) [88\%W] & 22(22)/2(1) [92\%W] & 22(22)/2(1) [92\%W] \\
+\texttt{U\_T} & 21(21)/3(2) [88\%W] & 21(21)/3(3) [88\%W] & 22(22)/2(1) [92\%W] & 22(22)/2(1) [92\%W] \\
+\texttt{U\_TPhi} & 20(20)/4(3) [83\%W] & 20(20)/4(4) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_B} & 21(20)/3(1) [88\%W] & 21(21)/3(1) [88\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_T} & 21(20)/3(2) [88\%W] & 21(21)/3(3) [88\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_TPhi} & 21(20)/3(2) [88\%W] & 21(21)/3(3) [88\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_B} & 19(19)/5(1) [79\%W] & 19(19)/5(1) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_T} & 20(19)/4(2) [83\%W] & 20(20)/4(3) [83\%W] & 22(21)/2(2) [92\%W] & 20(20)/4(2) [83\%W] \\
+\texttt{SM\_TPhi} & 19(18)/5(3) [79\%W] & 19(19)/5(4) [79\%W] & 22(21)/2(2) [92\%W] & 22(20)/2(2) [92\%W] \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
-MARS:
-  U_B        vs ARIMA  22(18)/2(1) [92%W]  vs.  paper 23(18)/1(1) [96%W]
-  U_B        vs BDES   21(20)/3(3) [88%W]  vs.  paper 21(20)/3(3) [88%W]
-  U_T        vs ARIMA  20(19)/4(1) [83%W]  vs.  paper 20(18)/4(2) [83%W]
-  U_T        vs BDES   21(21)/3(2) [88%W]  vs.  paper 21(19)/3(2) [88%W]
-  U_TPhi     vs ARIMA  21(19)/3(2) [88%W]  vs.  paper 22(19)/2(2) [92%W]
-  U_TPhi     vs BDES   21(21)/3(2) [88%W]  vs.  paper 21(21)/3(3) [88%W]
-  O_B        vs ARIMA  19(19)/5(1) [79%W]  vs.  paper 19(18)/5(1) [79%W]
-  O_B        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_T        vs ARIMA  19(19)/5(1) [79%W]  vs.  paper 18(18)/6(2) [75%W]
-  O_T        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_TPhi     vs ARIMA  19(18)/5(2) [79%W]  vs.  paper 18(18)/6(2) [75%W]
-  O_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_B       vs ARIMA  20(19)/4(2) [83%W]  vs.  paper 19(19)/5(1) [79%W]
-  SM_B       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_T       vs ARIMA  20(20)/4(3) [83%W]  vs.  paper 19(19)/5(4) [79%W]
-  SM_T       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_TPhi    vs ARIMA  20(20)/4(3) [83%W]  vs.  paper 19(19)/5(4) [79%W]
-  SM_TPhi    vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
 
-Random Forest (RF):
-  U_B        vs ARIMA  18(17)/6(3) [75%W]  vs.  paper 19(18)/5(1) [79%W]
-  U_B        vs BDES   20(18)/4(2) [83%W]  vs.  paper 19(18)/5(2) [79%W]
-  U_T        vs ARIMA  18(17)/6(3) [75%W]  vs.  paper 21(18)/3(2) [88%W]
-  U_T        vs BDES   19(19)/5(2) [79%W]  vs.  paper 19(18)/5(2) [79%W]
-  U_TPhi     vs ARIMA  20(17)/4(3) [83%W]  vs.  paper 21(17)/3(2) [88%W]
-  U_TPhi     vs BDES   19(18)/5(2) [79%W]  vs.  paper 18(18)/6(2) [75%W]
-  O_B        vs ARIMA  19(15)/5(2) [79%W]  vs.  paper 20(17)/4(2) [83%W]
-  O_B        vs BDES   15(14)/9(4) [62%W]  vs.  paper 18(16)/6(2) [75%W]
-  O_T        vs ARIMA  17(15)/7(2) [71%W]  vs.  paper 19(17)/5(2) [79%W]
-  O_T        vs BDES   14(14)/10(5) [58%W]  vs.  paper 15(15)/9(3) [62%W]
-  O_TPhi     vs ARIMA  17(15)/7(3) [71%W]  vs.  paper 19(16)/5(2) [79%W]
-  O_TPhi     vs BDES   14(14)/10(5) [58%W]  vs.  paper 15(15)/9(3) [62%W]
-  SM_B       vs ARIMA  22(22)/2(1) [92%W]  vs.  paper 22(22)/2(1) [92%W]
-  SM_B       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_T       vs ARIMA  21(21)/3(2) [88%W]  vs.  paper 20(20)/4(2) [83%W]
-  SM_T       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_TPhi    vs ARIMA  21(20)/3(2) [88%W]  vs.  paper 20(20)/4(2) [83%W]
-  SM_TPhi    vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 5 replication check --- MARS}, every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha=0.05$.}
+\label{tab:exp002_cmp_cmp_table5_mars}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}} \\
+\midrule
+ & Ours & Paper & Ours & Paper \\
+\texttt{U\_B} & 22(18)/2(1) [92\%W] & 23(18)/1(1) [96\%W] & 21(20)/3(3) [88\%W] & 21(20)/3(3) [88\%W] \\
+\texttt{U\_T} & 20(19)/4(1) [83\%W] & 20(18)/4(2) [83\%W] & 21(21)/3(2) [88\%W] & 21(19)/3(2) [88\%W] \\
+\texttt{U\_TPhi} & 21(19)/3(2) [88\%W] & 22(19)/2(2) [92\%W] & 21(21)/3(2) [88\%W] & 21(21)/3(3) [88\%W] \\
+\texttt{O\_B} & 19(19)/5(1) [79\%W] & 19(18)/5(1) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_T} & 19(19)/5(1) [79\%W] & 18(18)/6(2) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_TPhi} & 19(18)/5(2) [79\%W] & 18(18)/6(2) [75\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_B} & 20(19)/4(2) [83\%W] & 19(19)/5(1) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_T} & 20(20)/4(3) [83\%W] & 19(19)/5(4) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_TPhi} & 20(20)/4(3) [83\%W] & 19(19)/5(4) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
-CART (RPART):
-  U_B        vs ARIMA  20(18)/4(3) [83%W]  vs.  paper 22(20)/2(2) [92%W]
-  U_B        vs BDES   23(22)/1(1) [96%W]  vs.  paper 22(22)/2(1) [92%W]
-  U_T        vs ARIMA  20(18)/4(2) [83%W]  vs.  paper 22(20)/2(2) [92%W]
-  U_T        vs BDES   22(22)/2(1) [92%W]  vs.  paper 22(22)/2(1) [92%W]
-  U_TPhi     vs ARIMA  20(18)/4(2) [83%W]  vs.  paper 20(18)/4(1) [83%W]
-  U_TPhi     vs BDES   23(22)/1(1) [96%W]  vs.  paper 23(22)/1(1) [96%W]
-  O_B        vs ARIMA  19(19)/5(1) [79%W]  vs.  paper 20(20)/4(1) [83%W]
-  O_B        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_T        vs ARIMA  19(19)/5(2) [79%W]  vs.  paper 20(20)/4(1) [83%W]
-  O_T        vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  O_TPhi     vs ARIMA  19(18)/5(1) [79%W]  vs.  paper 21(20)/3(1) [88%W]
-  O_TPhi     vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_B       vs ARIMA  19(17)/5(2) [79%W]  vs.  paper 22(18)/2(1) [92%W]
-  SM_B       vs BDES   22(22)/2(1) [92%W]  vs.  paper 22(22)/2(1) [92%W]
-  SM_T       vs ARIMA  18(16)/6(4) [75%W]  vs.  paper 17(17)/7(4) [71%W]
-  SM_T       vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
-  SM_TPhi    vs ARIMA  18(17)/6(4) [75%W]  vs.  paper 19(18)/5(3) [79%W]
-  SM_TPhi    vs BDES   22(22)/2(2) [92%W]  vs.  paper 22(22)/2(2) [92%W]
 
-\end{verbatim}
-\endgroup
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 5 replication check --- Random Forest (RF)}, every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha=0.05$.}
+\label{tab:exp002_cmp_cmp_table5_rf}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}} \\
+\midrule
+ & Ours & Paper & Ours & Paper \\
+\texttt{U\_B} & 18(17)/6(3) [75\%W] & 19(18)/5(1) [79\%W] & 20(18)/4(2) [83\%W] & 19(18)/5(2) [79\%W] \\
+\texttt{U\_T} & 18(17)/6(3) [75\%W] & 21(18)/3(2) [88\%W] & 19(19)/5(2) [79\%W] & 19(18)/5(2) [79\%W] \\
+\texttt{U\_TPhi} & 20(17)/4(3) [83\%W] & 21(17)/3(2) [88\%W] & 19(18)/5(2) [79\%W] & 18(18)/6(2) [75\%W] \\
+\texttt{O\_B} & 19(15)/5(2) [79\%W] & 20(17)/4(2) [83\%W] & 15(14)/9(4) [62\%W] & 18(16)/6(2) [75\%W] \\
+\texttt{O\_T} & 17(15)/7(2) [71\%W] & 19(17)/5(2) [79\%W] & 14(14)/10(5) [58\%W] & 15(15)/9(3) [62\%W] \\
+\texttt{O\_TPhi} & 17(15)/7(3) [71\%W] & 19(16)/5(2) [79\%W] & 14(14)/10(5) [58\%W] & 15(15)/9(3) [62\%W] \\
+\texttt{SM\_B} & 22(22)/2(1) [92\%W] & 22(22)/2(1) [92\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_T} & 21(21)/3(2) [88\%W] & 20(20)/4(2) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_TPhi} & 21(20)/3(2) [88\%W] & 20(20)/4(2) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+
+\begin{table*}[t]
+\centering
+\caption{\textbf{Table 5 replication check --- CART (RPART)}, every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha=0.05$.}
+\label{tab:exp002_cmp_cmp_table5_rpart}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{vs.\ ARIMA}} & \multicolumn{2}{c}{\textbf{vs.\ BDES}} \\
+\midrule
+ & Ours & Paper & Ours & Paper \\
+\texttt{U\_B} & 20(18)/4(3) [83\%W] & 22(20)/2(2) [92\%W] & 23(22)/1(1) [96\%W] & 22(22)/2(1) [92\%W] \\
+\texttt{U\_T} & 20(18)/4(2) [83\%W] & 22(20)/2(2) [92\%W] & 22(22)/2(1) [92\%W] & 22(22)/2(1) [92\%W] \\
+\texttt{U\_TPhi} & 20(18)/4(2) [83\%W] & 20(18)/4(1) [83\%W] & 23(22)/1(1) [96\%W] & 23(22)/1(1) [96\%W] \\
+\texttt{O\_B} & 19(19)/5(1) [79\%W] & 20(20)/4(1) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_T} & 19(19)/5(2) [79\%W] & 20(20)/4(1) [83\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{O\_TPhi} & 19(18)/5(1) [79\%W] & 21(20)/3(1) [88\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_B} & 19(17)/5(2) [79\%W] & 22(18)/2(1) [92\%W] & 22(22)/2(1) [92\%W] & 22(22)/2(1) [92\%W] \\
+\texttt{SM\_T} & 18(16)/6(4) [75\%W] & 17(17)/7(4) [71\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\texttt{SM\_TPhi} & 18(17)/6(4) [75\%W] & 19(18)/5(3) [79\%W] & 22(22)/2(2) [92\%W] & 22(22)/2(2) [92\%W] \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
