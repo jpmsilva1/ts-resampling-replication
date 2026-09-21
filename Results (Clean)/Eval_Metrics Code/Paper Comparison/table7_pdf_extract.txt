@@ -1,0 +1,46 @@
+Raw `pdftotext -layout` extract of Table 7, Annex 1, p.180 of
+Moniz, Branco & Torgo (2017), "Resampling strategies for imbalanced time
+series forecasting," Int J Data Sci Anal 3:161-181
+(Papers/Resampling strategies for imbalanced time series forecasting.pdf).
+
+Checked in verbatim so OPT_PARAMS_TABLE7 in paper_reference.py can be diffed
+against the paper text directly instead of trusting a by-hand transcription
+with no independent record -- this is what closes the circularity flagged in
+DIVERGENCE_ANALYSIS.md section 6 (the drift guard previously compared
+paper_reference.py's copy of Table 7 only against src/adapted/Exps.R's own
+copy, so a shared transcription error would have passed both).
+
+Regenerate with:
+  pdftotext -layout "Papers/Resampling strategies for imbalanced time series forecasting.pdf" - | sed -n '/^Table 7/,/^References/p'
+
+Columns: DS | SVM cost | SVM gamma | MARS nk | MARS degree | MARS thresh | RF mtry | RF ntree | RPART minsplit | RPART cp
+
+Table 7 Optimal parameterization for each standard regression algo-   Table 8 Optimal parameterization for SVM regression algorithm with
+rithm in each data set used for the experimental evaluation           the application of resampling strategies in three data sets
+       SVM           MARS               RF          RPART                      UNDER                OVER               SmoteR
+       cost gamma nk degree thr         mtry ntree minsplit cp                 c      g       u     c     g       o    c      g       u     o
+
+DS1    300 0.01      17 1        0.001 5     1500 10         0.01     DS4
+DS2    300 0.01      17 2        0.001 7     750    10       0.001      B      10     0.01    0.4 10      0.001 5      150 0.001 0.8 2
+DS3    300 0.01      17 1        0.001 7     500    10       0.001      T      10     0.01    0.4 150 0.001 2          150 0.001 0.6 2
+DS4    150 0.01      10 1        0.001 7     750    10       0.1        TPhi 10       0.01    0.8 150 0.01        2    10     0.001 0.8 2
+DS5    300 0.001     10 2        0.001 7     750    20       0.001    DS10
+DS6    300 0.01      17 2        0.001 5     500    10       0.001      B      10     0.001 0.1 10        0.001 2      10     0.001 0.8 10
+DS7    300 0.01      10 1        0.001 7     750    30       0.001      T      150 0.001 0.1 150 0.001 2               10     0.001 0.6 5
+DS8    300 0.01      17 2        0.001 7     750    30       0.001      TPhi 300 0.001 0.1 150 0.001 2                 300 0.001 0.6 3
+DS9     10 0.01      10 2        0.001 5     750    30       0.001    DS12
+DS10 300 0.01        17 2        0.001 7     500    10       0.001      B      150 0.001 0.2 10           0.001 10 10         0.001 0.2 3
+DS11    10 0.01      17 1        0.001 7     500    20       0.001      T      300 0.001 0.2 150 0.001 3               10     0.001 0.8 5
+DS12 300 0.01        17 1        0.001 7     750    10       0.001      TPhi 150 0.001 0.2 150 0.001 3                 150 0.001 0.4 2
+DS13 150 0.01        17 2        0.001 7     750    10       0.001    Parameters optimized include cost (c), gamma (g), percentage of under-
+DS14 150 0.01        17 2        0.001 7     1500 10         0.001    sampling (u) and oversampling (o)
+DS15 300 0.01        17 2        0.001 5     1500 10         0.001
+DS16 300 0.01        17 2        0.001 7     750    10       0.001
+DS17 300 0.01        17 2        0.001 7     500    10       0.001
+DS18 300 0.01        17 2        0.001 5     500    10       0.001
+DS19 150 0.01        17 1        0.01   5    500    10       0.001
+DS20 300 0.01        17 2        0.001 7     500    10       0.001
+DS21 150 0.001       17 2        0.001 7     500    10       0.001
+DS22 150 0.001       10 2        0.001 7     500    10       0.001
+DS23    10 0.001     10 1        0.001 5     500    10       0.001
+DS24 150 0.01        17 1        0.001 7     750    10       0.001

@@ -1,0 +1,24 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Sensitivity to the SVM Training-Window Co-Treatment}: pooled $\tau_k$ with and without the SVM model family, which alone is subject to \texttt{cap\_svm\_train()}'s asymmetric training-window truncation (see Section on Robustness).}
+\label{tab:causal_svm_sensitivity}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{F1}} & \multicolumn{2}{c}{\textbf{SERA (log)}} \\\cmidrule(lr){2-3}\cmidrule(lr){4-5} & \textbf{Pooled} & \textbf{Excl.\ SVM} & \textbf{Pooled} & \textbf{Excl.\ SVM} \\
+\midrule
+\texttt{UNDERB} & 0.1068 & 0.1256 & 0.2936 & 0.2751 \\
+\texttt{UNDERT} & 0.1096 & 0.1290 & 0.3032 & 0.2851 \\
+\texttt{UNDERTPhi} & 0.1119 & 0.1313 & 0.3612 & 0.3472 \\
+\texttt{OVERB} & 0.1098 & 0.1289 & 0.1796 & 0.1639 \\
+\texttt{OVERT} & 0.1083 & 0.1274 & 0.2850 & 0.2956 \\
+\texttt{OVERTPhi} & 0.1076 & 0.1265 & 0.1736 & 0.1560 \\
+\texttt{SMOTEB} & 0.1400 & 0.1682 & 0.3153 & 0.2732 \\
+\texttt{SMOTET} & 0.1287 & 0.1559 & 0.3450 & 0.3032 \\
+\texttt{SMOTETPhi} & 0.1295 & 0.1583 & 0.4264 & 0.3824 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

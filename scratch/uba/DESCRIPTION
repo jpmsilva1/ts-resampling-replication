@@ -1,0 +1,19 @@
+Package: uba
+Type: Package
+Version: 0.7.7
+Date: April 2017
+Author: Rita P. Ribeiro <rpribeiro@dcc.fc.up.pt>, with
+	contributions from Luis Torgo <ltorgo@dcc.fc.up.pt>. 	
+Maintainer:  Rita P. Ribeiro <rpribeiro@dcc.fc.up.pt>
+Description: Set of programming tools to address utility-based algorithms. 
+	     Currently, are available several utility-based metrics for regression;  
+	     Namely, it allows the setting of an utility-based evaluation framework;
+	     utility-based ROC and PR curves in a Regression Context; 		 
+	     and utility-based Rules Regression System. 
+Title: Utility-based Algorithms
+Depends: R (>= 2.9), methods, graphics, grDevices, stats, operators, class, fields, ROCR, DMwR
+Imports: gdata, Hmisc
+License: GPL-2
+LazyLoad: yes
+LazyData: yes
+

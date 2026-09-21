@@ -1,0 +1,40 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Global Average Rank -- SERA}, ranking all 50 model-family$\times$strategy combinations jointly across the 24 datasets (rank 1 = best; NOT a per-family ranking).}
+\label{tab:exp002_sera_avg_ranks}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lclc}
+\toprule
+\textbf{Combo} & \textbf{Avg. Rank} & \textbf{Combo} & \textbf{Avg. Rank} \\
+\midrule
+\textbf{\texttt{RF.baseline}} & \textbf{9.5} & \texttt{MARS.OVERB} & 26.2 \\
+\texttt{LM.baseline} & 11.4 & \texttt{MARS.UNDERT} & 26.4 \\
+\texttt{LM.OVERB} & 11.9 & \texttt{LM.SMOTETPhi} & 26.8 \\
+\texttt{RF.OVERT} & 12.0 & \texttt{SVM.OVERB} & 28.0 \\
+\texttt{RF.OVERTPhi} & 12.0 & \texttt{SVM.OVERT} & 28.1 \\
+\texttt{RF.OVERB} & 12.2 & \texttt{MARS.OVERTPhi} & 28.1 \\
+\texttt{LM.OVERT} & 12.4 & \texttt{SVM.OVERTPhi} & 28.5 \\
+\texttt{LM.OVERTPhi} & 12.9 & \texttt{RPART.OVERTPhi} & 30.7 \\
+\texttt{MARS.baseline} & 14.7 & \texttt{RPART.OVERT} & 31.2 \\
+\texttt{SVM.baseline} & 15.2 & \texttt{RPART.OVERB} & 32.0 \\
+\texttt{RF.UNDERB} & 15.5 & \texttt{SVM.UNDERB} & 32.5 \\
+\texttt{RF.UNDERTPhi} & 16.2 & \texttt{SVM.UNDERT} & 33.5 \\
+\texttt{RF.UNDERT} & 16.4 & \texttt{MARS.SMOTEB} & 34.4 \\
+\texttt{RF.SMOTEB} & 16.4 & \texttt{SVM.UNDERTPhi} & 35.2 \\
+\texttt{LM.UNDERB} & 16.7 & \texttt{MARS.SMOTET} & 35.9 \\
+\texttt{LM.UNDERT} & 17.9 & \texttt{MARS.SMOTETPhi} & 37.4 \\
+\texttt{RF.SMOTET} & 18.4 & \texttt{RPART.UNDERB} & 37.8 \\
+\texttt{LM.UNDERTPhi} & 19.1 & \texttt{RPART.SMOTEB} & 37.8 \\
+\texttt{LM.SMOTEB} & 19.6 & \texttt{RPART.UNDERT} & 38.3 \\
+\texttt{RF.SMOTETPhi} & 20.6 & \texttt{SVM.SMOTEB} & 38.9 \\
+\texttt{RPART.baseline} & 23.8 & \texttt{RPART.UNDERTPhi} & 39.0 \\
+\texttt{LM.SMOTET} & 24.9 & \texttt{RPART.SMOTET} & 39.5 \\
+\texttt{MARS.UNDERTPhi} & 25.5 & \texttt{SVM.SMOTET} & 40.2 \\
+\texttt{MARS.UNDERB} & 25.8 & \texttt{RPART.SMOTETPhi} & 40.4 \\
+\texttt{MARS.OVERT} & 26.0 & \texttt{SVM.SMOTETPhi} & 41.2 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

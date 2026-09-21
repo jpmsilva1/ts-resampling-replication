@@ -1,0 +1,30 @@
+# OS / editor cruft
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Archived/build artifacts -- not source, not tracked
+*.zip
+_archive/
+
+# Regenerable tool output
+graphify-out/
+
+# Stage 0's raw .Rdata per run (1.8 GB for the canonical run, largest single
+# file 464 MB -- exceeds GitHub's 100 MB hard per-file limit without Git LFS,
+# which this project does not use). Excluded because it adds no data the
+# tracked CSVs don't already have at full per-fold granularity (raw
+# iterations/predictions/RMSE/SERA are every Monte Carlo fold's numbers, not
+# an average) -- only R-internal serialization overhead. See
+# Results (Clean)/EXPERIMENTAL_PROTOCOL.md for how to regenerate it from the
+# cluster if the .Rdata itself is ever specifically needed.
+src/adapted/results/*/
+
+# Pre-phi-fix snapshot kept only as CHANGES.md's evidence base, not for git
+Results (Clean)/_pre_phi_fix_backup_20260903/
+
+# Raw cluster .out/.err logs -- large, regenerated per submission
+logs/*.out
+logs/*.err
+CLAUDE.md

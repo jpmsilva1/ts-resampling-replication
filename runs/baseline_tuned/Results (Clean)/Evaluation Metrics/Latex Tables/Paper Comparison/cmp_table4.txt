@@ -1,0 +1,44 @@
+Table 4 equivalent -- biased variant vs. its own biased base, ours vs. paper  [alpha=0.05]
+
+U_T vs. U_B:
+  Linear Model (LM)        18(2)/6(0) [75%W]  vs.  paper 14(2)/10(0) [58%W]
+  SVM                      14(2)/10(3) [58%W]  vs.  paper 10(0)/14(0) [42%W]
+  MARS                     16(0)/8(0) [67%W]  vs.  paper 11(0)/13(2) [46%W]
+  Random Forest (RF)       17(2)/7(0) [71%W]  vs.  paper 12(1)/12(2) [50%W]
+  CART (RPART)             13(1)/11(0) [54%W]  vs.  paper 14(4)/10(0) [58%W]
+
+U_TPhi vs. U_B:
+  Linear Model (LM)        13(5)/11(4) [54%W]  vs.  paper 15(10)/9(3) [62%W]
+  SVM                      13(5)/11(4) [54%W]  vs.  paper 11(5)/13(4) [46%W]
+  MARS                     20(6)/4(1) [83%W]  vs.  paper 17(6)/7(1) [71%W]
+  Random Forest (RF)       17(6)/7(3) [71%W]  vs.  paper 16(6)/8(3) [67%W]
+  CART (RPART)             15(5)/9(1) [62%W]  vs.  paper 16(7)/8(5) [67%W]
+
+O_T vs. O_B:
+  Linear Model (LM)        10(7)/14(5) [42%W]  vs.  paper 14(8)/10(9) [58%W]
+  SVM                      10(5)/14(7) [42%W]  vs.  paper 12(5)/12(6) [50%W]
+  MARS                     11(3)/13(4) [46%W]  vs.  paper 11(3)/13(4) [46%W]
+  Random Forest (RF)       9(3)/15(3) [38%W]  vs.  paper 8(4)/16(4) [33%W]
+  CART (RPART)             11(3)/13(1) [46%W]  vs.  paper 12(3)/12(2) [50%W]
+
+O_TPhi vs. O_B:
+  Linear Model (LM)        13(7)/11(6) [54%W]  vs.  paper 14(9)/10(7) [58%W]
+  SVM                      10(4)/14(8) [42%W]  vs.  paper 12(4)/12(7) [50%W]
+  MARS                     11(3)/13(4) [46%W]  vs.  paper 11(3)/13(2) [46%W]
+  Random Forest (RF)       11(3)/13(7) [46%W]  vs.  paper 8(2)/16(5) [33%W]
+  CART (RPART)             11(2)/13(2) [46%W]  vs.  paper 14(3)/10(2) [58%W]
+
+SM_T vs. SM_B:
+  Linear Model (LM)        8(3)/16(11) [33%W]  vs.  paper 6(5)/18(13) [25%W]
+  SVM                      8(5)/16(11) [33%W]  vs.  paper 10(5)/14(10) [42%W]
+  MARS                     9(1)/15(9) [38%W]  vs.  paper 9(6)/15(10) [38%W]
+  Random Forest (RF)       8(3)/16(11) [33%W]  vs.  paper 9(3)/15(10) [38%W]
+  CART (RPART)             8(1)/16(11) [33%W]  vs.  paper 8(1)/15(11) [33%W]
+
+SM_TPhi vs. SM_B:
+  Linear Model (LM)        7(2)/17(12) [29%W]  vs.  paper 6(4)/18(11) [25%W]
+  SVM                      9(7)/15(12) [38%W]  vs.  paper 9(6)/15(12) [38%W]
+  MARS                     10(6)/14(5) [42%W]  vs.  paper 12(4)/12(6) [50%W]
+  Random Forest (RF)       11(5)/13(7) [46%W]  vs.  paper 12(5)/12(10) [50%W]
+  CART (RPART)             10(4)/14(8) [42%W]  vs.  paper 6(4)/17(9) [25%W]
+

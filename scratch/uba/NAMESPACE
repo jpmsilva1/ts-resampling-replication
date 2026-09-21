@@ -1,0 +1,52 @@
+
+## ------------------------------------------------------------------------------------------------
+
+useDynLib(uba)
+
+## ------------------------------------------------------------------------------------------------
+
+import(graphics)
+importFrom(stats, formula, model.frame, predict, residuals, friedman.test) ## stats is at the base
+importFrom(operators, '%~%','%-~%')
+import(methods)
+import(Hmisc) 
+import(DMwR)
+
+
+## ------------------------------------------------------------------------------------------------
+## Classes
+exportClasses(uba.par, uba.learner, ubar, cdTest)
+
+## Methods
+S3method(predict, ubar) ## it is not defined as setMethod
+exportMethods(show)
+exportMethods(subset)
+exportMethods(plot)
+
+## Functions
+
+export(
+       ## evaluation basis
+       phi, phi.control, phi3D.values, phi.isometrics, phi.surface, phi.plot,
+       loss.control,phi.bumps.info,
+       util, util.rank,
+       util.control, util3D.values, util.isometrics, util.surface,
+
+       ## urpart - best u-cv rpart tree
+       urpart, 
+       
+       ## uba rules
+       ubar,
+
+       ## for internal ubar purposes
+       ## rules.rpart, 
+       ## print.rules.rpart, 
+       
+       ## ROC / PR curves
+       pn.prediction,pn.curve,pn.plot,
+
+       ## CD diagram
+       cd.test     
+       )
+       
+

@@ -1,0 +1,24 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Causal Effect on $\log(\mathrm{SERA})$ vs.\ Baseline} (pooled, $N{=}120$ blocks). Positive $\tau_k$ = strategy WORSE than baseline (SERA is lower-is-better). Bold indicates Holm-significant at $\alpha{=}0.05$.}
+\label{tab:causal_sera_pooled}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lccc c}
+\toprule
+\textbf{Strategy} & \textbf{$\tau_k$} & \textbf{95\% CI} & \textbf{RI $p$} & \textbf{Holm $p$} \\
+\midrule
+\texttt{UNDERB} & \textbf{0.2936} & [0.1976, 0.4074] & $<0.001$ & $<0.001$ \\
+\texttt{UNDERT} & \textbf{0.3032} & [0.2098, 0.4127] & $<0.001$ & $<0.001$ \\
+\texttt{UNDERTPhi} & \textbf{0.3612} & [0.2358, 0.5285] & $<0.001$ & $<0.001$ \\
+\texttt{OVERB} & \textbf{0.1796} & [0.1158, 0.2568] & 0.020 & 0.041 \\
+\texttt{OVERT} & \textbf{0.2850} & [0.1119, 0.5862] & $<0.001$ & $<0.001$ \\
+\texttt{OVERTPhi} & \textbf{0.1736} & [0.1176, 0.2388] & 0.031 & 0.041 \\
+\texttt{SMOTEB} & \textbf{0.3153} & [0.2418, 0.3966] & $<0.001$ & $<0.001$ \\
+\texttt{SMOTET} & \textbf{0.3450} & [0.2837, 0.4070] & $<0.001$ & $<0.001$ \\
+\texttt{SMOTETPhi} & \textbf{0.4264} & [0.3425, 0.5141] & $<0.001$ & $<0.001$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

@@ -1,0 +1,40 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Global Average Rank -- F1}, ranking all 50 model-family$\times$strategy combinations jointly across the 24 datasets (rank 1 = best; NOT a per-family ranking).}
+\label{tab:exp002_f1_avg_ranks}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lclc}
+\toprule
+\textbf{Combo} & \textbf{Avg. Rank} & \textbf{Combo} & \textbf{Avg. Rank} \\
+\midrule
+\textbf{\texttt{RF.SMOTEB}} & \textbf{15.3} & \texttt{RF.SMOTET} & 23.5 \\
+\texttt{LM.SMOTEB} & 16.3 & \texttt{SVM.SMOTEB} & 24.1 \\
+\texttt{LM.UNDERTPhi} & 19.9 & \texttt{RPART.SMOTETPhi} & 24.1 \\
+\texttt{LM.SMOTET} & 20.0 & \texttt{RPART.OVERTPhi} & 24.1 \\
+\texttt{RF.SMOTETPhi} & 20.5 & \texttt{MARS.OVERTPhi} & 24.1 \\
+\texttt{LM.UNDERT} & 20.5 & \texttt{RPART.OVERT} & 24.1 \\
+\texttt{LM.SMOTETPhi} & 20.5 & \texttt{MARS.OVERB} & 24.5 \\
+\texttt{SVM.UNDERTPhi} & 20.8 & \texttt{MARS.SMOTET} & 24.8 \\
+\texttt{LM.OVERB} & 20.9 & \texttt{SVM.baseline} & 26.5 \\
+\texttt{MARS.SMOTEB} & 21.6 & \texttt{SVM.SMOTET} & 27.1 \\
+\texttt{RPART.UNDERTPhi} & 21.9 & \texttt{MARS.UNDERTPhi} & 27.2 \\
+\texttt{SVM.OVERB} & 22.0 & \texttt{RF.UNDERB} & 27.9 \\
+\texttt{LM.OVERTPhi} & 22.0 & \texttt{SVM.SMOTETPhi} & 28.0 \\
+\texttt{LM.OVERT} & 22.1 & \texttt{RF.UNDERTPhi} & 28.1 \\
+\texttt{RPART.SMOTEB} & 22.1 & \texttt{RF.UNDERT} & 28.3 \\
+\texttt{MARS.SMOTETPhi} & 22.5 & \texttt{RPART.SMOTET} & 28.4 \\
+\texttt{MARS.OVERT} & 22.7 & \texttt{RPART.baseline} & 30.0 \\
+\texttt{LM.UNDERB} & 22.7 & \texttt{MARS.UNDERT} & 32.1 \\
+\texttt{RPART.OVERB} & 22.7 & \texttt{MARS.UNDERB} & 33.0 \\
+\texttt{SVM.OVERTPhi} & 22.9 & \texttt{RF.OVERB} & 36.0 \\
+\texttt{SVM.UNDERB} & 23.0 & \texttt{RF.OVERTPhi} & 36.2 \\
+\texttt{RPART.UNDERB} & 23.0 & \texttt{RF.OVERT} & 36.4 \\
+\texttt{SVM.OVERT} & 23.1 & \texttt{MARS.baseline} & 38.8 \\
+\texttt{RPART.UNDERT} & 23.2 & \texttt{RF.baseline} & 40.0 \\
+\texttt{SVM.UNDERT} & 23.5 & \texttt{LM.baseline} & 42.1 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

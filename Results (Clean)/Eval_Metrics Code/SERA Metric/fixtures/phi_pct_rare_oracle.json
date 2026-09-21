@@ -1,0 +1,165 @@
+{
+  "_source": "Moniz, Branco & Torgo (2017) Table 1 %Rare + R uba::phi.control extremes-method control points, vendored from tsresample-kit/repo-root/tests/fixtures/phi_oracle.json (r_oracle_median_control_x variant) on 2026-09-03",
+  "datasets": {
+    "DS01": {
+      "paper_pct_rare": 9.9,
+      "r_oracle_median_control_x": [
+        -0.124167,
+        0.003297,
+        0.124167
+      ]
+    },
+    "DS02": {
+      "paper_pct_rare": 9.3,
+      "r_oracle_median_control_x": [
+        -0.3,
+        0.00260375,
+        0.314583
+      ]
+    },
+    "DS03": {
+      "paper_pct_rare": 7.8,
+      "r_oracle_median_control_x": [
+        -0.200879,
+        -0.004352,
+        0.197141
+      ]
+    },
+    "DS04": {
+      "paper_pct_rare": 13.3,
+      "r_oracle_median_control_x": [
+        -1889.0,
+        72.5,
+        1920.0
+      ]
+    },
+    "DS05": {
+      "paper_pct_rare": 3.5,
+      "r_oracle_median_control_x": [
+        -0.06,
+        0.0,
+        0.06
+      ]
+    },
+    "DS06": {
+      "paper_pct_rare": 4.8,
+      "r_oracle_median_control_x": [
+        -0.15,
+        0.0,
+        0.15
+      ]
+    },
+    "DS07": {
+      "paper_pct_rare": 12.5,
+      "r_oracle_median_control_x": [
+        -0.1642,
+        0.0,
+        0.1642
+      ]
+    },
+    "DS08": {
+      "paper_pct_rare": 17.6,
+      "r_oracle_median_control_x": [
+        -140.0,
+        -4.0,
+        132.0
+      ]
+    },
+    "DS09": {
+      "paper_pct_rare": 21.1,
+      "r_oracle_median_control_x": [
+        -1.32,
+        0.0,
+        1.1
+      ]
+    },
+    "DS10": {
+      "paper_pct_rare": 4.8,
+      "r_oracle_median_control_x": [
+        -6.0,
+        0.0,
+        5.0
+      ]
+    },
+    "DS11": {
+      "paper_pct_rare": 13.3,
+      "r_oracle_median_control_x": [
+        -4.0,
+        0.0,
+        4.0
+      ]
+    },
+    "DS12": {
+      "paper_pct_rare": 11.0,
+      "r_oracle_median_control_x": [
+        -24.0,
+        0.0,
+        21.0
+      ]
+    },
+    "DS13": {
+      "paper_pct_rare": 11.1,
+      "r_oracle_median_control_x": [
+        -28.0,
+        0.0,
+        28.0
+      ]
+    },
+    "DS14": {
+      "paper_pct_rare": 16.3,
+      "r_oracle_median_control_x": [
+        -0.019879851,
+        0.001396013,
+        0.023022629
+      ]
+    },
+    "DS15": {
+      "paper_pct_rare": 11.4,
+      "r_oracle_median_control_x": [
+        -0.027823812,
+        0.001436601,
+        0.031411443
+      ]
+    },
+    "DS16": {
+      "paper_pct_rare": 9.7,
+      "r_oracle_median_control_x": [
+        -0.026085699,
+        0.001356129,
+        0.025350254
+      ]
+    },
+    "DS17": {
+      "paper_pct_rare": 11.6,
+      "r_oracle_median_control_x": [
+        -0.029286272,
+        9.62e-05,
+        0.027223014
+      ]
+    },
+    "DS18": {
+      "paper_pct_rare": 10.1,
+      "r_oracle_median_control_x": [
+        -0.025391151,
+        0.000950201,
+        0.0302374485
+      ]
+    },
+    "DS19": {
+      "paper_pct_rare": 8.2,
+      "r_oracle_median_control_x": [
+        -0.026607747,
+        0.000783591,
+        0.027037465
+      ]
+    },
+    "DS20": {
+      "paper_pct_rare": 6.8,
+      "r_oracle_median_control_x": [
+        -0.021109333,
+        0.0014072815,
+        0.025812429
+      ]
+    }
+  }
+}

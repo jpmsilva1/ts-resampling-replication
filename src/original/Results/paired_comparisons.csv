@@ -1,0 +1,16 @@
+"","Win","sigWin","Loss","SigLoss","Tie"
+"mc.lm_UNDERB",1,1,0,0,0
+"mc.lm_OVERB",1,1,0,0,0
+"mc.lm_SMOTEB",1,1,0,0,0
+"mc.svm_UNDERB",1,1,0,0,0
+"mc.svm_OVERB",1,1,0,0,0
+"mc.svm_SMOTEB",1,1,0,0,0
+"mc.mars_UNDERB",1,1,0,0,0
+"mc.mars_OVERB",1,1,0,0,0
+"mc.mars_SMOTEB",1,1,0,0,0
+"mc.rf_UNDERB",1,1,0,0,0
+"mc.rf_OVERB",1,1,0,0,0
+"mc.rf_SMOTEB",1,1,0,0,0
+"mc.rpart_UNDERB",1,0,0,0,0
+"mc.rpart_OVERB",0,0,1,1,0
+"mc.rpart_SMOTEB",1,0,0,0,0

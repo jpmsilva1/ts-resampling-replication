@@ -1,0 +1,16 @@
+Table 6 equivalent -- absolute SVM F1_phi, DS4/DS10/DS12, ours vs. paper.
+CAVEAT: paper's Table 6 jointly optimizes cost/gamma AND resampling
+percentages per dataset, using 10 MC reps (not 50) -- anchors magnitude,
+not an exact target. Our numbers use the single per-dataset Table 7
+cost/gamma (not further tuned) and default balanced resampling, 50 reps.
+
+  svm         DS04: ours=0.560 paper=0.584  DS10: ours=0.609 paper=0.638  DS12: ours=0.220 paper=0.554
+  U_B         DS04: ours=0.450 paper=0.668  DS10: ours=0.569 paper=0.652  DS12: ours=0.474 paper=0.610
+  U_T         DS04: ours=0.452 paper=0.659  DS10: ours=0.578 paper=0.643  DS12: ours=0.474 paper=0.614
+  U_TPhi      DS04: ours=0.457 paper=0.651  DS10: ours=0.614 paper=0.647  DS12: ours=0.469 paper=0.630
+  O_B         DS04: ours=0.444 paper=0.653  DS10: ours=0.589 paper=0.651  DS12: ours=0.401 paper=0.611
+  O_T         DS04: ours=0.437 paper=0.650  DS10: ours=0.601 paper=0.652  DS12: ours=0.418 paper=0.615
+  O_TPhi      DS04: ours=0.435 paper=0.651  DS10: ours=0.601 paper=0.652  DS12: ours=0.416 paper=0.611
+  SM_B        DS04: ours=0.424 paper=0.662  DS10: ours=0.586 paper=0.675  DS12: ours=0.453 paper=0.609
+  SM_T        DS04: ours=0.452 paper=0.656  DS10: ours=0.580 paper=0.698  DS12: ours=0.472 paper=0.600
+  SM_TPhi     DS04: ours=0.442 paper=0.649  DS10: ours=0.605 paper=0.721  DS12: ours=0.475 paper=0.620

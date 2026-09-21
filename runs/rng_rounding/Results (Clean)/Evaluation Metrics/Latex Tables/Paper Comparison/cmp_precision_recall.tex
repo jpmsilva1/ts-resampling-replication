@@ -1,0 +1,21 @@
+\begingroup
+\captionof{table}{Precision/recall delta check vs. paper Sec 5.1 claim}
+\label{tab:exp002_cmp_cmp_precision_recall}
+\tiny
+\begin{verbatim}
+Precision/recall split -- paper claims F1 gains come mostly from
+higher precision, not recall (Sec 5.1). Delta = resampled mean - baseline mean,
+averaged over all 9 strategies and 24 datasets, per family.
+
+Also flagged: baseline recall stays ~0.4-0.6 even in datasets where
+baseline precision is exactly 0.00 -- worth inspecting independently
+of the hyperparameter-placeholder finding (Eq. 2's recall denominator
+does not obviously predict this).
+
+  Linear Model (LM)        baseline prec=0.247 rec=0.481 | mean resampled delta: prec=+0.219 rec=+0.061 | baseline prec~0 in 12/24 datasets
+  SVM                      baseline prec=0.470 rec=0.498 | mean resampled delta: prec=-0.027 rec=+0.035 | baseline prec~0 in 0/24 datasets
+  MARS                     baseline prec=0.355 rec=0.480 | mean resampled delta: prec=+0.086 rec=+0.048 | baseline prec~0 in 0/24 datasets
+  Random Forest (RF)       baseline prec=0.279 rec=0.483 | mean resampled delta: prec=+0.134 rec=+0.033 | baseline prec~0 in 7/24 datasets
+  CART (RPART)             baseline prec=0.462 rec=0.491 | mean resampled delta: prec=-0.010 rec=+0.037 | baseline prec~0 in 0/24 datasets
+\end{verbatim}
+\endgroup

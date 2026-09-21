@@ -1,0 +1,41 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Best and Worst (Model, Strategy) Combination per Dataset -- SERA}, across all 50 model-family$\times$strategy combinations.}
+\label{tab:exp002_sera_best_worst}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{lllll}
+\toprule
+\textbf{Dataset} & \textbf{Best Combo} & \textbf{Best SERA} & \textbf{Worst Combo} & \textbf{Worst SERA} \\
+\midrule
+DS01 (Bike Daily Temp) & \texttt{LM.baseline} & 0.2996 & \texttt{SVM.SMOTETPhi} & 0.7131 \\
+DS02 (Bike Daily Humidity) & \texttt{LM.baseline} & 1.1704 & \texttt{RPART.UNDERTPhi} & 3.2341 \\
+DS03 (Bike Daily Windspeed) & \texttt{LM.OVERT} & 0.4435 & \texttt{RPART.SMOTETPhi} & 1.1340 \\
+DS04 (Bike Daily Count) & \texttt{LM.OVERB} & $1.5938 \times 10^{8}$ & \texttt{SVM.SMOTETPhi} & $3.7038 \times 10^{8}$ \\
+DS05 (Bike Hourly Temp) & \texttt{RF.SMOTETPhi} & 1.2509 & \texttt{SVM.SMOTETPhi} & 1.9049 \\
+DS06 (Bike Hourly Humidity) & \texttt{RF.UNDERB} & 9.6882 & \texttt{SVM.SMOTETPhi} & 21.4470 \\
+DS07 (Bike Hourly Windspeed) & \texttt{LM.UNDERTPhi} & 19.1523 & \texttt{SVM.SMOTETPhi} & 29.9872 \\
+DS08 (Bike Hourly Count) & \texttt{RF.SMOTEB} & $1.5201 \times 10^{7}$ & \texttt{LM.baseline} & $4.3257 \times 10^{7}$ \\
+DS09 (Icelandic River Flow) & \texttt{RF.SMOTEB} & 2709.9179 & \texttt{MARS.SMOTETPhi} & 11402.9492 \\
+DS10 (Porto Min Temp) & \texttt{LM.OVERB} & 400.3265 & \texttt{SVM.UNDERB} & 1466.8465 \\
+DS11 (Porto Max Temp) & \texttt{LM.UNDERT} & 1383.4027 & \texttt{RPART.SMOTETPhi} & 2656.3571 \\
+DS12 (Porto Max Steady Wind) & \texttt{LM.OVERB} & 4600.0639 & \texttt{RPART.UNDERT} & 13717.6710 \\
+DS13 (Porto Max Wind Gust) & \texttt{LM.OVERB} & 27415.3051 & \texttt{RPART.SMOTEB} & 55744.3905 \\
+DS14 (Istanbul S\&P) & \texttt{RF.OVERTPhi} & 0.0170 & \texttt{SVM.SMOTETPhi} & 0.0503 \\
+DS15 (Istanbul DAX) & \texttt{LM.baseline} & 0.0141 & \texttt{SVM.SMOTETPhi} & 0.0438 \\
+DS16 (Istanbul FTSE) & \texttt{LM.baseline} & 0.0153 & \texttt{SVM.SMOTETPhi} & 0.0528 \\
+DS17 (Istanbul Nikkei) & \texttt{RF.baseline} & 0.0189 & \texttt{SVM.SMOTETPhi} & 0.0594 \\
+DS18 (Istanbul Bovespa) & \texttt{SVM.baseline} & 0.0171 & \texttt{SVM.SMOTETPhi} & 0.0577 \\
+DS19 (Istanbul EU) & \texttt{LM.baseline} & 0.0164 & \texttt{MARS.SMOTETPhi} & 0.0507 \\
+DS20 (Istanbul EM) & \texttt{LM.baseline} & 0.0057 & \texttt{SVM.SMOTETPhi} & 0.0237 \\
+DS21 (AU Elec Demand) & \texttt{RF.baseline} & $3.0805 \times 10^{7}$ & \texttt{RPART.UNDERB} & $2.9281 \times 10^{8}$ \\
+DS22 (AU Elec Price) & \texttt{LM.baseline} & $2.3405 \times 10^{8}$ & \texttt{MARS.OVERT} & $7.2690 \times 10^{15}$ \\
+DS23 (Oporto Water Pedroucos) & \texttt{SVM.baseline} & $7.7656 \times 10^{7}$ & \texttt{LM.UNDERTPhi} & $1.5675 \times 10^{11}$ \\
+DS24 (Oporto Water Rotunda) & \texttt{SVM.UNDERT} & $2.8621 \times 10^{5}$ & \texttt{RPART.SMOTETPhi} & $3.3344 \times 10^{6}$ \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}

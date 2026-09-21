@@ -1,0 +1,149 @@
+Leave-one-out sensitivity of the Table 3 baseline comparison  [alpha=0.05, N=24]
+
+DIAGNOSTIC ONLY -- this is NOT a jackknife and implies no standard error.
+The datasets are source-clustered (7 sources over 24 datasets: e.g. DS14-20
+are seven indices from one exchange), so leave-one-DATASET-out values are not
+independent and their spread must not be read as a variance estimate. Dropping
+one dataset while its siblings remain damps the apparent effect, so 'little
+movement' is weak evidence. The leave-one-SOURCE-out block below is the clean
+cut; the causal module's jackknife (Eval_Metrics Code/Causal) uses that unit
+for exactly this reason.
+
+Question this answers: is our residual SVM disagreement with the paper spread
+across datasets (systemic -- something is still wrong in the pipeline), or
+carried by one or two (local -- a dataset-specific discrepancy)?
+
+Linear Model (LM):
+  U_B     full= 79.2%W  (paper  79.2%W)  LOO range [ 78.3,  82.6]  most influential: DS04 ->  82.6%W (+3.4pp)
+  O_B     full= 75.0%W  (paper  75.0%W)  LOO range [ 73.9,  78.3]  most influential: DS04 ->  78.3%W (+3.3pp)
+  SM_B    full= 79.2%W  (paper  79.2%W)  LOO range [ 78.3,  82.6]  most influential: DS04 ->  82.6%W (+3.4pp)
+
+SVM:
+  U_B     full= 62.5%W  (paper  33.3%W)  LOO range [ 60.9,  65.2]  most influential: DS03 ->  65.2%W (+2.7pp)
+  O_B     full= 66.7%W  (paper  29.2%W)  LOO range [ 65.2,  69.6]  most influential: DS04 ->  69.6%W (+2.9pp)
+  SM_B    full= 66.7%W  (paper  29.2%W)  LOO range [ 65.2,  69.6]  most influential: DS03 ->  69.6%W (+2.9pp)
+
+MARS:
+  U_B     full= 58.3%W  (paper  62.5%W)  LOO range [ 56.5,  60.9]  most influential: DS04 ->  60.9%W (+2.5pp)
+  O_B     full= 75.0%W  (paper  70.8%W)  LOO range [ 73.9,  78.3]  most influential: DS04 ->  78.3%W (+3.3pp)
+  SM_B    full= 75.0%W  (paper  75.0%W)  LOO range [ 73.9,  78.3]  most influential: DS04 ->  78.3%W (+3.3pp)
+
+Random Forest (RF):
+  U_B     full= 83.3%W  (paper  75.0%W)  LOO range [ 82.6,  87.0]  most influential: DS04 ->  87.0%W (+3.6pp)
+  O_B     full= 75.0%W  (paper  83.3%W)  LOO range [ 73.9,  78.3]  most influential: DS07 ->  78.3%W (+3.3pp)
+  SM_B    full= 91.7%W  (paper  83.3%W)  LOO range [ 91.3,  95.7]  most influential: DS04 ->  95.7%W (+4.0pp)
+
+CART (RPART):
+  U_B     full= 75.0%W  (paper  50.0%W)  LOO range [ 73.9,  78.3]  most influential: DS02 ->  78.3%W (+3.3pp)
+  O_B     full= 66.7%W  (paper  45.8%W)  LOO range [ 65.2,  69.6]  most influential: DS02 ->  69.6%W (+2.9pp)
+  SM_B    full= 70.8%W  (paper  41.7%W)  LOO range [ 69.6,  73.9]  most influential: DS02 ->  73.9%W (+3.1pp)
+
+
+Leave-one-SOURCE-out (the defensible cut -- whole correlated group removed):
+
+Linear Model (LM):
+  U_B     full= 79.2%W  australian_electricity=82  bike_daily=80  bike_hourly=80  icelandic_river=83  istanbul_stock=71  porto_water=82  porto_weather=75
+  O_B     full= 75.0%W  australian_electricity=77  bike_daily=75  bike_hourly=80  icelandic_river=78  istanbul_stock=65  porto_water=77  porto_weather=70
+  SM_B    full= 79.2%W  australian_electricity=82  bike_daily=80  bike_hourly=80  icelandic_river=83  istanbul_stock=71  porto_water=82  porto_weather=75
+
+SVM:
+  U_B     full= 62.5%W  australian_electricity=68  bike_daily=65  bike_hourly=60  icelandic_river=61  istanbul_stock=59  porto_water=64  porto_weather=60
+  O_B     full= 66.7%W  australian_electricity=68  bike_daily=65  bike_hourly=65  icelandic_river=70  istanbul_stock=65  porto_water=68  porto_weather=65
+  SM_B    full= 66.7%W  australian_electricity=68  bike_daily=70  bike_hourly=65  icelandic_river=65  istanbul_stock=65  porto_water=68  porto_weather=65
+
+MARS:
+  U_B     full= 58.3%W  australian_electricity=64  bike_daily=55  bike_hourly=50  icelandic_river=57  istanbul_stock=65  porto_water=64  porto_weather=55
+  O_B     full= 75.0%W  australian_electricity=82  bike_daily=75  bike_hourly=70  icelandic_river=74  istanbul_stock=65  porto_water=82  porto_weather=75
+  SM_B    full= 75.0%W  australian_electricity=82  bike_daily=75  bike_hourly=70  icelandic_river=74  istanbul_stock=65  porto_water=82  porto_weather=75
+
+Random Forest (RF):
+  U_B     full= 83.3%W  australian_electricity=91  bike_daily=85  bike_hourly=80  icelandic_river=83  istanbul_stock=76  porto_water=86  porto_weather=80
+  O_B     full= 75.0%W  australian_electricity=77  bike_daily=70  bike_hourly=75  icelandic_river=78  istanbul_stock=71  porto_water=77  porto_weather=75
+  SM_B    full= 91.7%W  australian_electricity=95  bike_daily=95  bike_hourly=90  icelandic_river=91  istanbul_stock=88  porto_water=91  porto_weather=90
+
+CART (RPART):
+  U_B     full= 75.0%W  australian_electricity=73  bike_daily=80  bike_hourly=70  icelandic_river=78  istanbul_stock=76  porto_water=73  porto_weather=75
+  O_B     full= 66.7%W  australian_electricity=64  bike_daily=70  bike_hourly=65  icelandic_river=70  istanbul_stock=59  porto_water=64  porto_weather=75
+  SM_B    full= 70.8%W  australian_electricity=68  bike_daily=75  bike_hourly=65  icelandic_river=74  istanbul_stock=71  porto_water=68  porto_weather=75
+
+
+Per-dataset detail, SVM only (the family whose Table 3 row still disagrees):
+
+  U_B (full 62.5%W):
+    drop DS01:  60.9%W (-1.6pp)  [bike_daily]
+    drop DS02:  60.9%W (-1.6pp)  [bike_daily]
+    drop DS03:  65.2%W (+2.7pp)  [bike_daily]
+    drop DS04:  65.2%W (+2.7pp)  [bike_daily]
+    drop DS05:  60.9%W (-1.6pp)  [bike_hourly]
+    drop DS06:  60.9%W (-1.6pp)  [bike_hourly]
+    drop DS07:  60.9%W (-1.6pp)  [bike_hourly]
+    drop DS08:  65.2%W (+2.7pp)  [bike_hourly]
+    drop DS09:  60.9%W (-1.6pp)  [icelandic_river]
+    drop DS10:  65.2%W (+2.7pp)  [porto_weather]
+    drop DS11:  60.9%W (-1.6pp)  [porto_weather]
+    drop DS12:  60.9%W (-1.6pp)  [porto_weather]
+    drop DS13:  60.9%W (-1.6pp)  [porto_weather]
+    drop DS14:  60.9%W (-1.6pp)  [istanbul_stock]
+    drop DS15:  60.9%W (-1.6pp)  [istanbul_stock]
+    drop DS16:  65.2%W (+2.7pp)  [istanbul_stock]
+    drop DS17:  60.9%W (-1.6pp)  [istanbul_stock]
+    drop DS18:  60.9%W (-1.6pp)  [istanbul_stock]
+    drop DS19:  65.2%W (+2.7pp)  [istanbul_stock]
+    drop DS20:  60.9%W (-1.6pp)  [istanbul_stock]
+    drop DS21:  65.2%W (+2.7pp)  [australian_electricity]
+    drop DS22:  65.2%W (+2.7pp)  [australian_electricity]
+    drop DS23:  65.2%W (+2.7pp)  [porto_water]
+    drop DS24:  60.9%W (-1.6pp)  [porto_water]
+
+  O_B (full 66.7%W):
+    drop DS01:  65.2%W (-1.4pp)  [bike_daily]
+    drop DS02:  65.2%W (-1.4pp)  [bike_daily]
+    drop DS03:  65.2%W (-1.4pp)  [bike_daily]
+    drop DS04:  69.6%W (+2.9pp)  [bike_daily]
+    drop DS05:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS06:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS07:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS08:  69.6%W (+2.9pp)  [bike_hourly]
+    drop DS09:  69.6%W (+2.9pp)  [icelandic_river]
+    drop DS10:  69.6%W (+2.9pp)  [porto_weather]
+    drop DS11:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS12:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS13:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS14:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS15:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS16:  69.6%W (+2.9pp)  [istanbul_stock]
+    drop DS17:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS18:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS19:  69.6%W (+2.9pp)  [istanbul_stock]
+    drop DS20:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS21:  65.2%W (-1.4pp)  [australian_electricity]
+    drop DS22:  69.6%W (+2.9pp)  [australian_electricity]
+    drop DS23:  65.2%W (-1.4pp)  [porto_water]
+    drop DS24:  69.6%W (+2.9pp)  [porto_water]
+
+  SM_B (full 66.7%W):
+    drop DS01:  65.2%W (-1.4pp)  [bike_daily]
+    drop DS02:  65.2%W (-1.4pp)  [bike_daily]
+    drop DS03:  69.6%W (+2.9pp)  [bike_daily]
+    drop DS04:  69.6%W (+2.9pp)  [bike_daily]
+    drop DS05:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS06:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS07:  65.2%W (-1.4pp)  [bike_hourly]
+    drop DS08:  69.6%W (+2.9pp)  [bike_hourly]
+    drop DS09:  65.2%W (-1.4pp)  [icelandic_river]
+    drop DS10:  69.6%W (+2.9pp)  [porto_weather]
+    drop DS11:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS12:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS13:  65.2%W (-1.4pp)  [porto_weather]
+    drop DS14:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS15:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS16:  69.6%W (+2.9pp)  [istanbul_stock]
+    drop DS17:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS18:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS19:  69.6%W (+2.9pp)  [istanbul_stock]
+    drop DS20:  65.2%W (-1.4pp)  [istanbul_stock]
+    drop DS21:  65.2%W (-1.4pp)  [australian_electricity]
+    drop DS22:  69.6%W (+2.9pp)  [australian_electricity]
+    drop DS23:  69.6%W (+2.9pp)  [porto_water]
+    drop DS24:  65.2%W (-1.4pp)  [porto_water]
+

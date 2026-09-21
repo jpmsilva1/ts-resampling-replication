@@ -1,0 +1,23 @@
+\begingroup
+\captionof{table}{Table 6 replication check: absolute SVM F1 on DS4/DS10/DS12}
+\label{tab:exp002_cmp_cmp_table6}
+\tiny
+\begin{verbatim}
+Table 6 equivalent -- absolute SVM F1_phi, DS4/DS10/DS12, ours vs. paper.
+CAVEAT: paper's Table 6 jointly optimizes cost/gamma AND resampling
+percentages per dataset, using 10 MC reps (not 50) -- anchors magnitude,
+not an exact target. Our numbers use the single per-dataset Table 7
+cost/gamma (not further tuned) and default balanced resampling, 50 reps.
+
+  svm         DS04: ours=0.557 paper=0.584  DS10: ours=0.617 paper=0.638  DS12: ours=0.151 paper=0.554
+  U_B         DS04: ours=0.452 paper=0.668  DS10: ours=0.564 paper=0.652  DS12: ours=0.484 paper=0.610
+  U_T         DS04: ours=0.456 paper=0.659  DS10: ours=0.573 paper=0.643  DS12: ours=0.493 paper=0.614
+  U_TPhi      DS04: ours=0.457 paper=0.651  DS10: ours=0.613 paper=0.647  DS12: ours=0.492 paper=0.630
+  O_B         DS04: ours=0.442 paper=0.653  DS10: ours=0.584 paper=0.651  DS12: ours=0.418 paper=0.611
+  O_T         DS04: ours=0.433 paper=0.650  DS10: ours=0.597 paper=0.652  DS12: ours=0.423 paper=0.615
+  O_TPhi      DS04: ours=0.432 paper=0.651  DS10: ours=0.597 paper=0.652  DS12: ours=0.425 paper=0.611
+  SM_B        DS04: ours=0.423 paper=0.662  DS10: ours=0.583 paper=0.675  DS12: ours=0.461 paper=0.609
+  SM_T        DS04: ours=0.448 paper=0.656  DS10: ours=0.580 paper=0.698  DS12: ours=0.478 paper=0.600
+  SM_TPhi     DS04: ours=0.439 paper=0.649  DS10: ours=0.604 paper=0.721  DS12: ours=0.495 paper=0.620
+\end{verbatim}
+\endgroup

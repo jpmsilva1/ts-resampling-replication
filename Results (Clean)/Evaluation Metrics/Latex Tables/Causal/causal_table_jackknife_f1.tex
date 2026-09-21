@@ -1,0 +1,26 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Leave-One-Source-Out Jackknife, F1}: pooled $\tau_k$ recomputed excluding each of the 5 dataset sources in turn.}
+\label{tab:causal_jackknife_f1}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Strategy} & \textbf{Pooled} & \textbf{Excl.\ Australian Electricity} & \textbf{Excl.\ Bike Daily} & \textbf{Excl.\ Bike Hourly} & \textbf{Excl.\ Icelandic River} & \textbf{Excl.\ Istanbul Stock} & \textbf{Excl.\ Porto Water} & \textbf{Excl.\ Porto Weather} \\
+\midrule
+\texttt{UNDERB} & 0.1068 & 0.1182 & 0.0892 & 0.1088 & 0.1115 & 0.1165 & 0.1149 & 0.0873 \\
+\texttt{UNDERT} & 0.1096 & 0.1212 & 0.0908 & 0.1121 & 0.1144 & 0.1179 & 0.1179 & 0.0911 \\
+\texttt{UNDERTPhi} & 0.1119 & 0.1240 & 0.0928 & 0.1140 & 0.1168 & 0.1199 & 0.1233 & 0.0909 \\
+\texttt{OVERB} & 0.1098 & 0.1207 & 0.0952 & 0.1148 & 0.1152 & 0.1073 & 0.1170 & 0.0955 \\
+\texttt{OVERT} & 0.1083 & 0.1193 & 0.0953 & 0.1135 & 0.1137 & 0.1054 & 0.1157 & 0.0924 \\
+\texttt{OVERTPhi} & 0.1076 & 0.1186 & 0.0947 & 0.1126 & 0.1129 & 0.1048 & 0.1149 & 0.0915 \\
+\texttt{SMOTEB} & 0.1400 & 0.1539 & 0.1249 & 0.1482 & 0.1459 & 0.1267 & 0.1506 & 0.1247 \\
+\texttt{SMOTET} & 0.1287 & 0.1463 & 0.1110 & 0.1364 & 0.1342 & 0.1151 & 0.1402 & 0.1121 \\
+\texttt{SMOTETPhi} & 0.1295 & 0.1463 & 0.1120 & 0.1372 & 0.1351 & 0.1144 & 0.1441 & 0.1115 \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table*}

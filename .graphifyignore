@@ -1,0 +1,7 @@
+_archive/
+*_backup*
+**/figures/**
+**/Figures/**
+*.png
+scratch/latex_font_tests/**
+scratch/cd_diagram_refs/**

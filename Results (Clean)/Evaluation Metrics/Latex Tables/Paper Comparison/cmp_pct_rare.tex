@@ -1,0 +1,41 @@
+\begingroup
+\captionof{table}{Table 1 \%Rare reference values (see SERA Metric for the check)}
+\label{tab:exp002_cmp_cmp_pct_rare}
+\small
+\begin{verbatim}
+%Rare (Table 1) regression guard -- see SERA Metric/test_sera_metric.py
+for the primary phi-fix regression test; this repeats the same check
+from the paper-comparison audit's own data path.
+
+Dataset   paper %Rare
+  DS01          9.9%
+  DS02          9.3%
+  DS03          7.8%
+  DS04         13.3%
+  DS05          3.5%
+  DS06          4.8%
+  DS07         12.5%
+  DS08         17.6%
+  DS09         21.1%
+  DS10          4.8%
+  DS11         13.3%
+  DS12         11.0%
+  DS13         11.1%
+  DS14         16.3%
+  DS15         11.4%
+  DS16          9.7%
+  DS17         11.6%
+  DS18         10.1%
+  DS19          8.2%
+  DS20          6.8%
+  DS21          1.8%
+  DS22         10.2%
+  DS23          0.1%
+  DS24          3.4%
+
+(Computed phi %Rare vs. these values: see test_sera_metric.py's
+test_phi_matches_paper_pct_rare, MAE 0.99pp post-fix -- not recomputed
+here to avoid a second phi implementation; this file is the reference
+values only.)
+\end{verbatim}
+\endgroup
