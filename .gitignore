@@ -28,3 +28,8 @@ Results (Clean)/_pre_phi_fix_backup_20260903/
 logs/*.out
 logs/*.err
 CLAUDE.md
+
+# Local-only compiled report -- deliberately excluded from the repo (no
+# compiled report/paper is tracked, per repo policy); not just untracked, so
+# a future `git add -A` can't pull it in by accident.
+Exp_Report_Main/

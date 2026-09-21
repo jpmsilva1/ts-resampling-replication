@@ -96,7 +96,7 @@ def gen_table3():
         rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
     body = subheader + r" \\" + "\n" + "\n".join(rows)
     tex = table_star(
-        caption=r"\textbf{Table 3 replication check --- resampling vs.\ baseline}, "
+        caption=r"\textcolor{red}{$\bullet$}~\textbf{Resampling vs.\ baseline} (replicates the paper's Table 3), "
                 rf"Win(sigWin)/Loss(sigLoss) [\%W] per family, ours ({N_OURS} datasets) "
                 rf"vs.\ the paper ({TOTAL_DATASETS_PAPER}), $\alpha={ALPHA}$.",
         label="tab:exp002_cmp_cmp_table3",
@@ -147,8 +147,8 @@ def gen_table4():
             rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
         body = subheader + r" \\" + "\n" + "\n".join(rows)
         tex = table_star(
-            caption=rf"\textbf{{Table 4 replication check --- {group_name}}}, "
-                    r"biased variant vs.\ its own biased base, Win(sigWin)/Loss(sigLoss) "
+            caption=rf"\textcolor{{red}}{{$\bullet$}}~\textbf{{{group_name}: biased variant vs.\ its own biased base}} "
+                    r"(replicates the paper's Table 4), Win(sigWin)/Loss(sigLoss) "
                     rf"[\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
             label=f"tab:exp002_cmp_cmp_table4_{group_name.lower()}",
             col_spec="l" + "cc" * len(variants),
@@ -211,8 +211,8 @@ def gen_table5():
             rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
         body = subheader + r" \\" + "\n" + "\n".join(rows)
         tex = table_star(
-            caption=rf"\textbf{{Table 5 replication check --- {FAMILY_LABELS[fam]}}}, "
-                    r"every strategy vs.\ \texttt{ARIMA}/\texttt{BDES}, "
+            caption=rf"\textcolor{{red}}{{$\bullet$}}~\textbf{{{FAMILY_LABELS[fam]}: every strategy vs.\ \texttt{{ARIMA}}/"
+                    r"\texttt{BDES}} (replicates the paper's Table 5), "
                     rf"Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
             label=f"tab:exp002_cmp_cmp_table5_{fam}",
             col_spec="lcccc",
@@ -293,7 +293,7 @@ def gen_table6():
         rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
     body = subheader + r" \\" + "\n" + "\n".join(rows)
     tex = table_star(
-        caption=r"\textbf{Table 6 replication check --- absolute SVM $F_1^\phi$} on "
+        caption=r"\textcolor{red}{$\bullet$}~\textbf{Absolute SVM $F_1^\phi$} (replicates the paper's Table 6) on "
                 r"DS04/DS10/DS12, ours vs.\ paper (paper jointly optimizes "
                 r"hyperparameters \emph{and} resampling percentages over 10 MC reps; "
                 r"anchors magnitude, not an exact target).",
@@ -388,9 +388,9 @@ def gen_pct_rare():
     for l, r in zip(left, right):
         rows.append(rf"{l} & {PCT_RARE[l]:.1f}\% & {r} & {PCT_RARE[r]:.1f}\% \\")
     tex = table_star(
-        caption=r"\textbf{Table 1 \%Rare reference values} (paper) --- regression guard "
-                r"for the relevance function $\phi$; see SERA Metric's own test for the "
-                r"reconstructed-$\phi$ comparison (MAE 0.99pp).",
+        caption=r"\textcolor{red}{$\bullet$}~\textbf{\%Rare reference values} (from the paper's Table 1) --- "
+                r"regression guard for the relevance function $\phi$; see SERA Metric's own "
+                r"test for the reconstructed-$\phi$ comparison (MAE 0.99pp).",
         label="tab:exp002_cmp_cmp_pct_rare",
         col_spec="lclc",
         header=header,
