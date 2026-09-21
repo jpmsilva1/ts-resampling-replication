@@ -30,34 +30,39 @@ result would reproduce.
 | `REPLICATION_LOG.md` | Day-by-day log of getting the pipeline running |
 | `Results (Clean)/EXPERIMENTAL_PROTOCOL.md` | The full operational protocol — read this before evaluating new results |
 
-## From a clean checkout to every table and figure
+## Reproducing every table and figure
 
-Stage 0 (producing the raw `.Rdata`) needs the SLURM cluster the paper's own compute scale
-requires; everything after that (Stage 1–5) runs locally from the checked-in CSVs, no
-cluster access needed:
+Everything in this repo — every table, every figure, every statistic — regenerates locally
+from the checked-in CSVs. No cluster, no GPU, no network, ~2–3 minutes:
 
 ```bash
+pip install -r requirements.txt
 cd "Results (Clean)/Eval_Metrics Code"
 python3 run_all.py --tests   # 58 tests, all green
-python3 run_all.py           # regenerates every table and figure, ~5-10 min
+python3 run_all.py           # regenerates every table and figure
 ```
 
-To reproduce Stage 0 itself (only needed if you want to regenerate the raw `.Rdata`, not
-to reproduce any table or figure already checked in): see `Results (Clean)/
-EXPERIMENTAL_PROTOCOL.md` §2, and the `apuana` runbook it references for the SLURM
-submission steps.
+The only thing this *doesn't* reproduce is the raw `.Rdata` those CSVs were extracted
+from — that requires re-running the R experiment itself on a SLURM cluster (the paper's own
+scale of compute). Not needed to check any result already in this repo; see `Results
+(Clean)/EXPERIMENTAL_PROTOCOL.md` §2 if you want to do it anyway.
 
-## What's excluded, and why
+## What's tracked, and what isn't
 
 This repo tracks exactly what an independent reviewer needs to check the result and rerun
-the evaluation — nothing more. Excluded, all mechanically regenerable from
-`src/adapted/Exps.R` given cluster access: the `.Rdata` result files (~1.8 GB per run),
-per-fold prediction CSVs (~4 GB), and the two GB-scale legacy artifact archives this project
-accumulated along the way (`_archive/`, `_pre_phi_fix_backup_20260903/`). Also excluded, by
-design rather than size: no compiled report or narrative paper lives in this repo — only the
-code that produces every table and figure, and the tables and figures themselves.
+the evaluation — nothing more.
 
-What *is* tracked: all code, the 24 source dataset CSVs, the small derived per-iteration
-CSVs (~17 MB), every table and figure this repo currently produces, and each run's
-`RUN_MANIFEST.txt` (records exactly what code, RNG state, and hyperparameters produced it —
-the traceability layer built during Tier 2, see `runs/README.md`).
+**Tracked:** all code, the 24 source dataset CSVs, every per-fold result (F1/RMSE/SERA and
+the raw predictions behind them, ~4.3 GB), every table and figure this repo produces, and
+each run's `RUN_MANIFEST.txt` (records exactly what code, RNG state, and hyperparameters
+produced it — see `runs/README.md`).
+
+**Excluded:**
+- The raw `.Rdata` result files (~1.8 GB per run, individual files up to 464 MB). These are
+  R's serialized form of the same numbers the tracked CSVs already hold at full per-fold
+  granularity — nothing is lost by leaving them out, and several exceed GitHub's 100 MB
+  per-file limit. (Regenerating them needs the cluster — see above.)
+- Two legacy artifact archives this project accumulated along the way (`_archive/`,
+  `_pre_phi_fix_backup_20260903/`) — superseded snapshots, not the current result.
+- No compiled report or narrative paper — only the code that produces every table and
+  figure, and the tables and figures themselves.
