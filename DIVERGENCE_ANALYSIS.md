@@ -16,7 +16,14 @@ experiment named in §6.
 
 ## 1. Executive summary
 
-Three families reproduce the paper; two do not.
+> **Current status (2026-09-30).** The table below is the **historical `data_v2`
+> state** that opened this investigation; it is no longer the result. On the canonical
+> `data_v3` run (RNG pinned to `Rounding`, Win/Loss signed from medians, §11), all 15
+> Table 3 cells match the paper within ±1 dataset (5 exactly), including SVM and RPART.
+> The discrepancies that remain in Tables 4–6 are analysed in §12; none is a
+> whole-family directional shift, and none invalidates the replication.
+
+Historical (`data_v2`): three families reproduce the paper; two do not.
 
 | Family | Ours %W (U_B/O_B/SM_B) | Bootstrap 95% CI | Paper %W | Agrees? |
 |---|---|---|---|---|
@@ -539,11 +546,14 @@ O_B  LM/SVM/MARS/RF/RPART   79/33/67/79/46   75/29/71/83/46
 SM_B LM/SVM/MARS/RF/RPART   79/29/71/79/42   79/29/75/83/42
 ```
 
-All 15 cells within ±1 dataset, 6 exact matches (SVM U_B, SVM SM_B, RPART all three,
-LM SM_B). Leave-one-dataset-out and leave-one-source-out sensitivity
+All 15 cells within ±1 dataset, 5 exact matches (LM SM_B, SVM SM_B, RPART all
+three). SVM U_B is 38% vs 33% — one dataset, not exact. Leave-one-dataset-out and leave-one-source-out sensitivity
 (`cmp_sensitivity.txt`) confirm the result is not carried by any single dataset or
-source: the largest single-dataset swing is ±3.4pp, and every source-level exclusion
-stays within a few points of the full-sample figure. (A LaTeX report built on this data
+source: the largest single-dataset swing is ±3.4pp. Source-level exclusions move rows
+further, because a source holds up to seven of the 24 datasets: up to 11.7pp from the
+full-sample figure (RPART `SM_B` without `bike_hourly`) and up to 14pp from the paper
+(LM `U_B`, 65%W vs 79%W, without `istanbul_stock`). The full-sample agreement is not
+carried by any single dataset, but individual rows depend on which sources are present. (A LaTeX report built on this data
 existed briefly during this work and its prose was rewritten against these corrected
 numbers; the report itself was later removed from this repo by design — see "What's
 excluded, and why" in `README.md` — this document is now the canonical, kept-up-to-date
@@ -555,3 +565,58 @@ promotion touching everything downstream of F1/RMSE/SERA.
 This closes the Tier 2 investigation. Both experiments ran, one candidate cause (B) was
 refuted, one (A) was confirmed once the sign-statistic bug (C) stopped masking it, and
 the corrected, fully traceable result is now the project's canonical state.
+
+## 12. Residual discrepancies in Tables 4–6 (2026-09-30)
+
+Recomputed from `data_v3` raw per-fold F1 with an independent Wilcoxon/median-sign
+implementation; every "ours" cell in the comparison tables reproduces exactly. What
+remains is the gap to the *paper's* numbers.
+
+| Table | Cells | Exact win count | Within ±1 | Max gap |
+|---|---|---|---|---|
+| 3 (resampling vs baseline) | 15 | 5 | 15 | 1 |
+| 4 (biased variant vs its own B) | 30 | 6 | 16 | 6 |
+| 5 (vs ARIMA / BDES) | 90 | 52 | 81 | 3 |
+
+**Table 3 and most of Table 4 — sign noise on non-significant datasets.** [VERIFIED] In
+every Table 3 and Table 4 cell the win-count gap is smaller than the number of datasets
+whose comparison is non-significant (p ≥ 0.05). Table 4 compares near-identical
+strategies: 8–23 of 24 datasets per cell are non-significant, so their Win/Loss sign is
+close to a coin flip (largest gap: SVM `U_TPhi`, 17 vs 11 wins, 15 non-significant
+datasets). Significant-win counts move far less (mean |Δ| 1.0–1.9). 27 of 30 cells stay
+on the same side of 50%; the 3 that cross (MARS `U_T`, SVM `U_TPhi`, LM `O_TPhi`) are
+near-tie cells. The paper's own Table 4 is not clean either (RPART `SM_T`/`SM_TPhi` rows
+sum to 23, §3).
+
+**Why the draws still differ with the RNG pinned.** [HYPOTHESIS, untested] Pinning
+`RNGkind(sample.kind="Rounding")` restored Monte Carlo *fold selection* — what Table 3
+needed. It does not make the *resampling draws* identical to the paper's run: they execute
+in forked `parallelMap` workers with their own RNG streams, `randomForest`'s bootstrap
+draws in C (unaffected by `sample.kind`, §2), and package versions (R 4.3.3, e1071, earth,
+rpart, UBL) postdate the paper. These change exactly the draws that decide near-tie cells.
+
+**Table 5 — the ARIMA columns carry the gap.** [VERIFIED] Ours vs paper differ in 31/45
+ARIMA cells (mean |Δ| 0.89 datasets) but only 7/45 BDES cells (mean |Δ| 0.22), with the
+same strategies on the other side. The one deviation touching only ARIMA is D4
+(`mc.arima` fitted with `method="CSS"` plus an order-bounded fallback, to stop
+`auto.arima` hanging on DS21–24). No row falls on the opposite side of 50%.
+
+**Table 6 — different design, not an error.** The paper's Table 6 jointly optimizes SVM
+hyperparameters *and* resampling percentages over 10 MC repetitions; this replication
+uses `C.perc="balance"` over 50 folds (the paper's §5.1 default setting, §1). Resampled
+SVM F1 is therefore ~0.1–0.2 below the paper's; the baselines on DS04/DS10 land close
+(0.557 vs 0.584, 0.617 vs 0.638). DS12 (0.151 vs 0.554) is D2, `complete.cases()`.
+
+**Verdict.** No discrepancy is a systematic whole-family directional shift (the signature
+the old SVM/RPART gap had). The replication holds within sampling noise on the paper's
+H.1 (Table 3) and H.3 (Table 5) evidence; it is not a bit-exact reproduction, and
+individual Table 4 cells should not be read at the cell level.
+
+**On H.2.** The paper's H.2 support comes from undersampling with TPhi (its Table 4:
+`U_TPhi` >50%W in 4 of 5 families); this replication agrees (5 of 5, and bias improves
+undersampling monotonically: 0.4564 → 0.4591 → 0.4615 mean F1). For SMOTE both find the
+biased variants no better than `SM_B`: `SM_T` is below 50%W in every family on both sides,
+and `SM_TPhi` is at or below 50%W in every family in the paper and in 4 of 5 here (MARS
+58%W). The pooled "H.2 not supported" reading
+is a statement about all resampling families together, not a contradiction of the
+paper's data.
