@@ -46,8 +46,11 @@ def test_bold_marks_lowest_sera_not_highest():
             ds_labels={"DS01": "DS01 (Test)"},
             strategies=["baseline", "OVERB"],
         )
-        assert r"\textbf{0.0000}" in tex
-        assert r"\textbf{2.0000}" not in tex
+        # scientific notation: SERA spans ~1e-1 to ~1e11 across datasets, so
+        # fixed 4-decimal cells overflow the page; bold marks the LOWEST.
+        assert r"\mathbf{0.00{\times}10^{0}" in tex
+        assert r"\mathbf{2.00{\times}10^{0}" not in tex
+        assert "2.00{\\times}10^{0}" in tex
     finally:
         shutil.rmtree(tmp)
 

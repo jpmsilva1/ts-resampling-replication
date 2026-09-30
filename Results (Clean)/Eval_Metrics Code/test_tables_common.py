@@ -11,7 +11,7 @@ so the check has to be explicit.
 import csv
 
 from paths import MANIFEST, ROOT
-from tables_common import DS_LABELS, STRATEGIES, parse_workflow
+from tables_common import DS_LABELS, STRATEGIES, fmt_sci, parse_workflow
 
 
 def _manifest_ids() -> list[str]:
@@ -41,3 +41,10 @@ def test_parse_workflow_round_trips_every_strategy():
         for strat in STRATEGIES:
             wf = f"mc.{fam}" if strat == "baseline" else f"mc.{fam}_{strat}"
             assert parse_workflow(wf) == (fam, strat)
+
+
+def test_fmt_sci():
+    assert fmt_sci(0.3682) == r"3.68{\times}10^{-1}"
+    assert fmt_sci(77656000.0) == r"7.77{\times}10^{7}"
+    assert fmt_sci(0.0) == r"0.00{\times}10^{0}"
+    assert fmt_sci(9.996) == r"1.00{\times}10^{1}"  # rounding carries into the exponent

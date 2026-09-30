@@ -84,6 +84,21 @@ def fmt_mean_sd(mean: float, sd: float, bold: bool) -> str:
     return rf"{mean:.4f} $\pm$ {sd:.4f}"
 
 
+def fmt_sci(x: float) -> str:
+    """3-significant-figure scientific notation as a math fragment:
+    0.3682 -> '3.68{\\times}10^{-1}'. For metrics (SERA) whose range spans ~12
+    orders of magnitude across datasets, where fixed decimals overflow the page."""
+    if x != x:  # NaN, e.g. the SD of a single fold
+        return r"\text{--}"
+    mant, exp = f"{x:.2e}".split("e")
+    return rf"{mant}{{\times}}10^{{{int(exp)}}}"
+
+
+def fmt_mean_sd_sci(mean: float, sd: float, bold: bool) -> str:
+    body = rf"{fmt_sci(mean)} \pm {fmt_sci(sd)}"
+    return rf"$\mathbf{{{body}}}$" if bold else rf"${body}$"
+
+
 def table_star(*, caption: str, label: str, col_spec: str, header: str, body: str,
                 resize: str | None = "1.15\\textwidth") -> str:
     """The \\begin{table*} skeleton shared by every generator (booktabs,

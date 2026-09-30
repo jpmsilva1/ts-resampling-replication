@@ -25,7 +25,7 @@ import pandas as pd
 from sera_metric import sera
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from tables_common import DS_LABELS, datasets_on_disk, labels_for, MODEL_FAMILIES, STRATEGIES, ROOT, fmt_mean_sd, parse_workflow, table_star
+from tables_common import DS_LABELS, datasets_on_disk, labels_for, MODEL_FAMILIES, STRATEGIES, ROOT, fmt_mean_sd_sci, parse_workflow, table_star
 
 DATA_DIR = ROOT / "Results (Clean)/Results Data/raw_predictions_by_dataset"
 OUT_DIR = ROOT / "Results (Clean)/Evaluation Metrics/Latex Tables/SERA"
@@ -60,7 +60,7 @@ def build_family_table(data_dir: Path, family: str, ds_labels: dict, strategies:
 
         means = [v[0] for v in values]
         best = means.index(min(means))
-        cells = [fmt_mean_sd(m, s, j == best) for j, (m, s) in enumerate(values)]
+        cells = [fmt_mean_sd_sci(m, s, j == best) for j, (m, s) in enumerate(values)]
         row_lines.append(f"{ds_label} & " + " & ".join(cells))
 
     col_spec = "l" + "c" * len(strategies)
@@ -69,7 +69,8 @@ def build_family_table(data_dir: Path, family: str, ds_labels: dict, strategies:
     body = " \\\\\n".join(row_lines) + r" \\"
 
     caption = (rf"\textbf{{SERA (Mean $\pm$ SD) by Resampling Strategy -- {family_label}}}, across the "
-               r"evaluated time series forecasting datasets ($50$ Monte Carlo folds per cell). Bold values "
+               r"evaluated time series forecasting datasets ($50$ Monte Carlo folds per cell), in scientific notation "
+               r"(3 significant figures). Bold values "
                r"indicate the LOWEST (best) SERA for each dataset.")
     return table_star(caption=caption, label=f"tab:exp002_sera_{family}", col_spec=col_spec,
                        header=header, body=body)
