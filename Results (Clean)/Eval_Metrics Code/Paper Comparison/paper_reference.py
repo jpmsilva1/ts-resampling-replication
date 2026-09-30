@@ -21,7 +21,7 @@ every count below is out of 24 while this project's own counts are out of 20
 TOTAL_DATASETS_PAPER = 24
 
 # Table 1 (p.170) -- %Rare per dataset, the phi-relevance oracle. Already
-# reproduced by SERA Metric/test_sera_metric.py at 0.99pp MAE; kept here too
+# reproduced by SERA Metric/test_sera_metric.py at 0.86pp MAE; kept here too
 # so the paper-comparison audit carries the same regression guard.
 PCT_RARE = {
     "DS01": 9.9, "DS02": 9.3, "DS03": 7.8, "DS04": 13.3,

@@ -374,7 +374,7 @@ def gen_pct_rare():
         lines.append(f"  {ds_id:6s} {PCT_RARE[ds_id]:>10.1f}%")
     lines.append("")
     lines.append("(Computed phi %Rare vs. these values: see test_sera_metric.py's")
-    lines.append("test_phi_matches_paper_pct_rare, MAE 0.99pp post-fix -- not recomputed")
+    lines.append("test_phi_matches_paper_pct_rare, MAE 0.86pp post-fix -- not recomputed")
     lines.append("here to avoid a second phi implementation; this file is the reference")
     lines.append("values only.)")
     _write_txt("cmp_pct_rare", lines)
@@ -390,7 +390,7 @@ def gen_pct_rare():
     tex = table_star(
         caption=r"\textcolor{red}{$\bullet$}~\textbf{\%Rare reference values} (from the paper's Table 1) --- "
                 r"regression guard for the relevance function $\phi$; see SERA Metric's own "
-                r"test for the reconstructed-$\phi$ comparison (MAE 0.99pp).",
+                r"test for the reconstructed-$\phi$ comparison (MAE 0.86pp).",
         label="tab:exp002_cmp_cmp_pct_rare",
         col_spec="lclc",
         header=header,
