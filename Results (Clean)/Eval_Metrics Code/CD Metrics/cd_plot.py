@@ -95,12 +95,13 @@ def plot_cd_diagram(avg_ranks: dict, cd: float, title: str, out_path: str, k: in
     # Rank axis: major integer ticks (numbered) + minor ticks at 0.2
     # intervals in between, matching the reference's finer-grained ruler.
     ax.plot([1, k], [0, 0], color="black", lw=1.4)
+    tick_labels = []
     minor = 0
     while minor <= k - 1:
         t = 1 + minor
         if abs(t - round(t)) < 1e-9:
             ax.plot([t, t], [0, 0.05], color="black", lw=1.4)
-            ax.text(t, 0.12, str(round(t)), ha="center", va="bottom", fontsize=TICK_FS)
+            tick_labels.append(ax.text(t, 0.12, str(round(t)), ha="center", va="bottom", fontsize=TICK_FS))
         else:
             ax.plot([t, t], [0, 0.025], color="black", lw=0.8)
         minor += 0.2
@@ -111,11 +112,22 @@ def plot_cd_diagram(avg_ranks: dict, cd: float, title: str, out_path: str, k: in
     # at the "1" tick, not at the best method's rank position (those two
     # just happen to sit close together when CD is small).
     cd_start = 1
-    cd_y = 0.45
+    # The bracket must clear the rank-axis numbers. Their height in data
+    # units depends on the final axes scale (font size is in points), so
+    # lay the figure out once, measure the tallest label in data coordinates,
+    # and place the bracket above it instead of at a guessed constant.
+    fig.tight_layout()
+    fig.canvas.draw()
+    inv = ax.transData.inverted()
+    tick_top = max(inv.transform((0, t.get_window_extent().y1))[1] for t in tick_labels)
+    cd_y = tick_top + 0.12
     ax.plot([cd_start, cd_start + cd], [cd_y, cd_y], color="black", lw=1.8)
     ax.plot([cd_start, cd_start], [cd_y - 0.04, cd_y + 0.04], color="black", lw=1.8)
     ax.plot([cd_start + cd, cd_start + cd], [cd_y - 0.04, cd_y + 0.04], color="black", lw=1.8)
     ax.text(cd_start + cd / 2, cd_y + 0.08, "CD", ha="center", va="bottom", fontsize=TICK_FS)
+    # headroom for the bracket + its "CD" caption (~1.2 label heights) above the axis
+    label_h = tick_top - 0.12
+    ax.set_ylim(ax.get_ylim()[0], max(1.0, cd_y + 0.08 + 1.3 * label_h))
 
     # Method labels: drop line from axis to a row, then out to the margin.
     # Left half's labels sit left of xmin, right half's labels sit right of
