@@ -255,3 +255,15 @@ if __name__ == "__main__":
     test_opt_params_table7_matches_pdf_extract()
     test_r_opt_params_and_mc_split_match_paper_reference()
     print("All paired-comparison tests passed.")
+
+
+def test_f1_decomposition_parts_sum_and_sign():
+    import pandas as pd
+    from generate_paper_comparison import f1_decomposition
+    df = pd.DataFrame({"dataset_id": ["D"] * 4, "iteration": [1, 2, 1, 2],
+                       "workflow": ["mc.lm", "mc.lm", "mc.lm_X", "mc.lm_X"],
+                       "prec": [0.2, 0.5, 0.6, 0.3], "rec": [0.5, 0.5, 0.5, 0.7]})
+    d = f1_decomposition(df, "mc.lm")
+    assert np.allclose(d.dF_prec + d.dF_rec, d.dF)
+    assert (np.sign(d.dF_prec) == np.sign(d.prec - d.prec0)).all()
+    assert d.dF_rec.iloc[0] == 0  # recall unchanged on fold 1

@@ -5,19 +5,15 @@
 #
 # Usage: Rscript src/stage0/rdata_to_csv.R <rdata_dir> <out_dir> <manifest_csv>
 # Same argv interface as src/stage0/rdata_to_csv_predictions.R -- one convention,
-# not two. Defaults point at the canonical data_v2 run unless EXP002_RUN_ID
-# is set (see src/adapted/run_config.R), so a Tier 2 variant run's manifest
-# CSV lands under its own runs/<run_id>/ tree without touching data_v2's.
+# not two. Defaults point at the canonical data_v4 run unless EXP002_RUN_ID
+# is set (same default as src/adapted/run_config.R).
 suppressMessages(library(performanceEstimation))
 
 root <- "."  # run from the project root, as the Usage line above documents
 args <- commandArgs(trailingOnly = TRUE)
-run_id <- Sys.getenv("EXP002_RUN_ID", "data_v2")
+run_id <- Sys.getenv("EXP002_RUN_ID", "data_v4")
 
 data_dir <- if (length(args) >= 1) args[1] else file.path(root, "src/adapted/results", run_id)
-#ponytail: reads data_v2 (post cap_svm_train fix) so F1 comes from the same
-#run as RMSE/SERA; the old data/ extraction is left in raw_iterations_by_dataset/
-#untouched so previously-published F1 tables stay reproducible.
 out_dir <- if (length(args) >= 2) args[2] else file.path(root, "Results (Clean)/Results Data/raw_iterations_by_dataset_v2")
 manifest_path <- if (length(args) >= 3) args[3] else file.path(root, "data/paper_datasets_csv/manifest.csv")
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)

@@ -3,20 +3,27 @@
 # resolve_results_dir(), resolve_sample_kind(), resolve_baseline_params(),
 # ensure_manifest_header()/write_manifest_header(), append_manifest_line().
 #
-# Defaults were promoted 2026-09-21 (DIVERGENCE_ANALYSIS.md Sec 11): data_v3, run
-# with RNGkind(sample.kind="Rounding"), matches the paper's Table 3 within +/-1
-# dataset on all 15 cells -- a plain `Rscript src/adapted/Exps.R` now reproduces
-# THAT experiment by default. data_v2 (the pre-promotion baseline) stays fully
-# reachable via EXP002_RUN_ID=data_v2 / EXP002_SAMPLE_KIND=Rejection.
+# Defaults: data_v4 (2026-10-10) -- RNGkind(sample.kind="Rounding") as promoted
+# 2026-09-21 (DIVERGENCE_ANALYSIS.md Sec 11) plus the paper's NA handling
+# (knnImputation, falling back to complete.cases where it errors; Sec 4 D2).
+# A plain `Rscript src/adapted/Exps.R` reproduces the canonical data_v4 result.
+# data_v3 is reachable via EXP002_RUN_ID=data_v3 EXP002_NA_METHOD=complete.cases;
+# data_v2 additionally needs EXP002_SAMPLE_KIND=Rejection.
 
 resolve_results_dir <- function() {
-  run_id <- Sys.getenv("EXP002_RUN_ID", "data_v3")
+  run_id <- Sys.getenv("EXP002_RUN_ID", "data_v4")
   file.path("src/adapted/results", run_id)
 }
 
 resolve_sample_kind <- function() {
   v <- Sys.getenv("EXP002_SAMPLE_KIND", "Rounding")
   if (!nzchar(v)) NULL else v
+}
+
+resolve_na_method <- function() {
+  v <- Sys.getenv("EXP002_NA_METHOD", "knn")
+  if (!v %in% c("knn", "complete.cases")) stop("EXP002_NA_METHOD must be knn or complete.cases, got: ", v)
+  v
 }
 
 resolve_baseline_params <- function() {
@@ -34,6 +41,7 @@ write_manifest_header <- function(manifest_file, run_id, total_ds, sample_kind_o
     sprintf("r_version: %s", R.version.string),
     sprintf("rngkind: %s", paste(RNGkind(), collapse = ", ")),
     sprintf("sample_kind_override: %s", sample_kind_override),
+    sprintf("na_method: %s", resolve_na_method()),
     sprintf("baseline_params_file: %s", baseline_params_file),
     sprintf("slurm_job_id: %s", Sys.getenv("SLURM_JOB_ID", "(none)")),
     sprintf("slurm_nodename: %s", Sys.getenv("SLURMD_NODENAME", "(none)")),

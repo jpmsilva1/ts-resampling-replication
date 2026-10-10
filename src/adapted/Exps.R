@@ -2595,7 +2595,14 @@ ensure_manifest_header(MANIFEST_FILE, run_id = Sys.getenv("EXP002_RUN_ID", "data
 cat(sprintf("\n[%s] Starting evaluation: %d datasets to process (48-core parallel per dataset)\n",
             format(Sys.time(), "%H:%M:%S"), TOTAL_DS))
 
-for (i in 1:TOTAL_DS) {
+# Optional subset / NA-method knobs for targeted reruns, e.g.
+# EXP002_DATASETS=12,13 EXP002_NA_METHOD=complete.cases. Defaults: all datasets,
+# knn (the canonical data_v4 rule; see run_config.R::resolve_na_method).
+NA_METHOD <- resolve_na_method()
+DS_IDS <- if (nzchar(Sys.getenv("EXP002_DATASETS"))) as.integer(strsplit(Sys.getenv("EXP002_DATASETS"), ",")[[1]]) else 1:TOTAL_DS
+cat(sprintf("NA method: %s | datasets: %s\n", NA_METHOD, paste(DS_IDS, collapse = ",")))
+
+for (i in DS_IDS) {
   output_file <- file.path(RESULTS_DIR, sprintf("results_dataset_%d.Rdata", i))
   
   if (file.exists(output_file)) {
@@ -2610,7 +2617,21 @@ for (i in 1:TOTAL_DS) {
               format(Sys.time(), "%H:%M:%S"), i, TOTAL_DS))
   
   ds <- create.data(data[[i]], 10) #Create the embed
-  ds <- ds[complete.cases(ds), ] #Ensure no NA values in embedded dataset
+  # NA handling. Paper Sec. 4.1 uses DMwR::knnImputation; the authors' own
+  # (commented) line imputes the embedded frame, the lag columns being the
+  # neighbour features. It cannot run on DS13/DS23 (rows with almost no
+  # observed values), so those fall back to complete.cases. This rule, with no
+  # extra row filter, reproduces paper Table 1 %Rare on all four NA datasets:
+  # DS12 10.99 (knn), DS13 11.13 (cc), DS23 0.08 (cc), DS24 3.40 (knn).
+  # EXP002_NA_METHOD=complete.cases restores the data_v3 behaviour everywhere.
+  if (anyNA(ds) && NA_METHOD == "knn") {
+    imp <- tryCatch(knnImputation(ds), error = function(e) NULL)
+    cat(sprintf("Dataset %d NA handling: %s\n", i,
+                if (is.null(imp)) "knnImputation failed -> complete.cases" else "knnImputation"))
+    ds <- if (is.null(imp)) ds[complete.cases(ds), ] else imp
+  } else {
+    ds <- ds[complete.cases(ds), ] #Ensure no NA values in embedded dataset
+  }
   form <- as.formula(V10 ~ .) #Define the formula for performanceEstimation
 
   # NOTE: the SVM training-row cap (previously applied here to the shared `ds`,

@@ -36,7 +36,7 @@ METRICS = [("$F_1^{\\phi}$", "F1", True, "{:.3f}", False),
 
 def build_matrix(metric: str, geometric: bool) -> np.ndarray:
     """10 (strategy) x 5 (family) array of the metric's average value across
-    the 20 datasets, in STRAT/FAM order.
+    the 24 datasets, in STRAT/FAM order.
 
     SERA and RMSE span several orders of magnitude across datasets of very
     different scale (e.g. baseline SERA ranges 0.004 to 1.5e8 across the 20

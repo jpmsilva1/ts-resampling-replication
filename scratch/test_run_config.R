@@ -8,14 +8,24 @@
 # Run: Rscript scratch/test_run_config.R
 source("src/adapted/run_config.R")
 
-test_default_run_id_is_data_v3 <- function() {
-  # Promoted 2026-09-21 (DIVERGENCE_ANALYSIS.md Sec 11): data_v3 is the RNG-pinned,
-  # median-signed replication that matches the paper within +/-1 dataset on all 15
-  # Table 3 cells. data_v2 stays on disk as the documented pre-fix predecessor --
-  # still reachable via EXP002_RUN_ID=data_v2, just no longer the default.
+test_default_run_id_is_data_v4 <- function() {
+  # Promoted 2026-10-10: data_v4 = the RNG-pinned (Rounding), median-signed data_v3
+  # replication plus the paper's knnImputation NA handling (DS12/DS24). data_v3 and
+  # data_v2 stay reachable via EXP002_RUN_ID, just no longer the default.
   Sys.unsetenv("EXP002_RUN_ID")
-  assert(resolve_results_dir() == "src/adapted/results/data_v3",
-         "default (no env var) must resolve to the promoted data_v3 tree")
+  assert(resolve_results_dir() == "src/adapted/results/data_v4",
+         "default (no env var) must resolve to the promoted data_v4 tree")
+}
+
+test_default_na_method_is_knn_and_rejects_typos <- function() {
+  Sys.unsetenv("EXP002_NA_METHOD")
+  assert(resolve_na_method() == "knn", "default NA method must be knn (data_v4)")
+  Sys.setenv(EXP002_NA_METHOD = "complete.cases")
+  assert(resolve_na_method() == "complete.cases", "complete.cases must be selectable")
+  Sys.setenv(EXP002_NA_METHOD = "knnn")
+  assert(inherits(tryCatch(resolve_na_method(), error = function(e) e), "error"),
+         "an unknown NA method must error, not silently fall back")
+  Sys.unsetenv("EXP002_NA_METHOD")
 }
 
 test_custom_run_id_changes_results_dir <- function() {
@@ -124,7 +134,8 @@ test_manifest_resume_appends_marker_instead_of_overwriting <- function() {
 
 assert <- function(cond, msg) if (!isTRUE(cond)) stop(msg, call. = FALSE)
 
-test_default_run_id_is_data_v3()
+test_default_run_id_is_data_v4()
+test_default_na_method_is_knn_and_rejects_typos()
 test_custom_run_id_changes_results_dir()
 test_sample_kind_default_is_rounding()
 test_sample_kind_override_is_read()

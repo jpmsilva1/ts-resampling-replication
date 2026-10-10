@@ -7,6 +7,8 @@ The stage order below is not cosmetic -- it is the actual DAG:
            WRITE raw_rmse_by_dataset/ and raw_sera_by_dataset/. Every later
            stage reads those, so these must run first.
   Stage 2  Per-metric appendix tables (F1 needs only the raw F1 iterations).
+           A generator whose script is not present (local-only, not in the
+           repo) is skipped with a note rather than failing the run.
   Stage 3  Rankings and significance -- CD, Bayes, Summary. Heatmaps and
            Rank Distribution import load_metric_long() from CD Metrics, so CD
            must be importable (it is; the import does not require CD to have
@@ -25,7 +27,9 @@ Each generator is run as a subprocess with its own directory as cwd, because
 they resolve sibling modules with sys.path.insert(parent) and expect that.
 """
 import argparse
+import json
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 import sys
 import time
 from pathlib import Path
@@ -57,8 +61,17 @@ PIPELINE = [
     (4, "Causal", "generate_causal_tables.py"),
     (4, "Causal", "generate_causal_figures.py"),
     (4, "Causal", "generate_effect_forest_plots.py"),
+    (4, "Causal", "generate_fold_median_check.py"),
     (5, "Paper Comparison", "generate_paper_comparison.py"),
 ]
+
+
+# Optional machine-local generators, same (stage, dir, script) shape, kept out of
+# the repo; merged in stage order (sort is stable, so they run after the stage's
+# repo generators).
+_LOCAL = CODE / "local_pipeline.json"
+if _LOCAL.exists():
+    PIPELINE = sorted(PIPELINE + [tuple(x) for x in json.loads(_LOCAL.read_text())], key=lambda p: p[0])
 
 
 def run_tests() -> int:
@@ -75,6 +88,8 @@ def main() -> int:
     ap.add_argument("--stage", type=int, help="run only this stage")
     ap.add_argument("--list", action="store_true", help="print the DAG and exit")
     ap.add_argument("--tests", action="store_true", help="run the test suite and exit")
+    ap.add_argument("--jobs", type=int, default=1,
+                    help="generators of the SAME stage to run concurrently (stages stay in order)")
     args = ap.parse_args()
 
     if args.tests:
@@ -86,23 +101,31 @@ def main() -> int:
         return 0
 
     todo = [p for p in PIPELINE if args.stage is None or p[0] == args.stage]
+    absent = [p for p in todo if not (CODE / p[1] / p[2]).exists()]
+    todo = [p for p in todo if p not in absent]
     print(f"ROOT = {ROOT}")
+    if absent:
+        print(f"Skipping {len(absent)} generator(s) not present in this checkout")
     print(f"Running {len(todo)} generators\n")
 
-    failures = []
-    for stage, d, script in todo:
-        wd = CODE / d
+    def run_one(item):
+        stage, d, script = item
         t0 = time.time()
-        print(f"[stage {stage}] {d}/{script} ... ", end="", flush=True)
-        r = subprocess.run([sys.executable, script], cwd=wd,
+        r = subprocess.run([sys.executable, script], cwd=CODE / d,
                            capture_output=True, text=True)
-        if r.returncode == 0:
-            print(f"ok ({time.time()-t0:.1f}s)")
-        else:
-            print("FAILED")
-            print(r.stdout[-2000:])
-            print(r.stderr[-2000:])
-            failures.append(f"{d}/{script}")
+        return item, r, time.time() - t0
+
+    failures = []
+    for stage in sorted({p[0] for p in todo}):
+        with ThreadPoolExecutor(args.jobs) as ex:
+            for (st, d, script), r, dt in ex.map(run_one, [p for p in todo if p[0] == stage]):
+                if r.returncode == 0:
+                    print(f"[stage {st}] {d}/{script} ... ok ({dt:.1f}s)", flush=True)
+                else:
+                    print(f"[stage {st}] {d}/{script} ... FAILED")
+                    print(r.stdout[-2000:])
+                    print(r.stderr[-2000:])
+                    failures.append(f"{d}/{script}")
 
     print()
     if failures:

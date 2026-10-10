@@ -16,11 +16,12 @@ experiment named in §6.
 
 ## 1. Executive summary
 
-> **Current status (2026-09-30).** The table below is the **historical `data_v2`
+> **Current status (2026-10-10).** The table below is the **historical `data_v2`
 > state** that opened this investigation; it is no longer the result. On the canonical
-> `data_v3` run (RNG pinned to `Rounding`, Win/Loss signed from medians, §11), all 15
-> Table 3 cells match the paper within ±1 dataset (5 exactly), including SVM and RPART.
-> The discrepancies that remain in Tables 4–6 are analysed in §12; none is a
+> `data_v4` run (RNG pinned to `Rounding`, Win/Loss signed from medians, §11; missing
+> values imputed with `knnImputation` as in the paper, §4 D2), all 15 Table 3 cells match
+> the paper within ±1 dataset (4 exactly; 5 on the earlier `data_v3`), including SVM and
+> RPART. The discrepancies that remain in Tables 4–6 are analysed in §12; none is a
 > whole-family directional shift, and none invalidates the replication.
 
 Historical (`data_v2`): three families reproduce the paper; two do not.
@@ -183,6 +184,17 @@ rather than taking the tail, and document it.
 
 ### D2. `complete.cases` — deviation; explains the DS12 Table 6 outlier
 
+> **RESOLVED 2026-10-10.** The paper (§4.1, p.169) states NAs were imputed with
+> `DMwR::knnImputation`; the authors' commented line imputes the *embedded* frame (imputing
+> the raw univariate series cannot run — no neighbour features). `Exps.R` now supports
+> `EXP002_NA_METHOD=knn`: `knnImputation` where it runs (DS12, DS24), `complete.cases` where it
+> errors (DS13, DS23 — rows with almost no observed values). That reproduces Table 1 %Rare on
+> all four (10.99/11.13/0.08/3.40 vs. 11/11.1/0.08/3.4; MAE over 24 datasets 0.03pp) and moves
+> DS12 SVM baseline F_φ 0.151 → **0.555 (paper 0.554)**. Results live in `data_v4`
+> (`src/stage0/build_data_v4.sh`: DS12/DS24 from run `na_knn_rounding`, rest from `data_v3`).
+> Table 3 effect: SVM 38/33/29 → 33/29/25 %W (paper 33/29/29); RPART 50/46/42 → 46/46/38
+> (paper 50/46/42). The text below is the pre-fix analysis, kept for the record.
+
 Original has `#ds <- ds[complete.cases(ds),]` commented out; ours is live (added 2026-08-07
 to stop a DS12 crash in `phi.control`). Affects **DS12, DS13, DS23, DS24** only — the four
 datasets with NAs per `data/paper_datasets_csv/manifest.csv`.
@@ -196,15 +208,18 @@ the paper (58 → 65 %W), i.e. the wrong direction.
 ### D3. Zero-relevance `stop()` → `return(data)` — deviation, inert
 
 All 9 inline resampling helpers had their `stop("All the points have relevance 0/1...")`
-guards replaced with silent no-op returns. **[VERIFIED]** inert: across all 15 Table-3
-cells there is exactly **1** tie, so a fold almost never falls back to unresampled data.
-Keep it (it prevents one fold killing a multi-day job), but state that it is measured as
-inert rather than assumed to be.
+guards replaced with silent no-op returns. **[VERIFIED]** inert, measured directly
+(2026-10-10 audit, `data_v4`): LM is deterministic, so a fold the guard returned
+unresampled would give predictions identical to the baseline's. None of the 10,800
+resampled LM folds (24 datasets × 9 strategies × 50) does, so the guard never fired.
+(An earlier version of this note used "1 tie across 15 Table-3 cells" as the evidence;
+that was indirect, and under the median sign rule there are now 0 ties.) Keep it (it
+prevents one fold killing a multi-day job).
 
 ### D4. `mc.arima` CSS estimation — deviation, already documented
 
 `auto.arima(trainY, method="CSS", stepwise=TRUE)` replaces plain `auto.arima(trainY)`.
-Already in `REPLICATION_LOG.md`. Affects only `mc.arima` (Table 5 / H.3), which is the
+Documented in `main.tex`'s deviations table. Affects only `mc.arima` (Table 5 / H.3), which is the
 cleanest-agreeing block in the audit, so the deviation is not load-bearing.
 
 ### D5. Per-dataset Monte Carlo splits — not a deviation
@@ -236,7 +251,7 @@ DS21–22 at 10%/5% and DS23–24 at 20%/10% match the paper (§5, p.169). Corre
    deliberate sentinel for "no prediction cleared the relevance threshold," kept non-zero so
    F1 does not evaluate 0/0. That recall stays ~0.48 alongside it follows from recall's
    denominator running over *true* relevant cases with the `(1+u)/(1+φ)` form returning ~0.5
-   at zero utility. That LM hits it on 12/24 datasets is also expected, not mysterious: LM is
+   at zero utility. That LM hits it on 12/24 datasets (11/24 on `data_v4`, where DS12 recovers) is also expected, not mysterious: LM is
    a global linear fit on a phase-space embedding, so it regresses to the mean and
    structurally cannot emit extreme predictions.
 8. **Report mean ΔF1 with CIs alongside Win/Loss counts.** Sign counting is what makes SVM
@@ -566,26 +581,52 @@ This closes the Tier 2 investigation. Both experiments ran, one candidate cause 
 refuted, one (A) was confirmed once the sign-statistic bug (C) stopped masking it, and
 the corrected, fully traceable result is now the project's canonical state.
 
-## 12. Residual discrepancies in Tables 4–6 (2026-09-30)
+### Update (2026-10-10): `data_v4` supersedes `data_v3`
 
-Recomputed from `data_v3` raw per-fold F1 with an independent Wilcoxon/median-sign
+`data_v4` = `data_v3` with the paper's NA handling (`knnImputation`, §4 D2) on DS12 and
+DS24 (run `na_knn_rounding`, job 16745, RNG `Rounding`); every other dataset is unchanged.
+Table 3 on `data_v4`:
+
+```
+                ours (data_v4)      paper
+U_B  LM/SVM/MARS/RF/RPART   75/33/58/71/46   79/33/62/75/50
+O_B  LM/SVM/MARS/RF/RPART   79/29/67/79/46   75/29/71/83/46
+SM_B LM/SVM/MARS/RF/RPART   79/25/71/79/38   79/29/75/83/42
+```
+
+Still all 15 cells within ±1 dataset; exact matches 5 → 4 (LM `SM_B`, SVM `U_B`, SVM
+`O_B`, RPART `O_B`). The RPART move (50/46/42 → 46/46/38) is entirely DS12: under
+`complete.cases` DS12 kept 643 of 1,447 rows and its RPART baseline was degraded (mean F1
+0.371), handing `U_B` a significant win and `SM_B` a non-significant one; with the
+paper's imputation the baseline is healthy (0.487) and all three strategies lose
+significantly (p ≤ 0.016). The same data reproduce the paper's DS12 Table 6 SVM baseline
+(0.555 vs 0.554) and Table 1 %Rare (10.99 vs 11.0), so the earlier exact RPART match was a
+coincidence of the wrong DS12 data. For `U_B` the significant counts now equal the
+paper's exactly (8 sig. wins, 3 sig. losses; was 9/2). A 2,000-draw bootstrap over the 50
+folds of each dataset puts the paper's RPART values inside our 95% intervals
+(`U_B` [42, 58]%W, `SM_B` [38, 54]%W; a fold redraw reaches the paper's count 61% and 88%
+of the time), so the one-dataset difference is fold noise.
+
+## 12. Residual discrepancies in Tables 4–6 (2026-09-30, numbers updated to `data_v4` 2026-10-10)
+
+Recomputed from `data_v4` raw per-fold F1 with an independent Wilcoxon/median-sign
 implementation; every "ours" cell in the comparison tables reproduces exactly. What
 remains is the gap to the *paper's* numbers.
 
 | Table | Cells | Exact win count | Within ±1 | Max gap |
 |---|---|---|---|---|
-| 3 (resampling vs baseline) | 15 | 5 | 15 | 1 |
-| 4 (biased variant vs its own B) | 30 | 6 | 16 | 6 |
-| 5 (vs ARIMA / BDES) | 90 | 52 | 81 | 3 |
+| 3 (resampling vs baseline) | 15 | 4 | 15 | 1 |
+| 4 (biased variant vs its own B) | 30 | 4 | 16 | 5 |
+| 5 (vs ARIMA / BDES) | 90 | 54 | 79 | 3 |
 
 **Table 3 and most of Table 4 — sign noise on non-significant datasets.** [VERIFIED] In
 every Table 3 and Table 4 cell the win-count gap is smaller than the number of datasets
 whose comparison is non-significant (p ≥ 0.05). Table 4 compares near-identical
-strategies: 8–23 of 24 datasets per cell are non-significant, so their Win/Loss sign is
-close to a coin flip (largest gap: SVM `U_TPhi`, 17 vs 11 wins, 15 non-significant
-datasets). Significant-win counts move far less (mean |Δ| 1.0–1.9). 27 of 30 cells stay
-on the same side of 50%; the 3 that cross (MARS `U_T`, SVM `U_TPhi`, LM `O_TPhi`) are
-near-tie cells. The paper's own Table 4 is not clean either (RPART `SM_T`/`SM_TPhi` rows
+strategies: 6–23 of 24 datasets per cell are non-significant, so their Win/Loss sign is
+close to a coin flip (largest gaps: MARS `U_T` and SVM `U_TPhi`, 16 vs 11 wins each).
+Significant-win counts move far less (mean |Δ| 1.4). 26 of 30 cells stay on the same side
+of 50%; the 4 that cross (MARS `U_T`, SVM `U_TPhi`, LM `O_T`, LM `O_TPhi`) are near-tie
+cells. The paper's own Table 4 is not clean either (RPART `SM_T`/`SM_TPhi` rows
 sum to 23, §3).
 
 **Why the draws still differ with the RNG pinned.** [HYPOTHESIS, untested] Pinning
@@ -596,7 +637,7 @@ draws in C (unaffected by `sample.kind`, §2), and package versions (R 4.3.3, e1
 rpart, UBL) postdate the paper. These change exactly the draws that decide near-tie cells.
 
 **Table 5 — the ARIMA columns carry the gap.** [VERIFIED] Ours vs paper differ in 31/45
-ARIMA cells (mean |Δ| 0.89 datasets) but only 7/45 BDES cells (mean |Δ| 0.22), with the
+ARIMA cells (mean |Δ| 0.93 datasets) but only 5/45 BDES cells (mean |Δ| 0.16), with the
 same strategies on the other side. The one deviation touching only ARIMA is D4
 (`mc.arima` fitted with `method="CSS"` plus an order-bounded fallback, to stop
 `auto.arima` hanging on DS21–24). No row falls on the opposite side of 50%.
@@ -605,7 +646,8 @@ same strategies on the other side. The one deviation touching only ARIMA is D4
 hyperparameters *and* resampling percentages over 10 MC repetitions; this replication
 uses `C.perc="balance"` over 50 folds (the paper's §5.1 default setting, §1). Resampled
 SVM F1 is therefore ~0.1–0.2 below the paper's; the baselines on DS04/DS10 land close
-(0.557 vs 0.584, 0.617 vs 0.638). DS12 (0.151 vs 0.554) is D2, `complete.cases()`.
+(0.557 vs 0.584, 0.617 vs 0.638), and so does DS12 since the D2 fix (0.555 vs 0.554;
+0.151 under `complete.cases()`).
 
 **Verdict.** No discrepancy is a systematic whole-family directional shift (the signature
 the old SVM/RPART gap had). The replication holds within sampling noise on the paper's
@@ -614,9 +656,9 @@ individual Table 4 cells should not be read at the cell level.
 
 **On H.2.** The paper's H.2 support comes from undersampling with TPhi (its Table 4:
 `U_TPhi` >50%W in 4 of 5 families); this replication agrees (5 of 5, and bias improves
-undersampling monotonically: 0.4564 → 0.4591 → 0.4615 mean F1). For SMOTE both find the
+undersampling monotonically: 0.4598 → 0.4633 → 0.4644 mean F1). For SMOTE both find the
 biased variants no better than `SM_B`: `SM_T` is below 50%W in every family on both sides,
 and `SM_TPhi` is at or below 50%W in every family in the paper and in 4 of 5 here (MARS
-58%W). The pooled "H.2 not supported" reading
+54%W). The pooled "H.2 not supported" reading
 is a statement about all resampling families together, not a contradiction of the
 paper's data.

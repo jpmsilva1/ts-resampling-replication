@@ -14,14 +14,15 @@
 cd $SLURM_SUBMIT_DIR
 
 # Tier 2 traceability: RUN_ID names this run's results dir. Defaults to
-# data_v2 (today's canonical run) for a plain `sbatch run_apuana.slurm`.
+# data_v4 (the canonical run; must match run_config.R's default) for a plain
+# `sbatch run_apuana.slurm`.
 # For a variant run, submit with --export=ALL,EXP002_RUN_ID=<id>[,EXP002_SAMPLE_KIND=...]
 # -- see the step-by-step in the Tier 2 plan. #SBATCH directives above are
 # fixed at submit time (SLURM parses them before this shell runs), so the
 # job name/log filenames stay generic (%j = job ID); RUN_MANIFEST.txt
 # (written by src/adapted/run_config.R) is the source of truth linking a
 # job ID to its run_id -- this banner just makes the .out log self-identifying.
-RUN_ID="${EXP002_RUN_ID:-data_v2}"
+RUN_ID="${EXP002_RUN_ID:-data_v4}"
 
 # Ensure output directories exist
 mkdir -p logs
@@ -44,12 +45,15 @@ fi
 micromamba activate exp002_env
 
 TOTAL=24
+[ -n "$EXP002_DATASETS" ] && TOTAL=$(echo "$EXP002_DATASETS" | tr ',' '\n' | wc -l)
 
 echo "=========================================================="
 echo "Exp002: TS Resampling Strategies (full 24-dataset rerun, 48-core parallel)"
 echo "RUN_ID: $RUN_ID"
-echo "EXP002_SAMPLE_KIND: ${EXP002_SAMPLE_KIND:-(default)}"
+echo "EXP002_SAMPLE_KIND: ${EXP002_SAMPLE_KIND:-Rounding}"
 echo "EXP002_BASELINE_PARAMS: ${EXP002_BASELINE_PARAMS:-(none)}"
+echo "EXP002_NA_METHOD: ${EXP002_NA_METHOD:-knn}"
+echo "EXP002_DATASETS: ${EXP002_DATASETS:-all}"
 echo "Submission dir: $SLURM_SUBMIT_DIR"
 echo "SLURM job ID: $SLURM_JOB_ID"
 echo "CPUs allocated: $SLURM_CPUS_PER_TASK"

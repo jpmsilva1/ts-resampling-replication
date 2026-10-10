@@ -34,11 +34,11 @@ FAMILIES = ["lm", "svm", "mars", "rf", "rpart"]
 GROUPS = ["None", "UNDER", "OVER", "SmoteR"]
 
 RARE_ORDER = [
-    "DS20", "DS19", "DS16", "DS18", "DS03", "DS15", "DS17", "DS02",
-    "DS10", "DS01", "DS14", "DS04", "DS12", "DS13", "DS11", "DS09",
-    "DS05", "DS06", "DS07", "DS08"
+    "DS20", "DS23", "DS19", "DS16", "DS18", "DS03", "DS15", "DS17",
+    "DS02", "DS10", "DS01", "DS14", "DS04", "DS12", "DS13", "DS11",
+    "DS09", "DS05", "DS06", "DS24", "DS07", "DS08", "DS21", "DS22",
 ]
-NATURAL_ORDER = [f"DS{i:02d}" for i in range(1, 21)]
+NATURAL_ORDER = [f"DS{i:02d}" for i in range(1, 25)]
 
 # %Rare per dataset, from the paper's Table 1. Imbalance Ratio (IR) is the
 # majority:minority ratio, IR = (100 - %Rare) / %Rare -- inversely related to
@@ -48,6 +48,7 @@ PCT_RARE = {
     "DS06": 4.8, "DS07": 12.5, "DS08": 17.6, "DS09": 21.1, "DS10": 4.8,
     "DS11": 13.3, "DS12": 11.0, "DS13": 11.1, "DS14": 16.3, "DS15": 11.4,
     "DS16": 9.7, "DS17": 11.6, "DS18": 10.1, "DS19": 8.2, "DS20": 6.8,
+    "DS21": 1.8, "DS22": 10.2, "DS23": 0.08, "DS24": 3.4,
 }
 IMBALANCE_RATIO = {ds: (100 - pct) / pct for ds, pct in PCT_RARE.items()}
 IMBALANCE_ORDER = sorted(IMBALANCE_RATIO, key=lambda ds: (IMBALANCE_RATIO[ds], ds))
@@ -138,9 +139,9 @@ def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title:
                 ls, color = line_styles[bias]
                 ax.plot(positions, values, linestyle=ls, color=color, marker='o', markersize=4, linewidth=2.0, label=bias)
 
-            ax.set_xlim(0, 21)
+            ax.set_xlim(0, 25)
             ax.set_yscale("log")
-            ax.set_xticks([1, 5, 10, 15, 20])
+            ax.set_xticks([1, 5, 10, 15, 20, 24])
             ax.tick_params(axis="both", labelsize=16)
             ax.grid(True, alpha=0.15, which="both")
             if row_idx == 0:

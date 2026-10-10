@@ -1,26 +1,26 @@
 \begin{table*}[t]
 \centering
-\caption{\textcolor{red}{$\bullet$}~\textbf{\%Rare reference values} (from the paper's Table 1) --- regression guard for the relevance function $\phi$; see SERA Metric's own test for the reconstructed-$\phi$ comparison (MAE 0.86pp).}
+\caption{\textcolor{red}{$\bullet$}~\textbf{\%Rare, paper Table 1 vs.\ this replication.} Ours is computed exactly as \texttt{Exps.R} prepares each series (authors' \texttt{.Rdata}, $k=10$ embedding, \texttt{DMwR::knnImputation} for missing values (as in the paper; \texttt{complete.cases} on DS13 and DS23, where it cannot run), \texttt{uba::phi.control(method="extremes")}, $\phi \ge 0.9$). MAE 0.03pp over all 24 datasets; largest difference 0.09pp (DS01). Green pairs: equal at the precision the paper reports; yellow pairs: within $\pm0.1$ percentage points.}
 \label{tab:exp002_cmp_cmp_pct_rare}
 \vspace{4pt}
 \noindent
 \makebox[\textwidth][c]{%
-\begin{tabular}{lclc}
+\begin{tabular}{lcclcc}
 \toprule
-\textbf{Dataset} & \textbf{Paper \%Rare} & \textbf{Dataset} & \textbf{Paper \%Rare} \\
+\textbf{Dataset} & \textbf{Paper} & \textbf{Ours} & \textbf{Dataset} & \textbf{Paper} & \textbf{Ours} \\
 \midrule
-DS01 & 9.9\% & DS13 & 11.1\% \\
-DS02 & 9.3\% & DS14 & 16.3\% \\
-DS03 & 7.8\% & DS15 & 11.4\% \\
-DS04 & 13.3\% & DS16 & 9.7\% \\
-DS05 & 3.5\% & DS17 & 11.6\% \\
-DS06 & 4.8\% & DS18 & 10.1\% \\
-DS07 & 12.5\% & DS19 & 8.2\% \\
-DS08 & 17.6\% & DS20 & 6.8\% \\
-DS09 & 21.1\% & DS21 & 1.8\% \\
-DS10 & 4.8\% & DS22 & 10.2\% \\
-DS11 & 13.3\% & DS23 & 0.1\% \\
-DS12 & 11.0\% & DS24 & 3.4\% \\
+DS01 & \cellcolor{yellow!30}9.9\% & \cellcolor{yellow!30}10.0\% & DS13 & \cellcolor{green!15}11.1\% & \cellcolor{green!15}11.1\% \\
+DS02 & \cellcolor{green!15}9.3\% & \cellcolor{green!15}9.3\% & DS14 & \cellcolor{green!15}16.3\% & \cellcolor{green!15}16.3\% \\
+DS03 & \cellcolor{green!15}7.8\% & \cellcolor{green!15}7.8\% & DS15 & \cellcolor{green!15}11.4\% & \cellcolor{green!15}11.4\% \\
+DS04 & \cellcolor{green!15}13.3\% & \cellcolor{green!15}13.3\% & DS16 & \cellcolor{green!15}9.7\% & \cellcolor{green!15}9.7\% \\
+DS05 & \cellcolor{green!15}3.5\% & \cellcolor{green!15}3.5\% & DS17 & \cellcolor{green!15}11.6\% & \cellcolor{green!15}11.6\% \\
+DS06 & \cellcolor{green!15}4.8\% & \cellcolor{green!15}4.8\% & DS18 & \cellcolor{green!15}10.1\% & \cellcolor{green!15}10.1\% \\
+DS07 & \cellcolor{green!15}12.5\% & \cellcolor{green!15}12.5\% & DS19 & \cellcolor{green!15}8.2\% & \cellcolor{green!15}8.2\% \\
+DS08 & \cellcolor{green!15}17.6\% & \cellcolor{green!15}17.6\% & DS20 & \cellcolor{green!15}6.8\% & \cellcolor{green!15}6.8\% \\
+DS09 & \cellcolor{yellow!30}21.1\% & \cellcolor{yellow!30}21.2\% & DS21 & \cellcolor{green!15}1.8\% & \cellcolor{green!15}1.8\% \\
+DS10 & \cellcolor{green!15}4.8\% & \cellcolor{green!15}4.8\% & DS22 & \cellcolor{green!15}10.2\% & \cellcolor{green!15}10.2\% \\
+DS11 & \cellcolor{green!15}13.3\% & \cellcolor{green!15}13.3\% & DS23 & \cellcolor{green!15}0.08\% & \cellcolor{green!15}0.08\% \\
+DS12 & \cellcolor{green!15}11.0\% & \cellcolor{green!15}11.0\% & DS24 & \cellcolor{green!15}3.4\% & \cellcolor{green!15}3.4\% \\
 \bottomrule
 \end{tabular}%
 }

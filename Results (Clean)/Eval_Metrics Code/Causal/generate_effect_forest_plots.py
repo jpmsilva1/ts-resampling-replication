@@ -38,7 +38,10 @@ STRATEGY_ORDER = ["UNDERB", "UNDERT", "UNDERTPhi", "OVERB", "OVERT",
                   "OVERTPhi", "SMOTEB", "SMOTET", "SMOTETPhi"]
 SOURCE_COLORS = {"bike_daily": C_DARK, "bike_hourly": C_TEAL,
                   "icelandic_river": C_GOLD, "istanbul_stock": C_CORAL,
-                  "porto_weather": C_SAND}
+                  "porto_weather": C_SAND,
+                  # DS21-24's sources; previously fell through to the same
+                  # default grey and could not be told apart in the legend.
+                  "australian_electricity": "#7B6BA8", "porto_water": "#5B8DB8"}
 
 
 def forest_plot(ci: pd.DataFrame, title: str, xlabel: str, out_path: Path):
@@ -75,7 +78,7 @@ def jackknife_plot(f1_panel, sera_panel, out_path: Path):
                    label="Pooled (all datasets)", marker="D", s=50)
         for source in jk.index:
             ax.scatter(x, jk.loc[source].to_numpy(), alpha=0.75, s=30,
-                       color=SOURCE_COLORS.get(source, "#999"),
+                       color=SOURCE_COLORS[source],
                        label=f"Excl. {source}")
         ax.axhline(0, color="#888", linestyle="--", linewidth=1)
         ax.set_xticks(x)

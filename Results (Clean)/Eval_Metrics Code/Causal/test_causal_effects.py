@@ -181,6 +181,16 @@ def test_bootstrap_ci_is_wide_under_the_null():
     assert n_excluding_zero <= 1
 
 
+def test_failure_rates_flags_folds_by_ratio_to_own_cell_median():
+    from generate_fold_median_check import failure_rates
+    # one cell, 10 folds at 1.0 plus one at 50 (>10x) and one at 500 (>100x and >10x)
+    vals = [1.0] * 10 + [50.0, 500.0]
+    df = pd.DataFrame({"dataset_id": "DS01", "model_family": "lm", "strategy": "A", "value": vals})
+    fr = failure_rates(df)
+    assert abs(fr.loc["A", ">100x"] - 100 / 12) < 1e-9
+    assert abs(fr.loc["A", ">10x"] - 200 / 12) < 1e-9
+
+
 if __name__ == "__main__":
     test_tau_k_is_mean_paired_difference_vs_baseline()
     test_ri_p_values_roughly_uniform_under_sharp_null()
@@ -192,4 +202,5 @@ if __name__ == "__main__":
     test_holm_adjust_matches_hand_worked_example()
     test_bootstrap_ci_contains_true_effect_and_excludes_zero()
     test_bootstrap_ci_is_wide_under_the_null()
+    test_failure_rates_flags_folds_by_ratio_to_own_cell_median()
     print("All causal_effects checks passed.")

@@ -12,17 +12,16 @@ Do NOT substitute `src/original/Results/paired_comparisons.csv` or
 with the original authors' code (15 rows, Win capped at 1), not the paper's
 real 24-dataset benchmark result. See CLAUDE.md 2026-08-26 entry.
 
-The paper's 24 datasets vs. this project's 20: DS21-DS24 (half-hourly,
-17.4k-239.6k raw rows) are out of scope for this replication throughout, so
-every count below is out of 24 while this project's own counts are out of 20
--- compare proportions, not raw counts.
+Both the paper and this replication cover all 24 datasets (DS21-DS24 were
+added 2026-09-03), so every count below is out of 24, like this project's own.
 """
 
 TOTAL_DATASETS_PAPER = 24
 
-# Table 1 (p.170) -- %Rare per dataset, the phi-relevance oracle. Already
-# reproduced by SERA Metric/test_sera_metric.py at 0.86pp MAE; kept here too
-# so the paper-comparison audit carries the same regression guard.
+# Table 1 (p.170) -- %Rare per dataset, the phi-relevance oracle. Compared
+# against Results Data/pct_rare_canonical.csv by gen_pct_rare() (MAE 0.03pp
+# over 24 datasets on data_v4); SERA Metric/test_sera_metric.py separately checks
+# its phi reconstruction against the same published column.
 PCT_RARE = {
     "DS01": 9.9, "DS02": 9.3, "DS03": 7.8, "DS04": 13.3,
     "DS05": 3.5, "DS06": 4.8, "DS07": 12.5, "DS08": 17.6,

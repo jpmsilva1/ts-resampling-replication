@@ -33,3 +33,6 @@ CLAUDE.md
 # compiled report/paper is tracked, per repo policy); not just untracked, so
 # a future `git add -A` can't pull it in by accident.
 Exp_Report_Main/
+
+# Pre-change copies of the local-only report (same policy as Exp_Report_Main/)
+Exp_Report_Main_backup_*/
