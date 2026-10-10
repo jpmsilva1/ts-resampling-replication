@@ -12,7 +12,7 @@ suppressMessages(library(performanceEstimation))
 
 args <- commandArgs(trailingOnly = TRUE)
 root <- "."  # run from the project root, as the Usage line above documents
-rdata_dir <- if (length(args) >= 1) args[1] else file.path(root, "src/adapted/results/data_v2")
+rdata_dir <- if (length(args) >= 1) args[1] else file.path(root, "src/adapted/results/data_v4")
 out_dir   <- if (length(args) >= 2) args[2] else file.path(root, "Results (Clean)/Results Data/raw_predictions_by_dataset")
 manifest_path <- if (length(args) >= 3) args[3] else file.path(root, "data/paper_datasets_csv/manifest.csv")
 

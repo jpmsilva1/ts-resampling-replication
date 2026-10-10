@@ -1,0 +1,58 @@
+Fold-aggregation robustness check: pooled log ratio vs. baseline
+(log strategy - log baseline; positive = worse), 95% bootstrap CI over cells.
+trim = mean of folds per cell, then 10% trimmed mean across cells.
+
+strategy                SERA mean            SERA median              SERA trim              RMSE mean            RMSE median              RMSE trim
+UNDERB        +0.282 [0.19, 0.39]    +0.161 [0.11, 0.21]    +0.187 [0.13, 0.25]    +0.306 [0.26, 0.36]    +0.265 [0.23, 0.30]    +0.266 [0.23, 0.30]
+UNDERT        +0.293 [0.20, 0.40]    +0.179 [0.13, 0.23]    +0.197 [0.14, 0.27]    +0.316 [0.26, 0.38]    +0.272 [0.24, 0.31]    +0.274 [0.24, 0.31]
+UNDERTPhi     +0.355 [0.23, 0.52]    +0.207 [0.14, 0.28]    +0.209 [0.15, 0.28]    +0.428 [0.35, 0.52]    +0.382 [0.32, 0.45]    +0.343 [0.29, 0.40]
+OVERB         +0.178 [0.11, 0.25]    +0.103 [0.07, 0.14]    +0.116 [0.08, 0.16]    +0.193 [0.16, 0.22]    +0.178 [0.15, 0.20]    +0.177 [0.15, 0.21]
+OVERT         +0.282 [0.11, 0.58]    +0.110 [0.07, 0.15]    +0.112 [0.08, 0.15]    +0.236 [0.16, 0.36]    +0.179 [0.15, 0.21]    +0.171 [0.14, 0.20]
+OVERTPhi      +0.171 [0.11, 0.24]    +0.113 [0.07, 0.15]    +0.118 [0.08, 0.16]    +0.188 [0.16, 0.21]    +0.178 [0.15, 0.21]    +0.174 [0.15, 0.20]
+SMOTEB        +0.310 [0.24, 0.39]    +0.240 [0.19, 0.30]    +0.256 [0.20, 0.32]    +0.338 [0.30, 0.38]    +0.314 [0.28, 0.35]    +0.330 [0.29, 0.37]
+SMOTET        +0.339 [0.28, 0.40]    +0.282 [0.23, 0.34]    +0.307 [0.25, 0.37]    +0.361 [0.32, 0.40]    +0.336 [0.30, 0.37]    +0.353 [0.31, 0.39]
+SMOTETPhi     +0.424 [0.34, 0.51]    +0.356 [0.28, 0.44]    +0.369 [0.29, 0.45]    +0.497 [0.44, 0.56]    +0.467 [0.41, 0.53]    +0.448 [0.40, 0.50]
+base wins                75 / 120               65 / 120                     --              114 / 120              109 / 120                     --
+
+Cells whose fold-mean is dominated by one fold (worst fold >50% of the fold sum and >100x the median fold): 9 SERA, 3 RMSE
+metric dataset          workflow  worst_over_median  mean_over_mean_without_worst
+  SERA    DS22     mc.mars_OVERB           1.78e+03                            24
+  SERA    DS22     mc.mars_OVERT           1.44e+09                      1.32e+06
+  SERA    DS22  mc.mars_OVERTPhi                676                          7.45
+  SERA    DS22    mc.mars_SMOTEB                601                          10.8
+  SERA    DS22    mc.mars_SMOTET                198                          3.75
+  SERA    DS22 mc.mars_SMOTETPhi                186                          3.69
+  SERA    DS23      mc.lm_UNDERT           4.76e+03                           3.4
+  SERA    DS23   mc.lm_UNDERTPhi           1.15e+05                          2.72
+  SERA    DS23    mc.mars_SMOTEB                481                          3.09
+  RMSE    DS22     mc.mars_OVERT           3.79e+04                           404
+  RMSE    DS23      mc.lm_UNDERT                325                          4.48
+  RMSE    DS23   mc.lm_UNDERTPhi                501                          2.27
+
+SERA: % of folds more than 100x / 10x their cell's median fold
+           >100x  >10x
+strategy              
+OVERB       0.02  0.77
+OVERT       0.05  0.68
+OVERTPhi    0.02  0.68
+SMOTEB      0.03  0.62
+SMOTET      0.02  0.40
+SMOTETPhi   0.02  0.53
+UNDERB      0.22  1.33
+UNDERT      0.18  1.40
+UNDERTPhi   0.12  1.35
+baseline    0.00  0.60
+
+RMSE: % of folds more than 100x / 10x their cell's median fold
+           >100x  >10x
+strategy              
+OVERB       0.00  0.02
+OVERT       0.02  0.05
+OVERTPhi    0.00  0.02
+SMOTEB      0.00  0.03
+SMOTET      0.00  0.02
+SMOTETPhi   0.00  0.02
+UNDERB      0.02  0.15
+UNDERT      0.02  0.08
+UNDERTPhi   0.05  0.08
+baseline    0.00  0.00

@@ -11,6 +11,7 @@ and one .txt (plain-text dump, unchanged) per comparison, in
 import sys
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -28,6 +29,7 @@ from paper_reference import (
 )
 
 OUT_DIR = LATEX_DIR / "Paper Comparison"
+PCT_RARE_CSV = Path(__file__).resolve().parents[2] / "Results Data" / "pct_rare_canonical.csv"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 # Counted from whatever raw per-dataset CSVs are actually present, not
 # hardcoded -- this run may have anywhere from 20 to 24 datasets depending
@@ -40,6 +42,35 @@ def _wl_cell(wl, n) -> str:
     table below so ours/paper cells render identically side by side."""
     w, sw, l, sl, _ = wl
     return rf"{w}({sw})/{l}({sl}) [{100*w/n:.0f}\%W]" if n else "--"
+
+
+# Shading for an Ours/Paper pair whose win count is identical (so %W is too).
+# Needs \usepackage[table]{xcolor} in the report preamble.
+MATCH = r"\cellcolor{green!15}"
+NEAR = r"\cellcolor{yellow!30}"
+FLIP = r"\cellcolor{red!15}"
+MATCH_NOTE = (r" Green pairs: same number of wins as the paper; "
+              r"yellow pairs: $\pm1$ win (one dataset) apart.")
+# Uncoloured gap between rows, so shaded cells in consecutive rows stay apart.
+ROW_GAP = "\n" + r"\noalign{\vskip 2pt}" + "\n"
+
+
+# Uncoloured gap between Ours/Paper pairs, so adjacent shaded pairs read as
+# separate comparisons rather than one band.
+PAIR_GAP = r"@{\hspace{5mm}}"
+
+
+def _pair_spec(n_pairs: int, first: str = "l") -> str:
+    return first + PAIR_GAP.join(["cc"] * n_pairs)
+
+
+def _wl_pair(ours, paper) -> list[str]:
+    """Ours and Paper cells for one comparison, both shaded when the win
+    counts match."""
+    pw, psw, pl, psl = paper
+    shade = {0: MATCH, 1: NEAR}.get(abs(ours[0] - pw), "")
+    return [shade + _wl_cell(ours, N_OURS),
+            shade + _wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER)]
 
 
 def _tex(code: str) -> str:
@@ -83,24 +114,21 @@ def gen_table3():
     _write_txt("cmp_table3", lines)
 
     header = (r"\textbf{Family} & " + " & ".join(
-        rf"\multicolumn{{2}}{{c}}{{\textbf{{{_tex(code)}}}}}" for code in codes))
+        rf"\multicolumn{{2}}{{c}}{{\textbf{{{_tex(code)} vs.\ none}}}}" for code in codes))
     subheader = " & " + " & ".join(r"Ours & Paper" for _ in codes)
     rows = []
     for fam in FAMILIES:
         cols = []
         for code in codes:
-            ours, paper = cells[(code, fam)]
-            pw, psw, pl, psl = paper
-            cols.append(_wl_cell(ours, N_OURS))
-            cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+            cols += _wl_pair(*cells[(code, fam)])
         rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
-    body = subheader + r" \\" + "\n" + "\n".join(rows)
+    body = subheader + r" \\" + "\n" + ROW_GAP.join(rows)
     tex = table_star(
         caption=r"\textcolor{red}{$\bullet$}~\textbf{Resampling vs.\ baseline} (replicates the paper's Table 3), "
                 rf"Win(sigWin)/Loss(sigLoss) [\%W] per family, ours ({N_OURS} datasets) "
-                rf"vs.\ the paper ({TOTAL_DATASETS_PAPER}), $\alpha={ALPHA}$.",
+                rf"vs.\ the paper ({TOTAL_DATASETS_PAPER}), $\alpha={ALPHA}$." + MATCH_NOTE,
         label="tab:exp002_cmp_cmp_table3",
-        col_spec="l" + "cc" * len(codes),
+        col_spec=_pair_spec(len(codes)),
         header=header,
         body=body,
     )
@@ -108,10 +136,10 @@ def gen_table3():
 
 
 # ---------------------------------------------------------------------------
-# cmp_table4: biased variants vs. their biased base
+# cmp_table4: biased variants vs. their non-biased version
 # ---------------------------------------------------------------------------
 def gen_table4():
-    lines = [f"Table 4 equivalent -- biased variant vs. its own biased base, ours vs. paper  [alpha={ALPHA}]", ""]
+    lines = [f"Table 4 equivalent -- biased variants vs. their non-biased version, ours vs. paper  [alpha={ALPHA}]", ""]
     cells = {}  # (variant, fam) -> (ours_wl, paper_wl)
     for variant, base_code in TABLE4_BASE.items():
         variant_suffix = STRATEGY_CODE_MAP[variant]
@@ -140,18 +168,15 @@ def gen_table4():
         for fam in FAMILIES:
             cols = []
             for v in variants:
-                ours, paper = cells[(v, fam)]
-                pw, psw, pl, psl = paper
-                cols.append(_wl_cell(ours, N_OURS))
-                cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+                cols += _wl_pair(*cells[(v, fam)])
             rows.append(f"{FAMILY_LABELS[fam]} & " + " & ".join(cols) + r" \\")
-        body = subheader + r" \\" + "\n" + "\n".join(rows)
+        body = subheader + r" \\" + "\n" + ROW_GAP.join(rows)
         tex = table_star(
-            caption=rf"\textcolor{{red}}{{$\bullet$}}~\textbf{{{group_name}: biased variant vs.\ its own biased base}} "
+            caption=rf"\textcolor{{red}}{{$\bullet$}}~\textbf{{{group_name}: biased variants vs.\ their non-biased version}} "
                     r"(replicates the paper's Table 4), Win(sigWin)/Loss(sigLoss) "
-                    rf"[\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
+                    rf"[\%W], ours vs.\ paper, $\alpha={ALPHA}$." + MATCH_NOTE,
             label=f"tab:exp002_cmp_cmp_table4_{group_name.lower()}",
-            col_spec="l" + "cc" * len(variants),
+            col_spec=_pair_spec(len(variants)),
             header=header,
             body=body,
             resize=None,
@@ -204,18 +229,15 @@ def gen_table5():
         for code in codes:
             cols = []
             for ref in ("ARIMA", "BDES"):
-                ours, paper = cells[(fam, code, ref)]
-                pw, psw, pl, psl = paper
-                cols.append(_wl_cell(ours, N_OURS))
-                cols.append(_wl_cell((pw, psw, pl, psl, 0), TOTAL_DATASETS_PAPER))
+                cols += _wl_pair(*cells[(fam, code, ref)])
             rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
-        body = subheader + r" \\" + "\n" + "\n".join(rows)
+        body = subheader + r" \\" + "\n" + ROW_GAP.join(rows)
         tex = table_star(
             caption=rf"\textcolor{{red}}{{$\bullet$}}~\textbf{{{FAMILY_LABELS[fam]}: every strategy vs.\ \texttt{{ARIMA}}/"
                     r"\texttt{BDES}} (replicates the paper's Table 5), "
-                    rf"Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha={ALPHA}$.",
+                    rf"Win(sigWin)/Loss(sigLoss) [\%W], ours vs.\ paper, $\alpha={ALPHA}$." + MATCH_NOTE,
             label=f"tab:exp002_cmp_cmp_table5_{fam}",
-            col_spec="lcccc",
+            col_spec=_pair_spec(2),
             header=header,
             body=body,
             resize=None,
@@ -291,7 +313,7 @@ def gen_table6():
             cols.append(f"{ours_mean:.3f}")
             cols.append(f"{paper_val:.3f}")
         rows.append(rf"\texttt{{{_tex(code)}}} & " + " & ".join(cols) + r" \\")
-    body = subheader + r" \\" + "\n" + "\n".join(rows)
+    body = subheader + r" \\" + "\n" + ROW_GAP.join(rows)
     tex = table_star(
         caption=r"\textcolor{red}{$\bullet$}~\textbf{Absolute SVM $F_1^\phi$} (replicates the paper's Table 6) on "
                 r"DS04/DS10/DS12, ours vs.\ paper (paper jointly optimizes "
@@ -309,20 +331,45 @@ def gen_table6():
 # ---------------------------------------------------------------------------
 # cmp_precision_recall: paper's "gains come mostly from precision" claim
 # ---------------------------------------------------------------------------
+def _f1(p, r):
+    return np.where(p + r > 0, 2 * p * r / np.where(p + r > 0, p + r, 1), 0.0)
+
+
+def f1_decomposition(fam_df: pd.DataFrame, base_wf: str) -> pd.DataFrame:
+    """Split each fold's F1 change vs. the baseline (same dataset, same fold)
+    into a precision part and a recall part (Shapley split: average of the two
+    orders in which precision and recall can be changed), so the parts add up
+    exactly to the F1 change. One row per resampled (dataset, workflow, fold)."""
+    base = fam_df[fam_df.workflow == base_wf][["dataset_id", "iteration", "prec", "rec"]]
+    res = fam_df[fam_df.workflow != base_wf].merge(base, on=["dataset_id", "iteration"], suffixes=("", "0"))
+    p, r, p0, r0 = res.prec, res.rec, res.prec0, res.rec0
+    res["dF"] = _f1(p, r) - _f1(p0, r0)
+    res["dF_prec"] = 0.5 * ((_f1(p, r0) - _f1(p0, r0)) + (_f1(p, r) - _f1(p0, r)))
+    res["dF_rec"] = res.dF - res.dF_prec
+    res["floor"] = res.groupby("dataset_id").prec0.transform("mean") < 0.01
+    return res
+
+
+def _pr_summary(dec: pd.DataFrame) -> tuple[float, float, float]:
+    """(precision share of the mean F1 change, share of (dataset, strategy)
+    cells whose mean recall fell, share where it fell by more than 0.02)."""
+    cell = dec.groupby(["dataset_id", "workflow"])[["rec", "rec0"]].mean()
+    d_rec = cell.rec - cell.rec0
+    return dec.dF_prec.sum() / dec.dF.sum(), float((d_rec < 0).mean()), float((d_rec < -0.02).mean())
+
+
 def gen_precision_recall():
     lines = [
         "Precision/recall split -- paper claims F1 gains come mostly from",
         "higher precision, not recall (Sec 5.1). Delta = resampled mean - baseline mean,",
         f"averaged over all 9 strategies and {N_OURS} datasets, per family.",
-        "",
-        "Also flagged: baseline recall stays ~0.4-0.6 even in datasets where",
-        "baseline precision is exactly 0.00 -- worth inspecting independently",
-        "of the hyperparameter-placeholder finding (Eq. 2's recall denominator",
-        "does not obviously predict this).",
+        "Prec share = share of the mean F1 change due to precision (per-fold Shapley split",
+        "against the baseline on the same fold). Rec down = share of (dataset, strategy)",
+        "cells whose mean recall is below the baseline's.",
         "",
     ]
     df = _load_all()
-    rows = []
+    rows, decs = [], []
     for fam in FAMILIES:
         fam_df = df[df.workflow.str.startswith(f"mc.{fam}")]
         base = fam_df[fam_df.workflow == f"mc.{fam}"]
@@ -332,32 +379,51 @@ def gen_precision_recall():
         d_rec = resampled.rec.mean() - base_rec
         zero_prec_ds = base.groupby("dataset_id").prec.mean()
         n_zero = int((zero_prec_ds < 0.01).sum())
+        dec = f1_decomposition(fam_df, f"mc.{fam}")
+        decs.append(dec)
+        share, rec_down, rec_down2 = _pr_summary(dec)
+        share_nf = _pr_summary(dec[~dec.floor])[0]
         lines.append(
             f"  {FAMILY_LABELS[fam]:24s} baseline prec={base_prec:.3f} rec={base_rec:.3f} | "
-            f"mean resampled delta: prec={d_prec:+.3f} rec={d_rec:+.3f} | "
-            f"baseline prec~0 in {n_zero}/{len(zero_prec_ds)} datasets"
+            f"delta: prec={d_prec:+.3f} rec={d_rec:+.3f} F1={dec.dF.mean():+.3f} | "
+            f"prec share={share:.0%} (no floor: {share_nf:.0%}) | rec down {rec_down:.0%} "
+            f"(>0.02: {rec_down2:.0%}) | baseline prec~0 in {n_zero}/{len(zero_prec_ds)}"
         )
-        rows.append((FAMILY_LABELS[fam], base_prec, base_rec, d_prec, d_rec, n_zero, len(zero_prec_ds)))
+        rows.append((FAMILY_LABELS[fam], base_prec, base_rec, d_prec, d_rec, n_zero,
+                     len(zero_prec_ds), share, rec_down))
+    alld = pd.concat(decs, ignore_index=True)
+    share, rec_down, rec_down2 = _pr_summary(alld)
+    share_nf = _pr_summary(alld[~alld.floor])[0]
+    lines.append(f"  {'All families':24s} prec share={share:.0%} (no floor: {share_nf:.0%}) | "
+                 f"rec down {rec_down:.0%} (>0.02: {rec_down2:.0%})")
     _write_txt("cmp_precision_recall", lines)
 
     header = (r"\textbf{Family} & \textbf{Baseline Prec} & \textbf{Baseline Rec} & "
-              r"\textbf{$\Delta$Prec} & \textbf{$\Delta$Rec} & \textbf{Baseline $\approx$0 (of 24)}")
+              r"\textbf{$\Delta$Prec} & \textbf{$\Delta$Rec} & \textbf{Prec share of $\Delta\Fphi$} & "
+              r"\textbf{Recall falls} & \textbf{Baseline $\approx$0 (of 24)}")
     body_rows = []
-    for fam_label, base_prec, base_rec, d_prec, d_rec, n_zero, n_total in rows:
+    for fam_label, base_prec, base_rec, d_prec, d_rec, n_zero, n_total, sh, rd in rows:
         body_rows.append(
             rf"{fam_label} & {base_prec:.3f} & {base_rec:.3f} & "
-            rf"{d_prec:+.3f} & {d_rec:+.3f} & {n_zero}/{n_total} \\"
+            rf"{d_prec:+.3f} & {d_rec:+.3f} & {sh:.0%} & {rd:.0%} & {n_zero}/{n_total} \\".replace("%", r"\%")
         )
+    body_rows.append(r"\midrule")
+    body_rows.append(rf"All families & & & & & {share:.0%} & {rec_down:.0%} & \\".replace("%", r"\%"))
     tex = table_star(
         caption=r"\textbf{Precision/recall delta vs.\ baseline, by family} --- checks "
                 r"the paper's claim (Sec.\ 5.1) that $\Fphi$ gains come chiefly from "
-                r"precision. Delta = resampled mean $-$ baseline mean, averaged over "
-                rf"all 9 strategies and {N_OURS} datasets.",
+                r"precision. $\Delta$ = resampled mean $-$ baseline mean, averaged over "
+                rf"all 9 strategies and {N_OURS} datasets. \emph{{Prec share}}: the part of the "
+                r"mean $\Fphi$ change caused by the precision change, from splitting each fold's "
+                r"$\Fphi$ change against the baseline on the same fold into a precision part and "
+                r"a recall part (negative: precision fell and the gain came from recall). "
+                r"\emph{Recall falls}: share of (dataset, strategy) cells whose mean recall is "
+                r"below the baseline's.",
         label="tab:exp002_cmp_cmp_precision_recall",
-        col_spec="lccccc",
+        col_spec="lccccccc",
         header=header,
         body="\n".join(body_rows),
-        resize=None,
+        resize=r"\textwidth",
     )
     _write_tex("cmp_precision_recall", tex)
 
@@ -365,35 +431,47 @@ def gen_precision_recall():
 # ---------------------------------------------------------------------------
 # cmp_pct_rare: Table 1 %Rare regression guard
 # ---------------------------------------------------------------------------
+def _fmt_pct(v: float) -> str:
+    # Two decimals below 1% so DS23's 0.08 is not rounded to 0.1.
+    return f"{v:.2f}" if v < 1 else f"{v:.1f}"
+
+
 def gen_pct_rare():
-    lines = ["%Rare (Table 1) regression guard -- see SERA Metric/test_sera_metric.py",
-             "for the primary phi-fix regression test; this repeats the same check",
-             "from the paper-comparison audit's own data path.", ""]
-    lines.append(f"{'Dataset':8s} {'paper %Rare':>12s}")
-    for ds_id in sorted(PCT_RARE):
-        lines.append(f"  {ds_id:6s} {PCT_RARE[ds_id]:>10.1f}%")
+    """Paper Table 1 %Rare vs. this run's, computed in R by
+    src/stage0/pct_rare.R (the canonical Exps.R data path: authors' .Rdata,
+    k=10 embed, knnImputation (complete.cases where it errors), uba::phi.control on the whole series)."""
+    ours = pd.read_csv(PCT_RARE_CSV).set_index("dataset_id")["pct_rare"]
+    ids = sorted(PCT_RARE)
+    err = {d: abs(ours[d] - PCT_RARE[d]) for d in ids}
+    mae = sum(err.values()) / len(ids)
+    worst = max(err, key=err.get)
+
+    lines = ["%Rare: paper Table 1 vs. this run (src/stage0/pct_rare.R, R uba)", ""]
+    lines.append(f"{'Dataset':8s} {'paper':>8s} {'ours':>8s} {'|diff|':>8s}")
+    for d in ids:
+        lines.append(f"  {d:6s} {PCT_RARE[d]:>8.2f} {ours[d]:>8.2f} {err[d]:>8.2f}")
     lines.append("")
-    lines.append("(Computed phi %Rare vs. these values: see test_sera_metric.py's")
-    lines.append("test_phi_matches_paper_pct_rare, MAE 0.86pp post-fix -- not recomputed")
-    lines.append("here to avoid a second phi implementation; this file is the reference")
-    lines.append("values only.)")
+    lines.append(f"MAE {mae:.2f}pp over {len(ids)} datasets; largest |diff| {err[worst]:.2f}pp ({worst}).")
     _write_txt("cmp_pct_rare", lines)
 
-    # Two 12-row columns side by side (Dataset | %Rare, twice) rather than one
-    # long 24-row column -- same space-saving convention as the datasets table.
-    ids = sorted(PCT_RARE)
+    # Two 12-row panels side by side, same convention as the datasets table.
     left, right = ids[:12], ids[12:]
-    header = r"\textbf{Dataset} & \textbf{Paper \%Rare} & \textbf{Dataset} & \textbf{Paper \%Rare}"
-    rows = []
-    for l, r in zip(left, right):
-        rows.append(rf"{l} & {PCT_RARE[l]:.1f}\% & {r} & {PCT_RARE[r]:.1f}\% \\")
+    half = r"\textbf{Dataset} & \textbf{Paper} & \textbf{Ours}"
+
+    def pair(d):  # green: equal at the paper's printed precision; yellow: within 0.1 points
+        p, o = _fmt_pct(PCT_RARE[d]), _fmt_pct(ours[d])
+        shade = MATCH if p == o else NEAR if abs(ours[d] - PCT_RARE[d]) <= 0.1 else ""
+        return rf"{d} & {shade}{p}\% & {shade}{o}\%"
+    rows = [pair(l) + " & " + pair(r) + r" \\" for l, r in zip(left, right)]
     tex = table_star(
-        caption=r"\textcolor{red}{$\bullet$}~\textbf{\%Rare reference values} (from the paper's Table 1) --- "
-                r"regression guard for the relevance function $\phi$; see SERA Metric's own "
-                r"test for the reconstructed-$\phi$ comparison (MAE 0.86pp).",
+        caption=r"\textcolor{red}{$\bullet$}~\textbf{\%Rare, paper Table 1 vs.\ this replication.} "
+                r"Ours is computed exactly as \texttt{Exps.R} prepares each series (authors' \texttt{.Rdata}, "
+                r'$k=10$ embedding, \texttt{DMwR::knnImputation} for missing values (as in the paper; \texttt{complete.cases} on DS13 and DS23, where it cannot run), \texttt{uba::phi.control(method="extremes")}, '
+                rf"$\phi \ge 0.9$). MAE {mae:.2f}pp over all {len(ids)} datasets; largest difference {err[worst]:.2f}pp ({worst}). "
+                r"Green pairs: equal at the precision the paper reports; yellow pairs: within $\pm0.1$ percentage points.",
         label="tab:exp002_cmp_cmp_pct_rare",
-        col_spec="lclc",
-        header=header,
+        col_spec="lcclcc",
+        header=half + " & " + half,
         body="\n".join(rows),
         resize=None,
     )
@@ -474,7 +552,7 @@ def gen_sensitivity():
             source_rows.append((FAMILY_LABELS[fam], code, full, src_vals))
         lines.append("")
 
-    lines += ["", "Per-dataset detail, SVM only (the family whose Table 3 row still disagrees):", ""]
+    lines += ["", "Per-dataset detail, SVM only:", ""]
     svm_full = {code: _win_pct("svm", STRATEGY_CODE_MAP[code], None) for code in _BASELINE_STRATEGIES}
     svm_detail = {ds: {} for ds in ids}  # ds -> {code: (pct, shift)}
     for code in _BASELINE_STRATEGIES:
@@ -498,7 +576,7 @@ def gen_sensitivity():
             rf"[{lo:.1f}, {hi:.1f}] & {worst} ({shift:+.1f}pp) \\"
         )
     tex_a = table_star(
-        caption=r"\textbf{Leave-one-dataset-out sensitivity of Table 3's baseline "
+        caption=r"\textbf{Leave-one-dataset-out sensitivity of the paper's Table 3 baseline "
                 r"comparison} --- diagnostic only, datasets are source-correlated so "
                 r"this is not a variance estimate (see leave-one-source-out below for "
                 r"the defensible cut).",
@@ -520,17 +598,29 @@ def gen_sensitivity():
                 " & ".join(rf"\textbf{{{s.replace('_', ' ').title()}}}" for s in sources))
     rows_b = []
     for fam_label, code, full, src_vals in source_rows:
-        cells = " & ".join(f"{src_vals[s]:.0f}" for s in sources)
+        side = lambda v: (v > 50) - (v < 50)  # above / at / below 50%W
+        # \colorbox gives each flagged value its own small block, so neighbouring
+        # flagged cells never merge into one band (unlike \cellcolor).
+        cells = " & ".join(rf"\colorbox{{red!15}}{{\makebox[7mm]{{{src_vals[s]:.0f}}}}}"
+                           if side(src_vals[s]) != side(full) else f"{src_vals[s]:.0f}"
+                           for s in sources)
         rows_b.append(rf"{fam_label} & \texttt{{{_tex(code)}}} & {full:.1f} & {cells} \\")
     tex_b = table_star(
-        caption=r"\textbf{Leave-one-source-out sensitivity of Table 3's baseline "
-                r"comparison} --- \%W with each of the 7 correlated dataset sources "
-                r"dropped in turn; the clean cut (independent draws), unlike the "
-                r"per-dataset table above.",
+        caption=r"\textbf{Does one data source drive the resampling vs.\ baseline result?} "
+                r"The \%W of each strategy against the baseline from "
+                r"Table~\ref{tab:exp002_cmp_cmp_table3} (our reproduction of the paper's "
+                r"Table 3), shown in full (Full \%W) and recomputed with each of the 7 data "
+                r"sources removed in turn. Datasets from the same source are related, so this shows whether "
+                r"any single source drives the result. Only the plain variants are shown "
+                r"because the paper's Table 3 compares only those with the baseline; "
+                r"Figure~\ref{fig:effect_jackknife} repeats this check for all 9 strategies "
+                r"on the pooled effects. Shaded cells fall on a different "
+                r"side of 50\%W (above, at, or below) than the full value, i.e.\ removing "
+                r"that source changes which side usually wins.",
         label="tab:exp002_cmp_cmp_sensitivity_source",
-        col_spec="llc" + "c" * len(sources),
+        col_spec="llc" + (r"@{\hspace{3mm}}c" * len(sources)),
     header=header_b,
-        body="\n".join(rows_b),
+        body=ROW_GAP.join(rows_b),
     )
 
     # (c) Per-dataset SVM-only detail, one row per dataset, 3 strategies as columns
@@ -546,8 +636,7 @@ def gen_sensitivity():
     tex_c = table_star(
         caption=r"\textbf{Per-dataset detail, SVM only} --- \%W and shift from the "
                 r"full-sample value when that single dataset is excluded, for the "
-                r"three baseline-comparison strategies (the family whose Table 3 row "
-                r"is fragile, per Section~\ref{sec:paper-comparison}).",
+                r"three strategies of the paper's Table 3 baseline comparison.",
         label="tab:exp002_cmp_cmp_sensitivity_svm",
         col_spec="llccc",
         header=header_c,

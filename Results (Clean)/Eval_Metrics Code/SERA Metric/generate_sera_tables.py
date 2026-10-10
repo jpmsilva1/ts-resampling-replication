@@ -17,6 +17,9 @@ Output:
     (all 52 workflows, not just the 5-family x 10-strategy grid the
     tables use) in Results (Clean)/Results Data/raw_sera_by_dataset/
 """
+import os
+from concurrent.futures import ProcessPoolExecutor
+from itertools import repeat
 import sys
 from pathlib import Path
 
@@ -76,31 +79,44 @@ def build_family_table(data_dir: Path, family: str, ds_labels: dict, strategies:
                        header=header, body=body)
 
 
+WORKERS = int(os.environ.get("EXP002_WORKERS", "8"))
+
+
+def _raw_sera_one(ds_id: str, data_dir: Path, out_dir: Path) -> str:
+    ds_dir = data_dir / ds_id
+    rows = []
+    for preds_path in sorted(ds_dir.glob("*_predictions.csv")):
+        workflow = preds_path.stem.removesuffix("_predictions")
+        ctrl_path = ds_dir / f"{workflow}_phi_ctrl.csv"
+        model_family, strategy = parse_workflow(workflow)
+
+        preds_df = pd.read_csv(preds_path)
+        ctrl_df = pd.read_csv(ctrl_path)
+        per_it = _sera_per_iteration(preds_df, ctrl_df)
+        rows.append(pd.DataFrame({
+            "dataset_id": ds_id, "workflow": workflow,
+            "model_family": model_family, "strategy": strategy,
+            "iteration": per_it.index, "sera": per_it.to_numpy(),
+        }))
+
+    out_file = out_dir / f"{ds_id}.csv"
+    pd.concat(rows, ignore_index=True).to_csv(out_file, index=False)
+    return f"Wrote {out_file}"
+
+
 def export_raw_sera(data_dir: Path, out_dir: Path, ds_labels: dict) -> None:
     """Writes one CSV per dataset with the SERA of every workflow's every
     iteration (all 52 workflows, incl. mc.arima/mc.BDES) -- the actual
-    per-fold numbers behind the aggregated tables above."""
+    per-fold numbers behind the aggregated tables above. Datasets are
+    independent, so they run in parallel (EXP002_WORKERS, default 8)."""
     out_dir.mkdir(parents=True, exist_ok=True)
-    for ds_id in ds_labels:
-        ds_dir = data_dir / ds_id
-        rows = []
-        for preds_path in sorted(ds_dir.glob("*_predictions.csv")):
-            workflow = preds_path.stem.removesuffix("_predictions")
-            ctrl_path = ds_dir / f"{workflow}_phi_ctrl.csv"
-            model_family, strategy = parse_workflow(workflow)
+    with ProcessPoolExecutor(WORKERS) as ex:
+        for msg in ex.map(_raw_sera_one, list(ds_labels), repeat(data_dir), repeat(out_dir)):
+            print(msg)
 
-            preds_df = pd.read_csv(preds_path)
-            ctrl_df = pd.read_csv(ctrl_path)
-            per_it = _sera_per_iteration(preds_df, ctrl_df)
-            rows.append(pd.DataFrame({
-                "dataset_id": ds_id, "workflow": workflow,
-                "model_family": model_family, "strategy": strategy,
-                "iteration": per_it.index, "sera": per_it.to_numpy(),
-            }))
 
-        out_file = out_dir / f"{ds_id}.csv"
-        pd.concat(rows, ignore_index=True).to_csv(out_file, index=False)
-        print(f"Wrote {out_file}")
+def _family_tex(family: str, data_dir: Path, ds_labels: dict) -> tuple:
+    return family, build_family_table(data_dir, family, ds_labels, STRATEGIES)
 
 
 def main():
@@ -111,11 +127,11 @@ def main():
     missing = [d for d in DS_LABELS if d not in ds_labels]
     if missing:
         print(f"NOTE: no predictions on disk for {missing} -- skipped.")
-    for family in MODEL_FAMILIES:
-        tex = build_family_table(DATA_DIR, family, ds_labels, STRATEGIES)
-        out_file = OUT_DIR / f"sera_table_{family}.tex"
-        out_file.write_text(tex)
-        print(f"Wrote {out_file}")
+    with ProcessPoolExecutor(WORKERS) as ex:
+        for family, tex in ex.map(_family_tex, MODEL_FAMILIES, repeat(DATA_DIR), repeat(ds_labels)):
+            out_file = OUT_DIR / f"sera_table_{family}.tex"
+            out_file.write_text(tex)
+            print(f"Wrote {out_file}")
     export_raw_sera(DATA_DIR, RAW_OUT_DIR, ds_labels)
     print("Done.")
 

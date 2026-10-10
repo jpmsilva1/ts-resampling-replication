@@ -51,7 +51,7 @@ pip install -r requirements.txt          # numpy, pandas, scipy, matplotlib, sta
 ```
 
 Python ≥ 3.10 (the code uses `X | None` type syntax and `str.removeprefix`).
-No R is needed for Stages 1–5. No GPU, no network. Full pipeline runs in ~2.5 min.
+No R is needed for Stages 1–5. No GPU, no network. Full pipeline runs in ~5–6 min serial (`--jobs 8` parallelises within a stage).
 
 ### Cluster (Stage 0 — the R experiment)
 
@@ -110,12 +110,12 @@ resampling sweep. `OPT_PARAMS` replaced it and the collapse is gone (0/21).
 # VPN first, then:
 ssh <login>@slurm-client1.cin.ufpe.br
 tmux new -s exp002                      # the VPN drops every ~30 min
-cd ~/002_ts_resampling_strategies
+cd ~/002_ts_resampling_strategies_isolated
 mkdir -p logs
 sbatch run_apuana.slurm                 # short-simple, 2 days, 48 cpus, 128G
 
 squeue -u $USER --format="%.10i %.12j %.8T %.10M %.6D %R"
-ls src/adapted/results/data_v3/*.Rdata | wc -l    # want 24
+ls src/adapted/results/data_v4/*.Rdata | wc -l    # want 24
 ```
 
 DS21–DS24 are far slower than DS01–DS20 (larger series, CSS `auto.arima` order
@@ -126,13 +126,13 @@ resubmit retries only the missing indices.
 ### 2.3 Pull results back and unserialize
 
 ```bash
-scp -r <login>@slurm-client1.cin.ufpe.br:~/.../results/data_v3/ src/adapted/results/
+scp -r <login>@slurm-client1.cin.ufpe.br:~/002_ts_resampling_strategies_isolated/src/adapted/results/data_v4/ src/adapted/results/
 
 Rscript src/stage0/rdata_to_csv.R              # -> Results Data/raw_iterations_by_dataset_v2/
 Rscript src/stage0/rdata_to_csv_predictions.R  # -> Results Data/raw_predictions_by_dataset/
 ```
 
-Both scan `data_v3/` (or whatever `EXP002_RUN_ID` points at) for whatever `results_dataset_N.Rdata` files exist, so they
+Both scan `data_v4/` (or whatever `EXP002_RUN_ID` / their first argument points at) for whatever `results_dataset_N.Rdata` files exist, so they
 work on a partial run. **R is mandatory here and only here** — the results are
 `performanceEstimation::ComparisonResults` S4 objects and no Python reader
 handles S4. Everything downstream is Python (project convention).
@@ -145,25 +145,26 @@ proceed to Stage 1 with a truncated extraction.
 
 ### 2.4 Tier 2 variant runs — traceability knobs
 
-Three env vars redirect `Exps.R` to a non-canonical run, all sourced from
-`src/adapted/run_config.R`. **Defaults were promoted 2026-09-21** — a plain
-`Rscript Exps.R` now reproduces the corrected, paper-replicating experiment
-(`data_v3`, RNG pinned to `Rounding`) rather than the pre-promotion baseline;
-see `DIVERGENCE_ANALYSIS.md` §11 for why. `data_v2` is still fully reachable,
-just no longer the default:
+Five env vars redirect `Exps.R` to a non-canonical run, all resolved in
+`src/adapted/run_config.R` (except `EXP002_DATASETS`, read in `Exps.R`). **Defaults
+were promoted 2026-10-10** — a plain `Rscript Exps.R` reproduces the canonical
+`data_v4` experiment (RNG pinned to `Rounding`, `knnImputation` for missing values);
+see `DIVERGENCE_ANALYSIS.md` §11 for why. Earlier runs stay reachable:
 
 | Env var | Effect | Default |
 |---|---|---|
-| `EXP002_RUN_ID` | `RESULTS_DIR` → `src/adapted/results/<id>` | `data_v3` (was `data_v2`) |
+| `EXP002_RUN_ID` | `RESULTS_DIR` → `src/adapted/results/<id>` | `data_v4` (was `data_v3`, before that `data_v2`) |
 | `EXP002_SAMPLE_KIND` | `RNGkind(sample.kind=...)`, applied once before any fork (multicore forking inherits it automatically) | `Rounding` (was unset — R's post-2019 default) |
+| `EXP002_NA_METHOD` | `knn` → `knnImputation` on the embedded frame (paper §4.1), falling back to `complete.cases` where it errors (DS13, DS23). Prints `Dataset N NA handling: ...`; any other value than `knn`/`complete.cases` errors | `knn` (was `complete.cases`) |
+| `EXP002_DATASETS` | comma list, e.g. `12,24` — run only these datasets | all |
 | `EXP002_BASELINE_PARAMS` | CSV of per-dataset `svm_cost,svm_gamma,rpart_minsplit,rpart_cp` read **only** by the plain (unresampled) `mc.svm`/`mc.rpart` workflows; every resampled variant keeps Table 7 | unset — Table 7 for baseline too |
 
-To reproduce the pre-promotion `data_v2` run exactly: `EXP002_RUN_ID=data_v2
-EXP002_SAMPLE_KIND=Rejection Rscript src/adapted/Exps.R`.
+To reproduce `data_v3` exactly: `EXP002_RUN_ID=data_v3 EXP002_NA_METHOD=complete.cases
+Rscript src/adapted/Exps.R`; `data_v2` additionally needs `EXP002_SAMPLE_KIND=Rejection`.
 
 Submit with `sbatch --export=ALL,EXP002_RUN_ID=<id>[,EXP002_SAMPLE_KIND=...][,EXP002_BASELINE_PARAMS=...] run_apuana.slurm`.
 Every run writes `src/adapted/results/<id>/RUN_MANIFEST.txt` (run id, timestamp,
-R version, actual `RNGkind()`, the two override values, SLURM job id/node/CPU
+R version, actual `RNGkind()`, the override values and NA method, SLURM job id/node/CPU
 count, `Exps.R`'s md5, and one status line per dataset) — read this before
 trusting any number from a variant run against a "which code produced this"
 question.
@@ -173,7 +174,7 @@ scaffolds `runs/<id>/` as a standalone `EXP002_ROOT`, then
 `Rscript src/stage0/rdata_to_csv.R "src/adapted/results/<id>" "runs/<id>/Results (Clean)/Results Data/raw_iterations_by_dataset_v2" data/paper_datasets_csv/manifest.csv`
 followed by `EXP002_ROOT="$PWD/runs/<id>" python3 "Eval_Metrics Code/Paper Comparison/generate_paper_comparison.py"`
 answers the Tier 2 decision-gate question with only the one generator that
-needs it, not the full 22-generator pipeline.
+needs it, not the full pipeline.
 
 ---
 
@@ -184,7 +185,8 @@ needs it, not the full 22-generator pipeline.
 ```bash
 cd "Results (Clean)/Eval_Metrics Code"
 python3 run_all.py --tests     # ALWAYS first. 56 tests, ~3s.
-python3 run_all.py             # 19 generators, ~2.5 min
+python3 run_all.py             # every generator, ~5–6 min serial
+python3 run_all.py --jobs 8    # same, generators of a stage in parallel (~6 min wall incl. SERA's own 8 workers)
 ```
 
 Other entry points: `--list` prints the DAG without running; `--stage N` runs one
@@ -232,7 +234,7 @@ LaTeX aesthetic comes from `tables_common.table_star()` (booktabs,
   scales as 1/√N, so N is derived per matrix, never a constant.
 - **`Figures/Bayes/`** — Bayesian signed-rank (Benavoli et al. 2017), each
   strategy vs. baseline only, ungated. Stacked bar = P(strategy wins) / P(ROPE
-  draw) / P(baseline wins), 50,000 Dirichlet draws. ROPE is `±0.01` for F1 (raw
+  draw) / P(baseline wins), `baycomp.SignedRankTest`, 50,000 posterior samples. ROPE is `±0.01` for F1 (raw
   difference) and `±log(1.05)` for RMSE/SERA (log ratio, since both are unbounded
   and differ wildly in scale across datasets).
 - **`Figures/Rank Distribution/`** — per-dataset rank boxplots. Adds what CD
@@ -452,3 +454,13 @@ Superseded entries, for the record:
   run (job 15570, `rng_rounding`, promoted).
 - ~~`main.tex` SERA prose pre-dates the φ fix~~ — resolved, re-synced 2026-09-21
   alongside the fidelity-section rewrite.
+
+## Current canonical result set: `data_v4` (2026-10-10)
+
+`data_v4` = `data_v3` with the paper's NA handling on DS12 and DS24 (job 16745, run
+`na_knn_rounding`, `EXP002_SAMPLE_KIND=Rounding`, `EXP002_NA_METHOD=knn`). Build it with
+`bash src/stage0/build_data_v4.sh` (symlinks plus its own `RUN_MANIFEST.txt` pointing at the
+two source runs); the three stage-0 extractors, `run_config.R` and `run_apuana.slurm` default
+to `data_v4`. Check `RUN_MANIFEST.txt` shows `Rounding` before trusting any
+variant run — the cluster's `run_config.R` once lagged the local default (job 16744 ran with
+`Rejection` and was discarded).

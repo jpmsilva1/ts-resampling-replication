@@ -1,21 +1,25 @@
 \begin{table*}[t]
 \centering
-\caption{\textcolor{red}{$\bullet$}~\textbf{Resampling vs.\ baseline} (replicates the paper's Table 3), Win(sigWin)/Loss(sigLoss) [\%W] per family, ours (24 datasets) vs.\ the paper (24), $\alpha=0.05$.}
+\caption{\textcolor{red}{$\bullet$}~\textbf{Resampling vs.\ baseline} (replicates the paper's Table 3), Win(sigWin)/Loss(sigLoss) [\%W] per family, ours (24 datasets) vs.\ the paper (24), $\alpha=0.05$. Green pairs: same number of wins as the paper; yellow pairs: $\pm1$ win (one dataset) apart.}
 \label{tab:exp002_cmp_cmp_table3}
 \vspace{4pt}
 \noindent
 \makebox[\textwidth][c]{%
 \resizebox{1.15\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabular}{lcc@{\hspace{5mm}}cc@{\hspace{5mm}}cc}
 \toprule
-\textbf{Family} & \multicolumn{2}{c}{\textbf{U\_B}} & \multicolumn{2}{c}{\textbf{O\_B}} & \multicolumn{2}{c}{\textbf{SM\_B}} \\
+\textbf{Family} & \multicolumn{2}{c}{\textbf{U\_B vs.\ none}} & \multicolumn{2}{c}{\textbf{O\_B vs.\ none}} & \multicolumn{2}{c}{\textbf{SM\_B vs.\ none}} \\
 \midrule
  & Ours & Paper & Ours & Paper & Ours & Paper \\
-Linear Model (LM) & 18(18)/6(4) [75\%W] & 19(18)/5(4) [79\%W] & 19(18)/5(3) [79\%W] & 18(17)/6(3) [75\%W] & 19(19)/5(3) [79\%W] & 19(18)/5(3) [79\%W] \\
-SVM & 9(6)/15(9) [38\%W] & 8(6)/16(8) [33\%W] & 8(7)/16(10) [33\%W] & 7(6)/17(10) [29\%W] & 7(7)/17(9) [29\%W] & 7(6)/17(10) [29\%W] \\
-MARS & 14(11)/10(7) [58\%W] & 15(12)/9(7) [62\%W] & 16(15)/8(5) [67\%W] & 17(17)/7(4) [71\%W] & 17(17)/7(4) [71\%W] & 18(17)/6(4) [75\%W] \\
-Random Forest (RF) & 17(16)/7(4) [71\%W] & 18(17)/6(2) [75\%W] & 19(13)/5(3) [79\%W] & 20(15)/4(1) [83\%W] & 19(19)/5(2) [79\%W] & 20(20)/4(1) [83\%W] \\
-CART (RPART) & 12(9)/12(2) [50\%W] & 12(8)/12(3) [50\%W] & 11(8)/13(7) [46\%W] & 11(9)/13(8) [46\%W] & 10(9)/14(5) [42\%W] & 10(10)/14(7) [42\%W] \\
+Linear Model (LM) & \cellcolor{yellow!30}18(18)/6(4) [75\%W] & \cellcolor{yellow!30}19(18)/5(4) [79\%W] & \cellcolor{yellow!30}19(18)/5(3) [79\%W] & \cellcolor{yellow!30}18(17)/6(3) [75\%W] & \cellcolor{green!15}19(19)/5(3) [79\%W] & \cellcolor{green!15}19(18)/5(3) [79\%W] \\
+\noalign{\vskip 2pt}
+SVM & \cellcolor{green!15}8(5)/16(10) [33\%W] & \cellcolor{green!15}8(6)/16(8) [33\%W] & \cellcolor{green!15}7(6)/17(11) [29\%W] & \cellcolor{green!15}7(6)/17(10) [29\%W] & \cellcolor{yellow!30}6(6)/18(10) [25\%W] & \cellcolor{yellow!30}7(6)/17(10) [29\%W] \\
+\noalign{\vskip 2pt}
+MARS & \cellcolor{yellow!30}14(11)/10(7) [58\%W] & \cellcolor{yellow!30}15(12)/9(7) [62\%W] & \cellcolor{yellow!30}16(15)/8(5) [67\%W] & \cellcolor{yellow!30}17(17)/7(4) [71\%W] & \cellcolor{yellow!30}17(17)/7(4) [71\%W] & \cellcolor{yellow!30}18(17)/6(4) [75\%W] \\
+\noalign{\vskip 2pt}
+Random Forest (RF) & \cellcolor{yellow!30}17(16)/7(4) [71\%W] & \cellcolor{yellow!30}18(17)/6(2) [75\%W] & \cellcolor{yellow!30}19(12)/5(3) [79\%W] & \cellcolor{yellow!30}20(15)/4(1) [83\%W] & \cellcolor{yellow!30}19(19)/5(2) [79\%W] & \cellcolor{yellow!30}20(20)/4(1) [83\%W] \\
+\noalign{\vskip 2pt}
+CART (RPART) & \cellcolor{yellow!30}11(8)/13(3) [46\%W] & \cellcolor{yellow!30}12(8)/12(3) [50\%W] & \cellcolor{green!15}11(8)/13(8) [46\%W] & \cellcolor{green!15}11(9)/13(8) [46\%W] & \cellcolor{yellow!30}9(9)/15(6) [38\%W] & \cellcolor{yellow!30}10(10)/14(7) [42\%W] \\
 \bottomrule
 \end{tabular}%
 }%

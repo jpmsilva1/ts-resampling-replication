@@ -3,65 +3,65 @@
 ==============================================================================
 Dep. Variable:               log_sera   R-squared:                       0.995
 Model:                            OLS   Adj. R-squared:                  0.995
-Method:                 Least Squares   F-statistic:                     23.45
-Date:                Mon, 21 Sep 2026   Prob (F-statistic):           3.36e-10
-Time:                        16:23:49   Log-Likelihood:                -1130.5
-No. Observations:                1200   AIC:                             2335.
-Df Residuals:                    1163   BIC:                             2523.
+Method:                 Least Squares   F-statistic:                     21.73
+Date:                Sat, 10 Oct 2026   Prob (F-statistic):           7.37e-10
+Time:                        15:01:46   Log-Likelihood:                -1130.8
+No. Observations:                1200   AIC:                             2336.
+Df Residuals:                    1163   BIC:                             2524.
 Df Model:                          36                                         
 Covariance Type:              cluster                                         
 ===================================================================================================================
                                                       coef    std err          z      P>|z|      [0.025      0.975]
 -------------------------------------------------------------------------------------------------------------------
-Intercept                                          -1.2945      0.072    -18.006      0.000      -1.435      -1.154
-C(strategy, Treatment('baseline'))[T.OVERB]         0.1796      0.050      3.590      0.000       0.082       0.278
-C(strategy, Treatment('baseline'))[T.OVERT]         0.2850      0.146      1.950      0.051      -0.001       0.571
-C(strategy, Treatment('baseline'))[T.OVERTPhi]      0.1736      0.046      3.737      0.000       0.083       0.265
-C(strategy, Treatment('baseline'))[T.SMOTEB]        0.3153      0.059      5.314      0.000       0.199       0.432
-C(strategy, Treatment('baseline'))[T.SMOTET]        0.3450      0.052      6.599      0.000       0.243       0.448
-C(strategy, Treatment('baseline'))[T.SMOTETPhi]     0.4264      0.084      5.092      0.000       0.262       0.591
-C(strategy, Treatment('baseline'))[T.UNDERB]        0.2936      0.092      3.198      0.001       0.114       0.473
-C(strategy, Treatment('baseline'))[T.UNDERT]        0.3032      0.090      3.378      0.001       0.127       0.479
-C(strategy, Treatment('baseline'))[T.UNDERTPhi]     0.3612      0.129      2.808      0.005       0.109       0.613
-C(dataset_id)[T.DS02]                               1.4606   1.15e-14   1.27e+14      0.000       1.461       1.461
-C(dataset_id)[T.DS03]                               0.4601   1.64e-14    2.8e+13      0.000       0.460       0.460
-C(dataset_id)[T.DS04]                              20.0333   1.27e-14   1.58e+15      0.000      20.033      20.033
-C(dataset_id)[T.DS05]                               1.2750   9.09e-15    1.4e+14      0.000       1.275       1.275
-C(dataset_id)[T.DS06]                               3.3755   1.22e-14   2.76e+14      0.000       3.376       3.376
-C(dataset_id)[T.DS07]                               3.9534   2.26e-14   1.75e+14      0.000       3.953       3.953
-C(dataset_id)[T.DS08]                              17.9268   3.66e-14    4.9e+14      0.000      17.927      17.927
-C(dataset_id)[T.DS09]                               9.1255    5.8e-14   1.57e+14      0.000       9.126       9.126
-C(dataset_id)[T.DS10]                               7.4708   9.63e-15   7.76e+14      0.000       7.471       7.471
-C(dataset_id)[T.DS11]                               8.3030   9.84e-15   8.44e+14      0.000       8.303       8.303
-C(dataset_id)[T.DS12]                               9.7233   1.87e-14   5.21e+14      0.000       9.723       9.723
-C(dataset_id)[T.DS13]                              11.4853   9.32e-15   1.23e+15      0.000      11.485      11.485
-C(dataset_id)[T.DS14]                              -2.8313   1.06e-14  -2.68e+14      0.000      -2.831      -2.831
-C(dataset_id)[T.DS15]                              -2.9666   1.34e-14  -2.21e+14      0.000      -2.967      -2.967
-C(dataset_id)[T.DS16]                              -2.8351   9.57e-15  -2.96e+14      0.000      -2.835      -2.835
-C(dataset_id)[T.DS17]                              -2.6757   9.46e-15  -2.83e+14      0.000      -2.676      -2.676
-C(dataset_id)[T.DS18]                              -2.7599   1.55e-14  -1.79e+14      0.000      -2.760      -2.760
-C(dataset_id)[T.DS19]                              -2.8141   1.26e-14  -2.23e+14      0.000      -2.814      -2.814
-C(dataset_id)[T.DS20]                              -3.7500   9.46e-15  -3.96e+14      0.000      -3.750      -3.750
-C(dataset_id)[T.DS21]                              18.8856   1.09e-14   1.73e+15      0.000      18.886      18.886
-C(dataset_id)[T.DS22]                              21.0135   2.79e-14   7.54e+14      0.000      21.013      21.013
-C(dataset_id)[T.DS23]                              20.4946   9.29e-15    2.2e+15      0.000      20.495      20.495
-C(dataset_id)[T.DS24]                              14.2837    1.1e-14    1.3e+15      0.000      14.284      14.284
-C(model_family)[T.mars]                             0.2996      0.151      1.982      0.047       0.003       0.596
-C(model_family)[T.rf]                              -0.0620      0.079     -0.780      0.435      -0.218       0.094
-C(model_family)[T.rpart]                            0.3253      0.100      3.268      0.001       0.130       0.520
-C(model_family)[T.svm]                              0.2263      0.086      2.625      0.009       0.057       0.395
+Intercept                                          -1.2887      0.071    -18.261      0.000      -1.427      -1.150
+C(strategy, Treatment('baseline'))[T.OVERB]         0.1778      0.050      3.535      0.000       0.079       0.276
+C(strategy, Treatment('baseline'))[T.OVERT]         0.2823      0.146      1.931      0.053      -0.004       0.569
+C(strategy, Treatment('baseline'))[T.OVERTPhi]      0.1712      0.046      3.686      0.000       0.080       0.262
+C(strategy, Treatment('baseline'))[T.SMOTEB]        0.3097      0.060      5.175      0.000       0.192       0.427
+C(strategy, Treatment('baseline'))[T.SMOTET]        0.3393      0.053      6.441      0.000       0.236       0.443
+C(strategy, Treatment('baseline'))[T.SMOTETPhi]     0.4241      0.085      4.988      0.000       0.257       0.591
+C(strategy, Treatment('baseline'))[T.UNDERB]        0.2821      0.091      3.087      0.002       0.103       0.461
+C(strategy, Treatment('baseline'))[T.UNDERT]        0.2928      0.089      3.273      0.001       0.117       0.468
+C(strategy, Treatment('baseline'))[T.UNDERTPhi]     0.3554      0.129      2.746      0.006       0.102       0.609
+C(dataset_id)[T.DS02]                               1.4606   3.24e-14    4.5e+13      0.000       1.461       1.461
+C(dataset_id)[T.DS03]                               0.4601    2.9e-14   1.59e+13      0.000       0.460       0.460
+C(dataset_id)[T.DS04]                              20.0333   1.57e-14   1.28e+15      0.000      20.033      20.033
+C(dataset_id)[T.DS05]                               1.2750   3.56e-14   3.58e+13      0.000       1.275       1.275
+C(dataset_id)[T.DS06]                               3.3755   2.02e-14   1.67e+14      0.000       3.376       3.376
+C(dataset_id)[T.DS07]                               3.9534   4.55e-14   8.69e+13      0.000       3.953       3.953
+C(dataset_id)[T.DS08]                              17.9268   7.68e-14   2.33e+14      0.000      17.927      17.927
+C(dataset_id)[T.DS09]                               9.1255    2.6e-14   3.51e+14      0.000       9.126       9.126
+C(dataset_id)[T.DS10]                               7.4708   1.35e-14   5.55e+14      0.000       7.471       7.471
+C(dataset_id)[T.DS11]                               8.3030   2.23e-14   3.72e+14      0.000       8.303       8.303
+C(dataset_id)[T.DS12]                              10.6170   2.28e-14   4.66e+14      0.000      10.617      10.617
+C(dataset_id)[T.DS13]                              11.4853   2.29e-14   5.01e+14      0.000      11.485      11.485
+C(dataset_id)[T.DS14]                              -2.8313    3.2e-14  -8.85e+13      0.000      -2.831      -2.831
+C(dataset_id)[T.DS15]                              -2.9666   2.86e-14  -1.04e+14      0.000      -2.967      -2.967
+C(dataset_id)[T.DS16]                              -2.8351   1.71e-14  -1.65e+14      0.000      -2.835      -2.835
+C(dataset_id)[T.DS17]                              -2.6757   2.47e-14  -1.08e+14      0.000      -2.676      -2.676
+C(dataset_id)[T.DS18]                              -2.7599   3.03e-14   -9.1e+13      0.000      -2.760      -2.760
+C(dataset_id)[T.DS19]                              -2.8141   2.71e-14  -1.04e+14      0.000      -2.814      -2.814
+C(dataset_id)[T.DS20]                              -3.7500   2.39e-14  -1.57e+14      0.000      -3.750      -3.750
+C(dataset_id)[T.DS21]                              18.8856   3.72e-14   5.08e+14      0.000      18.886      18.886
+C(dataset_id)[T.DS22]                              21.0135   1.62e-14   1.29e+15      0.000      21.013      21.013
+C(dataset_id)[T.DS23]                              20.4946   2.17e-14   9.43e+14      0.000      20.495      20.495
+C(dataset_id)[T.DS24]                              14.2552   2.92e-14   4.88e+14      0.000      14.255      14.255
+C(model_family)[T.mars]                             0.2955      0.150      1.963      0.050       0.001       0.590
+C(model_family)[T.rf]                              -0.0612      0.080     -0.769      0.442      -0.217       0.095
+C(model_family)[T.rpart]                            0.3233      0.099      3.262      0.001       0.129       0.518
+C(model_family)[T.svm]                              0.2264      0.086      2.620      0.009       0.057       0.396
 ==============================================================================
-Omnibus:                     2464.078   Durbin-Watson:                   1.220
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):          7886483.547
-Skew:                          16.093   Prob(JB):                         0.00
-Kurtosis:                     398.846   Cond. No.                         27.9
+Omnibus:                     2464.135   Durbin-Watson:                   1.229
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):          7876692.599
+Skew:                          16.095   Prob(JB):                         0.00
+Kurtosis:                     398.598   Cond. No.                         27.9
 ==============================================================================
 
 Notes:
-[1] Standard Errors are robust to cluster correlation (CRV1)
+[1] Standard Errors are robust to cluster correlation (cluster)
 
 === SERA (log): strategy x family interaction, joint F-test ===
-F = 1921934483.632, p = 1.191e-101 (36 interaction terms)
+F = 49.694, p = 1.408e-14 (36 interaction terms)
 A significant p means the strategy effect genuinely differs by model
 family (matches the per-family split already visible across the 15
 Bayes charts / 15 CD diagrams) -- the pooled coefficients above then

@@ -1,34 +1,29 @@
-%Rare (Table 1) regression guard -- see SERA Metric/test_sera_metric.py
-for the primary phi-fix regression test; this repeats the same check
-from the paper-comparison audit's own data path.
+%Rare: paper Table 1 vs. this run (src/stage0/pct_rare.R, R uba)
 
-Dataset   paper %Rare
-  DS01          9.9%
-  DS02          9.3%
-  DS03          7.8%
-  DS04         13.3%
-  DS05          3.5%
-  DS06          4.8%
-  DS07         12.5%
-  DS08         17.6%
-  DS09         21.1%
-  DS10          4.8%
-  DS11         13.3%
-  DS12         11.0%
-  DS13         11.1%
-  DS14         16.3%
-  DS15         11.4%
-  DS16          9.7%
-  DS17         11.6%
-  DS18         10.1%
-  DS19          8.2%
-  DS20          6.8%
-  DS21          1.8%
-  DS22         10.2%
-  DS23          0.1%
-  DS24          3.4%
+Dataset     paper     ours   |diff|
+  DS01       9.90     9.99     0.09
+  DS02       9.30     9.29     0.01
+  DS03       7.80     7.77     0.03
+  DS04      13.30    13.31     0.01
+  DS05       3.50     3.54     0.04
+  DS06       4.80     4.85     0.05
+  DS07      12.50    12.53     0.03
+  DS08      17.60    17.63     0.03
+  DS09      21.10    21.18     0.08
+  DS10       4.80     4.84     0.04
+  DS11      13.30    13.34     0.04
+  DS12      11.00    10.99     0.01
+  DS13      11.10    11.13     0.03
+  DS14      16.30    16.32     0.02
+  DS15      11.40    11.39     0.01
+  DS16       9.70     9.68     0.02
+  DS17      11.60    11.57     0.03
+  DS18      10.10    10.06     0.04
+  DS19       8.20     8.16     0.04
+  DS20       6.80     6.83     0.03
+  DS21       1.80     1.76     0.04
+  DS22      10.20    10.24     0.04
+  DS23       0.08     0.08     0.00
+  DS24       3.40     3.40     0.00
 
-(Computed phi %Rare vs. these values: see test_sera_metric.py's
-test_phi_matches_paper_pct_rare, MAE 0.86pp post-fix -- not recomputed
-here to avoid a second phi implementation; this file is the reference
-values only.)
+MAE 0.03pp over 24 datasets; largest |diff| 0.09pp (DS01).

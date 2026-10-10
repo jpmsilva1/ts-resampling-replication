@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Heatmap B: win-count heatmap -- how many of the 20 datasets each
+"""Heatmap B: win-count heatmap -- how many of the 24 datasets each
 (strategy, family) combo is the single best performer for. Direct
 heatmap-ification of tables/Wins_Loss/{f1,sera}_table_best_counts.tex (2
 panels: F1, SERA -- RMSE has no win-count table in this project, see
 CLAUDE.md's Summary Tables entry).
 
-Sequential single-hue colormap (win count is a pure 0-20 magnitude with no
+Sequential single-hue colormap (win count is a pure 0-24 magnitude with no
 "bad" pole, unlike heatmap A/C's diverging/direction-flipped treatment), a
 teal ramp matching the project's Ocean Dusk palette.
 
@@ -71,7 +71,7 @@ def main():
     axes[1].set_yticks(range(len(STRAT)))
     axes[1].set_yticklabels([])
     fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=CMAP), ax=axes,
-                 fraction=0.03, pad=0.03, label="datasets won (of 20)")
+                 fraction=0.03, pad=0.03, label=f"datasets won (of {n_ds})")
 
     save(fig, OUT_DIR / "heatmap_win_count.png")
     print("Wrote", OUT_DIR / "heatmap_win_count.pdf")
