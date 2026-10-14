@@ -56,6 +56,7 @@ PIPELINE = [
     (3, "Overview Figures", "generate_overview_figures_sera.py"),
     (3, "Metric Diagnostics", "generate_metric_disagreement.py"),
     (3, "Metric Diagnostics", "generate_precision_recall.py"),
+    (3, "Metric Diagnostics", "generate_bias_ts_baselines.py"),
     (4, "Regression", "generate_regression.py"),
     (4, "Causal", "generate_causal_effects.py"),
     (4, "Causal", "generate_causal_tables.py"),

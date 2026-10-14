@@ -30,6 +30,7 @@ MODEL_FAMILIES = {"lm": "Linear Model (LM)", "svm": "SVM", "mars": "MARS",
                   "rf": "Random Forest (RF)", "rpart": "CART (RPART)"}
 STRATEGIES = ["baseline", "UNDERB", "UNDERT", "UNDERTPhi", "OVERB", "OVERT",
               "OVERTPhi", "SMOTEB", "SMOTET", "SMOTETPhi"]
+METRIC_LABEL = {"F1": r"$F_1^{\phi}$"}  # display name only; data keys stay "F1"
 # Derived per-matrix inside main(), never hardcoded: Nemenyi's critical
 # distance scales as 1/sqrt(n), so a stale N silently produces a WRONG CD
 # bar rather than an error. See EXPERIMENTAL_PROTOCOL.md, 'N is derived'.
@@ -99,7 +100,7 @@ def main():
             out_file = OUT_DIR / f"cd_{metric.lower()}_{family}.png"
             plot_cd_diagram(
                 avg_ranks.to_dict(), cd,
-                title=(f"{metric} -- {family_label} (CD = {cd:.3f}, N = {n_datasets} "
+                title=(f"{METRIC_LABEL.get(metric, metric)} -- {family_label} (CD = {cd:.3f}, N = {n_datasets} "
                        f"datasets, Friedman {p_str}{flag})"),
                 out_path=str(out_file), k=len(STRATEGIES),
             )

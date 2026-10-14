@@ -18,7 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from tables_common import DS_LABELS, labels_for, MODEL_FAMILIES, STRATEGIES, STRATEGY_HDR, ROOT, fmt_mean_sd, table_star
+from tables_common import labels_for, MODEL_FAMILIES, STRATEGIES, STRATEGY_HDR, ROOT, fmt_mean_sd, table_star
 
 DATA_DIR = ROOT / "Results (Clean)/Results Data/raw_iterations_by_dataset_v2"
 OUT_DIR = ROOT / "Results (Clean)/Evaluation Metrics/Latex Tables/F1"

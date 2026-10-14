@@ -18,13 +18,13 @@ import sys as _sys, pathlib as _pl; _sys.path.insert(0, str(_pl.Path(__file__).r
 from paths import ROOT  # noqa: E402
 sys.path.insert(0, str(ROOT / "Results (Clean)/Eval_Metrics Code"))
 sys.path.insert(0, str(ROOT / "Results (Clean)/Eval_Metrics Code/CD Metrics"))
-from plot_style import apply_style, save, C_DARK  # noqa: E402
+from plot_style import apply_style, C_DARK  # noqa: E402
 from generate_cd_diagrams import MODEL_FAMILIES, STRATEGIES  # noqa: E402
 
 apply_style()
 
 FAM = list(MODEL_FAMILIES)
-FAMLAB = ["LM", "SVM", "MARS", "RF", "CART"]
+FAMLAB = ["LM", "SVM", "MARS", "RF", "RPART"]
 STRAT = STRATEGIES
 SLAB = ["Baseline"] + STRATEGIES[1:]
 

@@ -44,10 +44,13 @@ def panel(long_df: pd.DataFrame, agg: str) -> pd.DataFrame:
     return p
 
 
-def baseline_wins(p: pd.DataFrame) -> int:
-    """Cells where baseline has the lowest (best) value; same rule as Figure 3."""
-    wide = p.pivot_table(index=["dataset_id", "model_family"], columns="strategy", values="value")
-    return int((wide.round(4).idxmin(axis=1) == "baseline").sum())
+def baseline_wins(p: pd.DataFrame) -> float:
+    """Cells where baseline has the lowest (best) value; same rule as Figure 3:
+    values tied at 4 decimals split the win evenly (idxmin used to hand the
+    whole cell to the alphabetically first tied strategy)."""
+    wide = p.pivot_table(index=["dataset_id", "model_family"], columns="strategy", values="value").round(4)
+    best = wide.eq(wide.min(axis=1), axis=0)
+    return float((best["baseline"] / best.sum(axis=1)).sum())
 
 
 def dominated_cells(long_df: pd.DataFrame, metric: str) -> pd.DataFrame:
@@ -105,7 +108,7 @@ def main():
         for agg in ["mean", "median"]:
             p = panel(long_df, agg)
             cols[(metric, agg)] = bootstrap_ci(p, dv="log_value", n_boot=N_BOOT, seed=SEED).reindex(STRATEGY_ORDER)
-            wins[(metric, agg)] = f"{baseline_wins(p)} / {len(p) // 10}"
+            wins[(metric, agg)] = f"{baseline_wins(p):.1f}".removesuffix(".0") + f" / {len(p) // 10}"
         cols[(metric, "trim")] = trimmed_ci(panel(long_df, "mean"))
         wins[(metric, "trim")] = "--"
     dom = pd.concat(dominated, ignore_index=True)

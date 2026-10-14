@@ -79,7 +79,7 @@ def jackknife_plot(f1_panel, sera_panel, out_path: Path):
         for source in jk.index:
             ax.scatter(x, jk.loc[source].to_numpy(), alpha=0.75, s=30,
                        color=SOURCE_COLORS[source],
-                       label=f"Excl. {source}")
+                       label=f"Excl. {source.replace('_', ' ').title()}")
         ax.axhline(0, color="#888", linestyle="--", linewidth=1)
         ax.set_xticks(x)
         ax.set_xticklabels(STRATEGY_ORDER, rotation=45, ha="right", fontsize=9)

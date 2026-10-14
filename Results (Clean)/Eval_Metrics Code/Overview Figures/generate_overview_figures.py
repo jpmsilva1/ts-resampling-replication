@@ -22,7 +22,6 @@ from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 
 import sys as _sys, pathlib as _pl; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))  # make Eval_Metrics Code/ importable when run directly
@@ -40,11 +39,12 @@ FAMILIES = ["lm", "svm", "mars", "rf", "rpart"]
 
 # Resampling groups, in row order
 GROUPS = ["None", "UNDER", "OVER", "SmoteR"]
+GROUP_LABEL = {"None": "Baseline", "SmoteR": "SMOTE"}  # display only
 
 # The order of datasets by ascending number of rare cases (from task description)
 RARE_ORDER = [
     "DS20", "DS23", "DS19", "DS16", "DS18", "DS03", "DS15", "DS17",
-    "DS02", "DS10", "DS01", "DS14", "DS04", "DS12", "DS13", "DS11",
+    "DS02", "DS10", "DS01", "DS14", "DS04", "DS13", "DS12", "DS11",
     "DS09", "DS05", "DS06", "DS24", "DS07", "DS08", "DS21", "DS22",
 ]
 
@@ -123,22 +123,22 @@ def plot_figures(data: pd.DataFrame):
     # Figure 7: natural order
     _plot_figure(data, NATURAL_ORDER,
                  OUT_DIR / "fig7_f1_by_dataset.png",
-                 "F1 by Dataset (Natural Order)")
+                 r"$F_1^{\phi}$ by Dataset (Natural Order)")
 
     # Figure 8: rare-case order
     _plot_figure(data, RARE_ORDER,
                  OUT_DIR / "fig8_f1_by_rare_cases.png",
-                 "F1 by Dataset (Sorted by Rare Cases)")
+                 r"$F_1^{\phi}$ by Dataset (Sorted by Rare Cases)")
 
     # Figure 9: imbalance-ratio order
     _plot_figure(data, IMBALANCE_ORDER,
                  OUT_DIR / "fig9_f1_by_imbalance_ratio.png",
-                 "F1 by Dataset (Sorted by Imbalance Ratio)")
+                 r"$F_1^{\phi}$ by Dataset (Sorted by Imbalance Ratio)")
 
     # Figure 10: %Rare order
     _plot_figure(data, PCT_RARE_ORDER,
                  OUT_DIR / "fig10_f1_by_pct_rare.png",
-                 "F1 by Dataset (Sorted by %Rare)")
+                 r"$F_1^{\phi}$ by Dataset (Sorted by %Rare)")
 
 
 def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title: str):
@@ -222,7 +222,7 @@ def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title:
 
             # Row labels on right
             if col_idx == 4:
-                ax.text(1.14, 0.5, group, transform=ax.transAxes,
+                ax.text(1.14, 0.5, GROUP_LABEL.get(group, group), transform=ax.transAxes,
                        fontsize=21, fontweight='bold', va='center')
 
             # Remove x-axis labels except bottom row
@@ -239,7 +239,7 @@ def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title:
 
     # Build legend manually
     legend_elements = [
-        Line2D([0], [0], color=C_DARK, linestyle="solid", linewidth=3.5, label="Original"),
+        Line2D([0], [0], color=C_DARK, linestyle="solid", linewidth=3.5, label="Baseline"),
         Line2D([0], [0], color=C_TEAL, linestyle="dashed", linewidth=3.5, label="B"),
         Line2D([0], [0], color=C_TEAL, linestyle="dotted", linewidth=3.5, label="T"),
         Line2D([0], [0], color=C_TEAL, linestyle="dashdot", linewidth=3.5, label="TPhi"),

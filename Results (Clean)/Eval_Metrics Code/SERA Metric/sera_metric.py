@@ -11,12 +11,17 @@ def _phi(y, ctrl_pts):
     nonzero derivatives at the outer knots -- verified against Moniz,
     Branco & Torgo (2017) Table 1 %Rare (see test_phi_matches_paper_pct_rare
     and docs/adr/0002-hermite-not-pchip.md in the sibling tsresample-kit
-    repo). Outside [lo, hi], phi is extended flat at 1.0, not extrapolated."""
+    repo). Edge handling follows ImbalancedLearningRegression's phi
+    (pchip_val), as used by Avelino et al.'s MetaIR sera.py: y strictly
+    below the first control point -> 1; y >= the last control point -> that
+    point's own phi (flat, since every recorded derivative is 0); y equal to
+    the first control point -> its own phi. Note R's uba::phi differs only
+    strictly below lo, where it returns the first point's phi."""
     pts = np.asarray(ctrl_pts, dtype=float).reshape(-1, 3)
     lo, hi = pts[0, 0], pts[-1, 0]
     spline = CubicHermiteSpline(x=pts[:, 0], y=pts[:, 1], dydx=pts[:, 2])
     inside = np.clip(spline(np.clip(y, lo, hi)), 0.0, 1.0)
-    return np.where((y <= lo) | (y >= hi), 1.0, inside)
+    return np.where(y < lo, 1.0, inside)
 
 
 def sera(y_true, y_pred, ctrl_pts, step=0.01):
