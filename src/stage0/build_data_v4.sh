@@ -4,6 +4,8 @@
 # DS13/DS23: knnImputation cannot run there, Exps.R falls back to
 # complete.cases -- the same code path data_v3 ran, so data_v3's files are used.
 # Symlinks, not copies: DS21/22 alone are ~900 MB.
+# NOTE: src/adapted/results/data_v3 was deleted locally on 2026-10-14; regenerate it
+# (EXP002_RUN_ID=data_v3 EXP002_NA_METHOD=complete.cases) before rerunning this script.
 # Usage (project root): bash src/stage0/build_data_v4.sh
 set -euo pipefail
 src=src/adapted/results
