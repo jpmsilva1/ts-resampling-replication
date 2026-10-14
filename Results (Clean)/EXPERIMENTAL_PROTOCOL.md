@@ -184,7 +184,7 @@ needs it, not the full pipeline.
 
 ```bash
 cd "Results (Clean)/Eval_Metrics Code"
-python3 run_all.py --tests     # ALWAYS first. 56 tests, ~3s.
+python3 run_all.py --tests     # ALWAYS first. 65 tests, ~3s.
 python3 run_all.py             # every generator, ~5–6 min serial
 python3 run_all.py --jobs 8    # same, generators of a stage in parallel (~6 min wall incl. SERA's own 8 workers)
 ```
@@ -423,7 +423,7 @@ Two conventions hold everywhere and should hold for anything added:
 A run is complete when all of these hold:
 
 - [ ] `python3 run_all.py --tests` — 56 passed.
-- [ ] `python3 run_all.py` — all 19 generators `ok`, none `FAILED`.
+- [ ] `python3 run_all.py` — all 24 generators `ok`, none `FAILED`.
 - [ ] `grep -rn "/Users/" "Eval_Metrics Code" --include='*.py'` returns only
       `paths.py`'s docstring.
 - [ ] File counts: 5 `.tex` each for F1/RMSE/SERA, 9 Summary, 5 Causal, 14 Paper

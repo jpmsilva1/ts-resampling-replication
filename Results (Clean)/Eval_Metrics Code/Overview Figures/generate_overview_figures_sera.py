@@ -32,10 +32,11 @@ apply_style()
 
 FAMILIES = ["lm", "svm", "mars", "rf", "rpart"]
 GROUPS = ["None", "UNDER", "OVER", "SmoteR"]
+GROUP_LABEL = {"None": "Baseline", "SmoteR": "SMOTE"}  # display only
 
 RARE_ORDER = [
     "DS20", "DS23", "DS19", "DS16", "DS18", "DS03", "DS15", "DS17",
-    "DS02", "DS10", "DS01", "DS14", "DS04", "DS12", "DS13", "DS11",
+    "DS02", "DS10", "DS01", "DS14", "DS04", "DS13", "DS12", "DS11",
     "DS09", "DS05", "DS06", "DS24", "DS07", "DS08", "DS21", "DS22",
 ]
 NATURAL_ORDER = [f"DS{i:02d}" for i in range(1, 25)]
@@ -147,7 +148,7 @@ def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title:
             if row_idx == 0:
                 ax.set_title(family.upper(), fontsize=23, fontweight='bold')
             if col_idx == 4:
-                ax.text(1.14, 0.5, group, transform=ax.transAxes, fontsize=21, fontweight='bold', va='center')
+                ax.text(1.14, 0.5, GROUP_LABEL.get(group, group), transform=ax.transAxes, fontsize=21, fontweight='bold', va='center')
             if row_idx < 3:
                 ax.set_xticklabels([])
             else:
@@ -156,7 +157,7 @@ def _plot_figure(data: pd.DataFrame, dataset_order: list, out_path: Path, title:
                 ax.set_ylabel("SERA (log scale)", fontsize=19)
 
     legend_elements = [
-        Line2D([0], [0], color=C_DARK, linestyle="solid", linewidth=3.5, label="Original"),
+        Line2D([0], [0], color=C_DARK, linestyle="solid", linewidth=3.5, label="Baseline"),
         Line2D([0], [0], color=C_TEAL, linestyle="dashed", linewidth=3.5, label="B"),
         Line2D([0], [0], color=C_TEAL, linestyle="dotted", linewidth=3.5, label="T"),
         Line2D([0], [0], color=C_TEAL, linestyle="dashdot", linewidth=3.5, label="TPhi"),

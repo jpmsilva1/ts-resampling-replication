@@ -27,6 +27,9 @@ OUT_DIR = ROOT / "Results (Clean)/Evaluation Metrics/Figures/Rank Distribution"
 METRICS = {"F1": True, "RMSE": False, "SERA": False}  # higher_is_better
 
 
+METRIC_LABEL = {"F1": r"$F_1^{\phi}$"}  # display name only; data keys stay "F1"
+
+
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for metric, higher_is_better in METRICS.items():
@@ -35,7 +38,7 @@ def main():
         # page) -- not stacked 3-to-a-page, which forces text back down no
         # matter how large the source fonts are.
         fig, axes = plt.subplots(1, 5, figsize=(26, 8.5), sharey=True)
-        fig.suptitle(f"{metric} rank distribution by model family (1 = best)",
+        fig.suptitle(f"{METRIC_LABEL.get(metric, metric)} rank distribution by model family (1 = best)",
                      fontsize=27, fontweight="bold")
         for ax, (family, family_label) in zip(axes, MODEL_FAMILIES.items()):
             matrix = dataset_by_strategy_matrix(long_df, family)

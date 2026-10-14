@@ -25,7 +25,7 @@ CD_METRICS_DIR = ROOT / "Results (Clean)/Eval_Metrics Code/CD Metrics"
 sys.path.insert(0, str(CD_METRICS_DIR))
 sys.path.insert(0, str(ROOT / "Results (Clean)/Eval_Metrics Code"))
 from generate_cd_diagrams import load_metric_long, dataset_by_strategy_matrix, MODEL_FAMILIES, STRATEGIES
-from plot_style import apply_style, save, C_DARK, C_TEAL, C_GOLD, C_GREY
+from plot_style import apply_style, save, C_TEAL, C_GOLD, C_GREY
 
 apply_style()
 
@@ -79,6 +79,9 @@ def plot_bayes_chart(probs: dict, title: str, out_path: Path):
     plt.close(fig)
 
 
+METRIC_LABEL = {"F1": r"$F_1^{\phi}$"}  # display name only; data keys stay "F1"
+
+
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for metric, cfg in METRICS.items():
@@ -90,7 +93,7 @@ def main():
                 diffs = diffs_for(matrix, strategy, cfg["higher_is_better"])
                 probs[strategy] = bayes_signedrank_probs(diffs, rope=cfg["rope"], seed=0)
             out_file = OUT_DIR / f"bayes_{metric.lower()}_{family}.png"
-            plot_bayes_chart(probs, f"{metric} vs. Baseline -- {family_label}", out_file)
+            plot_bayes_chart(probs, f"{METRIC_LABEL.get(metric, metric)} vs. Baseline -- {family_label}", out_file)
     print("Done.")
 
 

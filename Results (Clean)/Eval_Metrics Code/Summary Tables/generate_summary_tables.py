@@ -21,7 +21,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from tables_common import DS_LABELS, labels_for, MODEL_FAMILIES, STRATEGIES, ROOT, table_star
+from tables_common import labels_for, MODEL_FAMILIES, STRATEGIES, ROOT, table_star
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "CD Metrics"))
 from generate_cd_diagrams import load_metric_long

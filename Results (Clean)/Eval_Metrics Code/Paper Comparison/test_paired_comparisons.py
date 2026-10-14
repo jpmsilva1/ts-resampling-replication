@@ -267,3 +267,18 @@ def test_f1_decomposition_parts_sum_and_sign():
     assert np.allclose(d.dF_prec + d.dF_rec, d.dF)
     assert (np.sign(d.dF_prec) == np.sign(d.prec - d.prec0)).all()
     assert d.dF_rec.iloc[0] == 0  # recall unchanged on fold 1
+
+
+def test_wilcoxon_p_matches_r():
+    """Reference p-values from R 4.x wilcox.test(v, rep(0, length(v)), paired=TRUE),
+    run 2026-10-13: n = 50 (normal approximation in R), n = 20 without ties
+    (exact) and n = 20 with ties (normal approximation with tie correction)."""
+    import numpy as np
+    from paired_comparisons import wilcoxon_p
+    i = np.arange(1, 51)
+    x50 = i * (-1.0) ** i + 0.37 * i
+    x20 = np.array([0.5, -1.2, 2.3, 3.1, -0.4, 1.7, 2.2, -2.9, 4.4, 0.9,
+                    1.1, -0.2, 3.3, 2.8, -1.6, 0.7, 1.9, 2.6, -3.8, 4.1])
+    xt = np.array([1, 1, 2, 2, -3, 4, 4, -5, 6, 6, 7, 8, -9, 10, 11, 12, 13, -14, 15, 16], float)
+    for v, ref in [(x50, 0.080595119449), (x20, 0.044054031372), (xt, 0.023857650376)]:
+        assert abs(wilcoxon_p(v, np.zeros_like(v)) - ref) < 1e-9, (wilcoxon_p(v, np.zeros_like(v)), ref)

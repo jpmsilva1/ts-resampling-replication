@@ -25,7 +25,7 @@ CODE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(CODE))
 
 from paths import FIG_DIR, RAW_F1, require  # noqa: E402
-from plot_style import apply_style, save, C_DARK, C_TEAL, C_SAND, C_CORAL, C_GOLD, C_GREY  # noqa: E402
+from plot_style import apply_style, save, C_DARK, C_TEAL, C_CORAL, C_GOLD, C_GREY  # noqa: E402
 from tables_common import FAMILY_LABELS, parse_workflow  # noqa: E402
 
 sys.path.insert(0, str(CODE / "Paper Comparison"))
@@ -68,35 +68,43 @@ def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ch = paired_changes(cell_means())
 
-    fig, (ax, axd) = plt.subplots(1, 2, figsize=(13.5, 6.0), gridspec_kw={"width_ratios": [1.25, 1]})
+    fig, (ax, axd) = plt.subplots(1, 2, figsize=(15.0, 6.5), gridspec_kw={"width_ratios": [1.6, 1]})
 
     handles = []
     for prefix, color in GROUPS:
         g = ch[ch["strategy"].str.startswith(prefix)]
-        ax.scatter(g["d_rec"], g["d_prec"], s=22, color=color, alpha=0.35, linewidths=0, zorder=2)
-        handles.append(ax.scatter(g["d_rec"].mean(), g["d_prec"].mean(), marker="D", s=150,
+        ax.scatter(g["d_prec"], g["d_rec"], s=22, color=color, alpha=0.35, linewidths=0, zorder=2)
+        handles.append(ax.scatter(g["d_prec"].mean(), g["d_rec"].mean(), marker="D", s=150,
                                   color=color, edgecolor="white", lw=1.0, zorder=5,
                                   label=f"{prefix} mean ({len(g)} cells)"))
     ax.axhline(0, color="#777", lw=0.9, zorder=1)
     ax.axvline(0, color="#777", lw=0.9, zorder=1)
     # tint the two unambiguous quadrants: both improve (green), both worse (red)
-    (x0, x1), (y0, y1) = ax.get_xlim(), ax.get_ylim()
+    (x0, x1), (y0, _) = ax.get_xlim(), ax.get_ylim()
+    y1 = 0.6  # recall axis runs past the data so the equal-scale panel is not a thin strip
     ax.fill_between([0, x1], 0, y1, color="#2E9E44", alpha=0.10, lw=0, zorder=0)
     ax.fill_between([x0, 0], y0, 0, color="#D64545", alpha=0.10, lw=0, zorder=0)
     ax.set_xlim(x0, x1)
     ax.set_ylim(y0, y1)
+    # both axes are changes in a [0,1] metric: same unit length, so the y = x diagonal means equal gain
+    ax.set_aspect("equal", adjustable="box")
+    # equal-gain diagonal (meaningful because the axes share one scale): below it, precision gained more
+    lo, hi = max(x0, y0), min(x1, y1)
+    ax.plot([lo, hi], [lo, hi], ls="--", lw=1.0, color="#555", zorder=1)
+    ax.text(0.47, 0.47, "equal gain", rotation=45, rotation_mode="anchor", ha="center", va="bottom",
+            fontsize=9, style="italic", color="#555", zorder=6)
 
     up_p, up_r = ch["d_prec"] > 0, ch["d_rec"] > 0
     quads = [((0.98, 0.97), "right", "top", up_p & up_r, "Both improve"),
-             ((0.02, 0.97), "left", "top", up_p & ~up_r, "Only precision improves"),
-             ((0.98, 0.03), "right", "bottom", ~up_p & up_r, "Only recall improves"),
+             ((0.02, 0.97), "left", "top", ~up_p & up_r, "Only recall improves"),
+             ((0.98, 0.03), "right", "bottom", up_p & ~up_r, "Only precision improves"),
              ((0.02, 0.03), "left", "bottom", ~up_p & ~up_r, "Both worse")]
     for (x, y), ha, va, mask, label in quads:
         ax.text(x, y, f"{label}\n{mask.mean():.0%} of cells", transform=ax.transAxes, ha=ha, va=va,
                 fontsize=11, color="#333", fontweight="bold", zorder=6)
 
-    ax.set_xlabel("$\\Delta$recall$_\\phi$ vs. own baseline")
-    ax.set_ylabel("$\\Delta$precision$_\\phi$ vs. own baseline")
+    ax.set_xlabel("$\\Delta$precision$_\\phi$ vs. own baseline")
+    ax.set_ylabel("$\\Delta$recall$_\\phi$ vs. own baseline")
     ax.set_title(f"(a) Change vs. the baseline of the same dataset and family ({len(ch)} cells)",
                  fontsize=12)
     ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=3,

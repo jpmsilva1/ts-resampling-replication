@@ -14,13 +14,39 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy.stats import wilcoxon
+from scipy.stats import norm, rankdata, wilcoxon
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from tables_common import RESULTS_DATA
 
 DATA_DIR = RESULTS_DATA / "raw_iterations_by_dataset_v2"
 ALPHA = 0.05
+
+
+def wilcoxon_p(x: np.ndarray, y: np.ndarray) -> float:
+    """Two-sided paired Wilcoxon p-value computed the way R's
+    wilcox.test(x, y, paired=TRUE) does it (the test performanceEstimation
+    calls): zero differences dropped; the exact distribution only when n < 50
+    with no ties and no zeros; otherwise the normal approximation with tie and
+    continuity corrections. scipy's default uses the exact distribution at
+    n = 50, which flipped one paper-Table-4 cell (DS14, SVM O_TPhi vs O_B:
+    R p = 0.05004, scipy 0.0494)."""
+    d = np.asarray(x, dtype=float) - np.asarray(y, dtype=float)
+    zeroes = bool(np.any(d == 0))
+    d = d[d != 0]
+    n = d.size
+    if n == 0:
+        return 1.0
+    r = rankdata(np.abs(d))
+    _, counts = np.unique(r, return_counts=True)
+    if n < 50 and counts.max() == 1 and not zeroes:
+        return float(wilcoxon(d, method="exact").pvalue)
+    z = r[d > 0].sum() - n * (n + 1) / 4
+    sigma = np.sqrt(n * (n + 1) * (2 * n + 1) / 24 - (counts**3 - counts).sum() / 48)
+    if sigma == 0:
+        return 1.0
+    z = (z - np.sign(z) * 0.5) / sigma
+    return float(min(1.0, 2 * min(norm.cdf(z), norm.sf(z))))
 
 
 def compute_wl(baseline: np.ndarray, variant: np.ndarray, alpha: float = ALPHA) -> tuple[int, int, int, int, int]:
@@ -38,12 +64,7 @@ def compute_wl(baseline: np.ndarray, variant: np.ndarray, alpha: float = ALPHA) 
     diff = float(np.median(variant) - np.median(baseline))
     if diff == 0.0:
         return (0, 0, 0, 0, 1)
-    try:
-        p = wilcoxon(variant, baseline).pvalue
-    except ValueError:
-        p = 1.0
-    if np.isnan(p):
-        p = 1.0
+    p = wilcoxon_p(variant, baseline)
     if diff > 0:
         return (1, int(p < alpha), 0, 0, 0)
     return (0, 0, 1, int(p < alpha), 0)

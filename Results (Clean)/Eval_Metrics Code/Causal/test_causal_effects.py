@@ -204,3 +204,18 @@ if __name__ == "__main__":
     test_bootstrap_ci_is_wide_under_the_null()
     test_failure_rates_flags_folds_by_ratio_to_own_cell_median()
     print("All causal_effects checks passed.")
+
+
+def test_fold_median_baseline_wins_splits_ties():
+    """A cell where baseline ties another strategy at 4 decimals counts 1/2,
+    not 0 or 1 (the old idxmin rule gave the whole cell to whichever tied
+    strategy sorted first, e.g. UNDERTPhi over baseline on DS15/RF)."""
+    import pandas as pd
+    from generate_fold_median_check import baseline_wins
+    p = pd.DataFrame({
+        "dataset_id": ["A"] * 3 + ["B"] * 3,
+        "model_family": ["rf"] * 6,
+        "strategy": ["baseline", "UNDERTPhi", "SMOTEB"] * 2,
+        "value": [0.017371, 0.017406, 0.02, 0.5, 0.4, 0.6],
+    })
+    assert baseline_wins(p) == 0.5

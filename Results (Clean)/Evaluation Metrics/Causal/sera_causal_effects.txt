@@ -15,15 +15,15 @@ coefficient under
 this design's full balance.
 
               tau  p_value  p_holm
-OVERB      0.1778   0.0218  0.0436
-OVERT      0.2823   0.0001  0.0009
-OVERTPhi   0.1712   0.0331  0.0436
-SMOTEB     0.3097   0.0001  0.0009
-SMOTET     0.3393   0.0001  0.0009
-SMOTETPhi  0.4241   0.0001  0.0009
-UNDERB     0.2821   0.0002  0.0009
-UNDERT     0.2928   0.0001  0.0009
-UNDERTPhi  0.3554   0.0001  0.0009
+OVERB      0.1521   0.0490  0.0980
+OVERT      0.2640   0.0001  0.0009
+OVERTPhi   0.1539   0.0500  0.0980
+SMOTEB     0.2870   0.0001  0.0009
+SMOTET     0.3293   0.0001  0.0009
+SMOTETPhi  0.3366   0.0001  0.0009
+UNDERB     0.2296   0.0008  0.0024
+UNDERT     0.2482   0.0002  0.0010
+UNDERTPhi  0.2445   0.0004  0.0016
 
 === Leave-one-source-out jackknife (pooled tau_k) ===
 The 24 datasets are 7 sources (see plan): dropping an entire source and
@@ -31,13 +31,13 @@ recomputing tau_k shows how much of the pooled effect any single source
 (esp. the 7-dataset Istanbul Stock Exchange block) is carrying.
 
 strategy                 OVERB   OVERT  OVERTPhi  SMOTEB  SMOTET  SMOTETPhi  UNDERB  UNDERT  UNDERTPhi
-australian_electricity  0.1577  0.1482    0.1584  0.3114  0.3522     0.4384  0.2754  0.2886     0.3654
-bike_daily              0.1954  0.3184    0.1848  0.3185  0.3524     0.4432  0.2923  0.3028     0.3747
-bike_hourly             0.2076  0.3332    0.1996  0.3510  0.3773     0.4776  0.3295  0.3413     0.4189
-icelandic_river         0.1817  0.2924    0.1728  0.3244  0.3490     0.4344  0.2952  0.3044     0.3687
-istanbul_stock          0.1597  0.3158    0.1514  0.2255  0.2391     0.3366  0.2676  0.2733     0.3568
-porto_water             0.1324  0.2494    0.1288  0.2716  0.3068     0.3333  0.1839  0.1951     0.1853
-porto_weather           0.2134  0.3390    0.2049  0.3542  0.3839     0.4982  0.3370  0.3493     0.4320
+australian_electricity  0.1297  0.1283    0.1395  0.2867  0.3414     0.3429  0.2182  0.2400     0.2445
+bike_daily              0.1645  0.2965    0.1640  0.2913  0.3404     0.3382  0.2294  0.2493     0.2417
+bike_hourly             0.1768  0.3113    0.1788  0.3238  0.3653     0.3725  0.2665  0.2879     0.2859
+icelandic_river         0.1549  0.2733    0.1547  0.3008  0.3386     0.3431  0.2404  0.2580     0.2530
+istanbul_stock          0.1241  0.2910    0.1281  0.1930  0.2245     0.2130  0.1946  0.2113     0.2015
+porto_water             0.1276  0.2467    0.1259  0.2693  0.3046     0.3190  0.1736  0.1852     0.1644
+porto_weather           0.1874  0.3192    0.1863  0.3299  0.3748     0.4090  0.2845  0.3061     0.3209
 
 === Sensitivity: pooled tau_k excluding the SVM family ===
 cap_svm_train() bundles a training-window truncation into the SVM
@@ -45,60 +45,60 @@ OVER/SMOTE arms (see plan). If dropping svm barely moves tau_k, that
 co-treatment isn't driving the pooled conclusion.
 
               tau  p_value  p_holm
-OVERB      0.1625   0.0975  0.1950
-OVERT      0.2929   0.0007  0.0049
-OVERTPhi   0.1531   0.1158  0.1950
-SMOTEB     0.2660   0.0038  0.0152
-SMOTET     0.2943   0.0008  0.0049
-SMOTETPhi  0.3779   0.0001  0.0009
-UNDERB     0.2605   0.0039  0.0152
-UNDERT     0.2716   0.0023  0.0115
-UNDERTPhi  0.3395   0.0001  0.0009
+OVERB      0.1373   0.1440  0.2880
+OVERT      0.2755   0.0010  0.0070
+OVERTPhi   0.1369   0.1447  0.2880
+SMOTEB     0.2408   0.0071  0.0426
+SMOTET     0.2832   0.0007  0.0056
+SMOTETPhi  0.2876   0.0002  0.0018
+UNDERB     0.2025   0.0319  0.0957
+UNDERT     0.2239   0.0140  0.0670
+UNDERTPhi  0.2256   0.0134  0.0670
 
 === Per-family effects (exploratory, NOT multiplicity-adjusted) ===
      strategy     tau  p_value model_family
-0       OVERB  0.0502   0.6410           lm
-1       OVERT  0.0556   0.6245           lm
-2    OVERTPhi  0.0560   0.6191           lm
-3      SMOTEB  0.1480   0.3333           lm
-4      SMOTET  0.2428   0.1329           lm
-5   SMOTETPhi  0.2907   0.0637           lm
-6      UNDERB  0.2543   0.1138           lm
-7      UNDERT  0.2544   0.1170           lm
-8   UNDERTPhi  0.4342   0.0001           lm
-9       OVERB  0.2391   0.0010          svm
-10      OVERT  0.2400   0.0011          svm
-11   OVERTPhi  0.2434   0.0008          svm
-12     SMOTEB  0.4845   0.0001          svm
-13     SMOTET  0.5195   0.0001          svm
-14  SMOTETPhi  0.6091   0.0001          svm
-15     UNDERB  0.3682   0.0001          svm
-16     UNDERT  0.3774   0.0001          svm
-17  UNDERTPhi  0.4188   0.0001          svm
-18      OVERB  0.3760   0.2025         mars
-19      OVERT  0.9166   0.0001         mars
-20   OVERTPhi  0.3664   0.2013         mars
-21     SMOTEB  0.4947   0.1939         mars
-22     SMOTET  0.4521   0.1990         mars
-23  SMOTETPhi  0.5666   0.1632         mars
-24     UNDERB  0.2671   0.2064         mars
-25     UNDERT  0.2999   0.2137         mars
-26  UNDERTPhi  0.2800   0.2001         mars
-27      OVERB  0.0490   0.5445           rf
-28      OVERT  0.0429   0.5902           rf
-29   OVERTPhi  0.0426   0.5990           rf
-30     SMOTEB  0.1110   0.1598           rf
-31     SMOTET  0.1413   0.0721           rf
-32  SMOTETPhi  0.2516   0.0003           rf
-33     UNDERB  0.1807   0.0181           rf
-34     UNDERT  0.1825   0.0168           rf
-35  UNDERTPhi  0.2572   0.0003           rf
-36      OVERB  0.1747   0.0110        rpart
-37      OVERT  0.1564   0.0259        rpart
-38   OVERTPhi  0.1475   0.0352        rpart
-39     SMOTEB  0.3102   0.0001        rpart
-40     SMOTET  0.3409   0.0001        rpart
-41  SMOTETPhi  0.4025   0.0001        rpart
-42     UNDERB  0.3401   0.0001        rpart
-43     UNDERT  0.3496   0.0001        rpart
-44  UNDERTPhi  0.3867   0.0001        rpart
+0       OVERB  0.0163   0.8555           lm
+1       OVERT  0.0291   0.7451           lm
+2    OVERTPhi  0.0297   0.7367           lm
+3      SMOTEB  0.1275   0.3875           lm
+4      SMOTET  0.2287   0.1360           lm
+5   SMOTETPhi  0.2086   0.1645           lm
+6      UNDERB  0.2100   0.1561           lm
+7      UNDERT  0.2384   0.1223           lm
+8   UNDERTPhi  0.3327   0.0049           lm
+9       OVERB  0.2113   0.0013          svm
+10      OVERT  0.2184   0.0011          svm
+11   OVERTPhi  0.2219   0.0008          svm
+12     SMOTEB  0.4717   0.0001          svm
+13     SMOTET  0.5140   0.0001          svm
+14  SMOTETPhi  0.5328   0.0001          svm
+15     UNDERB  0.3383   0.0001          svm
+16     UNDERT  0.3458   0.0001          svm
+17  UNDERTPhi  0.3203   0.0001          svm
+18      OVERB  0.3394   0.2026         mars
+19      OVERT  0.8810   0.0004         mars
+20   OVERTPhi  0.3290   0.2017         mars
+21     SMOTEB  0.4371   0.2033         mars
+22     SMOTET  0.4435   0.2021         mars
+23  SMOTETPhi  0.4823   0.2003         mars
+24     UNDERB  0.2212   0.2097         mars
+25     UNDERT  0.2624   0.2142         mars
+26  UNDERTPhi  0.1802   0.2304         mars
+27      OVERB  0.0400   0.5448           rf
+28      OVERT  0.0416   0.5185           rf
+29   OVERTPhi  0.0425   0.5168           rf
+30     SMOTEB  0.1004   0.1074           rf
+31     SMOTET  0.1284   0.0379           rf
+32  SMOTETPhi  0.1437   0.0148           rf
+33     UNDERB  0.1040   0.0987           rf
+34     UNDERT  0.1090   0.0822           rf
+35  UNDERTPhi  0.1205   0.0501           rf
+36      OVERB  0.1536   0.0057        rpart
+37      OVERT  0.1500   0.0074        rpart
+38   OVERTPhi  0.1462   0.0084        rpart
+39     SMOTEB  0.2984   0.0001        rpart
+40     SMOTET  0.3321   0.0001        rpart
+41  SMOTETPhi  0.3156   0.0001        rpart
+42     UNDERB  0.2747   0.0001        rpart
+43     UNDERT  0.2856   0.0001        rpart
+44  UNDERTPhi  0.2690   0.0001        rpart

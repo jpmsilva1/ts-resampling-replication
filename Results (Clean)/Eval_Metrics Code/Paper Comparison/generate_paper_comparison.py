@@ -400,15 +400,15 @@ def gen_precision_recall():
 
     header = (r"\textbf{Family} & \textbf{Baseline Prec} & \textbf{Baseline Rec} & "
               r"\textbf{$\Delta$Prec} & \textbf{$\Delta$Rec} & \textbf{Prec share of $\Delta\Fphi$} & "
-              r"\textbf{Recall falls} & \textbf{Baseline $\approx$0 (of 24)}")
+              r"\textbf{Baseline $\approx$0 (of 24)}")
     body_rows = []
-    for fam_label, base_prec, base_rec, d_prec, d_rec, n_zero, n_total, sh, rd in rows:
+    for fam_label, base_prec, base_rec, d_prec, d_rec, n_zero, n_total, sh, _ in rows:
         body_rows.append(
             rf"{fam_label} & {base_prec:.3f} & {base_rec:.3f} & "
-            rf"{d_prec:+.3f} & {d_rec:+.3f} & {sh:.0%} & {rd:.0%} & {n_zero}/{n_total} \\".replace("%", r"\%")
+            rf"{d_prec:+.3f} & {d_rec:+.3f} & {sh:.0%} & {n_zero}/{n_total} \\".replace("%", r"\%")
         )
     body_rows.append(r"\midrule")
-    body_rows.append(rf"All families & & & & & {share:.0%} & {rec_down:.0%} & \\".replace("%", r"\%"))
+    body_rows.append(rf"All families & & & & & {share:.0%} & \\".replace("%", r"\%"))
     tex = table_star(
         caption=r"\textbf{Precision/recall delta vs.\ baseline, by family} --- checks "
                 r"the paper's claim (Sec.\ 5.1) that $\Fphi$ gains come chiefly from "
@@ -416,11 +416,11 @@ def gen_precision_recall():
                 rf"all 9 strategies and {N_OURS} datasets. \emph{{Prec share}}: the part of the "
                 r"mean $\Fphi$ change caused by the precision change, from splitting each fold's "
                 r"$\Fphi$ change against the baseline on the same fold into a precision part and "
-                r"a recall part (negative: precision fell and the gain came from recall). "
-                r"\emph{Recall falls}: share of (dataset, strategy) cells whose mean recall is "
-                r"below the baseline's.",
+                r"a recall part (negative: precision fell and the gain came from recall); "
+                r"the recall share is 100\% minus this."
+                r" \emph{Baseline $\approx$0}: number of datasets (of 24) where the baseline's mean precision is below 0.01, i.e.\ it almost never flags an extreme case correctly.",
         label="tab:exp002_cmp_cmp_precision_recall",
-        col_spec="lccccccc",
+        col_spec="lcccccc",
         header=header,
         body="\n".join(body_rows),
         resize=r"\textwidth",

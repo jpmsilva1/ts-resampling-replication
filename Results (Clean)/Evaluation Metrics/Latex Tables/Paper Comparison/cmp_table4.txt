@@ -23,7 +23,7 @@ O_T vs. O_B:
 
 O_TPhi vs. O_B:
   Linear Model (LM)        10(6)/14(10) [42%W]  vs.  paper 14(9)/10(7) [58%W]
-  SVM                      9(6)/15(8) [38%W]  vs.  paper 12(4)/12(7) [50%W]
+  SVM                      9(5)/15(8) [38%W]  vs.  paper 12(4)/12(7) [50%W]
   MARS                     10(1)/14(3) [42%W]  vs.  paper 11(3)/13(2) [46%W]
   Random Forest (RF)       8(1)/16(6) [33%W]  vs.  paper 8(2)/16(5) [33%W]
   CART (RPART)             12(3)/12(3) [50%W]  vs.  paper 14(3)/10(2) [58%W]

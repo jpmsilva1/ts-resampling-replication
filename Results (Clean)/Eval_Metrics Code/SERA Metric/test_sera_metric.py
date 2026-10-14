@@ -95,9 +95,22 @@ def test_phi_is_flat_one_outside_control_range():
     assert np.all(_phi(y, ctrl_pts) == 1.0)
 
 
+def test_phi_edges_match_iblr():
+    """One-sided ('High') control points as recorded for DS24 fold 1.
+    Expected values from ImbalancedLearningRegression's phi (the phi behind
+    Avelino et al.'s MetaIR sera.py), run 2026-10-12: below lo -> 1, at lo
+    -> lo's own phi (0), above hi -> hi's own phi. The old rule gave 1 at
+    y == lo, tagging every zero-consumption reading as extreme."""
+    ctrl_pts = [0, 0, 0, 36.25, 0, 0, 89.5, 1, 0]
+    y = np.array([-5, 0, 0.001, 10, 36.25, 60, 89.5, 120], dtype=float)
+    expected = [1, 0, 0, 0, 0, 0.4193288, 1, 1]
+    assert np.allclose(_phi(y, ctrl_pts), expected, atol=1e-6)
+
+
 if __name__ == "__main__":
     test_uniform_relevance_equals_sum_squared_errors()
     test_zero_for_perfect_predictions()
     test_phi_matches_paper_pct_rare()
     test_phi_is_flat_one_outside_control_range()
+    test_phi_edges_match_iblr()
     print("All SERA tests passed.")
