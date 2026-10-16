@@ -1,0 +1,39 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{Diagnostic: the pipeline's SERA is a quadrature approximation of the value used here.} This analysis computes SERA as $\sum_i \phi(y_i) e_i^2$, the exact continuous-limit value, because only that form is additive over regions. \texttt{SERA Metric/sera\_metric.py} instead integrates $SER_t$ over 101 thresholds with the trapezoid rule. The columns give the relative gap between the two over every fold $\times$ workflow of each dataset. It stays a fraction of a percent on most datasets, but the trapezoid rule overshoots where a point of near-zero relevance carries a very large squared error, because the rule credits it with half a threshold step instead of $\phi \approx 0$. Nothing in this section uses the trapezoid form.}
+\label{tab:exp002_region_quadrature}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Dataset} & \textbf{Median gap (\%)} & \textbf{95th pct.\ (\%)} & \textbf{Max (\%)} \\
+\midrule
+DS01 & 0.08 & 0.2 & 0.5 \\
+DS02 & 0.07 & 0.2 & 0.8 \\
+DS03 & 0.07 & 0.3 & 10.5 \\
+DS04 & 0.04 & 0.1 & 0.4 \\
+DS05 & 0.20 & 0.4 & 0.8 \\
+DS06 & 0.12 & 0.5 & 1.5 \\
+DS07 & 0.09 & 0.2 & 0.4 \\
+DS08 & 0.02 & 0.1 & 0.3 \\
+DS09 & 0.26 & 0.3 & 0.5 \\
+DS10 & 3.84 & 13.2 & 17.6 \\
+DS11 & 0.24 & 0.4 & 0.5 \\
+DS12 & 0.08 & 0.3 & 0.5 \\
+DS13 & 0.19 & 0.5 & 1.1 \\
+DS14 & 0.05 & 0.2 & 1.2 \\
+DS15 & 0.06 & 0.2 & 2.0 \\
+DS16 & 0.08 & 0.2 & 2.3 \\
+DS17 & 0.05 & 0.2 & 0.4 \\
+DS18 & 0.07 & 0.2 & 0.4 \\
+DS19 & 0.07 & 3.4 & 13.6 \\
+DS20 & 0.09 & 0.4 & 0.8 \\
+DS21 & 1.24 & 58.6 & 93.5 \\
+DS22 & 0.02 & 0.5 & 2.0 \\
+DS23 & 0.53 & 43.9 & 98.1 \\
+DS24 & 1.74 & 28.5 & 86.5 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

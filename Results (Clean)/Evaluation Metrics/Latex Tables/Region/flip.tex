@@ -1,0 +1,20 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{The verdict reverses between regions.} Strategy wins and losses against the un-resampled baseline, summed over all 1080 (dataset $\times$ model family $\times$ strategy) comparisons, with the significant count in parentheses. The same fitted models and the same predictions are scored twice; only the set of instances changes.}
+\label{tab:exp002_region_flip}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Metric} & \multicolumn{2}{c}{\textbf{Rare region}} & \multicolumn{2}{c}{\textbf{Normal region}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & \textbf{Wins (sig)} & \textbf{Losses (sig)} & \textbf{Wins (sig)} & \textbf{Losses (sig)} \\
+\midrule
+MAE & 688 (605) & 392 (261) & 16 (8) & 1064 (1050) \\
+RMSE & 587 (508) & 493 (371) & 13 (7) & 1067 (1059) \\
+SERA & 590 (505) & 490 (377) & 94 (67) & 986 (964) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

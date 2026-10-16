@@ -196,9 +196,9 @@ stage. Each generator runs as a subprocess with its own directory as cwd.
 
 | Stage | Generators | Reads | Writes |
 |---|---|---|---|
-| **1** | `RMSE Metric/generate_rmse_tables.py`, `SERA Metric/generate_sera_tables.py` | `raw_predictions_by_dataset/` | `Latex Tables/{RMSE,SERA}/`, **`raw_rmse_by_dataset/`, `raw_sera_by_dataset/`** |
-| **2** | `F1 Metric/generate_f1_tables.py` | `raw_iterations_by_dataset_v2/` | `Latex Tables/F1/` |
-| **3** | `CD Metrics`, `Bayes Signed-Rank`, `Summary Tables`, `Rank Distribution`, 4× `Heatmaps`, 2× `Overview Figures` | all three raw metric folders | `Figures/{CD,Bayes,Rank Distribution,Heatmaps,Overview}/`, `Latex Tables/Summary/` |
+| **1** | `RMSE Metric/generate_rmse_tables.py`, `SERA Metric/generate_sera_tables.py`, `Region Analysis/run_region_analysis.py` | `raw_predictions_by_dataset/` | `Latex Tables/{RMSE,SERA}/`, **`raw_rmse_by_dataset/`, `raw_sera_by_dataset/`, `raw_region_by_dataset/`** |
+| **2** | `F1 Metric/generate_f1_tables.py`, `Region Analysis/verify_region.py` | `raw_iterations_by_dataset_v2/`; `raw_region_by_dataset/` + `raw_rmse_by_dataset/` | `Latex Tables/F1/` |
+| **3** | `Region Analysis/generate_region_tables.py`, `CD Metrics`, `Bayes Signed-Rank`, `Summary Tables`, `Rank Distribution`, 4× `Heatmaps`, 2× `Overview Figures` | all raw metric folders | `Figures/{Region,CD,Bayes,Rank Distribution,Heatmaps,Overview}/`, `Latex Tables/{Region,Summary}/` |
 | **4** | `Regression/generate_regression.py`, then `Causal/` × 4 | `raw_*_by_dataset/` | `Evaluation Metrics/{Regression,Causal}/`, `Latex Tables/Causal/`, `Figures/{Causal,Metric Diagnostics}/` |
 | **5** | `Paper Comparison/generate_paper_comparison.py` | `raw_iterations_by_dataset_v2/` | `Latex Tables/Paper Comparison/` |
 
@@ -246,6 +246,15 @@ LaTeX aesthetic comes from `tables_common.table_star()` (booktabs,
   decimals** (matching displayed precision), not raw float equality.
 - **`Figures/Heatmaps/`, `Figures/Overview/`** — value/delta/Bayes/win-count
   heatmaps and per-metric overview panels.
+- **`Latex Tables/Region/`, `Figures/Region/`** — relevance-region decomposition.
+  The same predictions are scored twice, on the rare points (`phi(y) >= 0.9`, the
+  fold's boxplot φ) and on the normal ones, and the paper's paired comparison is
+  rerun inside each region with MAE, RMSE and SERA (Wilcoxon W/L plus Bayesian
+  signed-rank, ROPE ±5%). F1 is absent because utility-based precision/recall are
+  set-level and undefined on the normal region. Region SERA is the exact
+  `sum(phi * e^2)`, not the trapezoid form of `SERA Metric/`. `verify_region.py`
+  (stage 2) checks that the two regions' per-fold SSE recombine to the published
+  per-fold RMSE; `region_numbers.tex` carries every number quoted in prose.
 
 ### Stage 4 — effect size
 
@@ -423,7 +432,7 @@ Two conventions hold everywhere and should hold for anything added:
 A run is complete when all of these hold:
 
 - [ ] `python3 run_all.py --tests` — 56 passed.
-- [ ] `python3 run_all.py` — all 24 generators `ok`, none `FAILED`.
+- [ ] `python3 run_all.py` — all 27 generators `ok`, none `FAILED`.
 - [ ] `grep -rn "/Users/" "Eval_Metrics Code" --include='*.py'` returns only
       `paths.py`'s docstring.
 - [ ] File counts: 5 `.tex` each for F1/RMSE/SERA, 9 Summary, 5 Causal, 14 Paper

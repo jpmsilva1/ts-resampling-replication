@@ -1,0 +1,28 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{Size of the trade, by strategy.} Median percentage change in each metric, strategy against its own baseline, over the 24 datasets $\times$ 5 model families. \textbf{Positive means the strategy has the lower error}, and bold marks the cells where the strategy is ahead. Computed on the log ratio, as the Bayesian test is, because these metrics span orders of magnitude across datasets and raw differences cannot be pooled. Table~\ref{tab:exp002_region_flip} reports which way each comparison goes; this table reports by how much.}
+\label{tab:exp002_region_effect}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Strategy} & \multicolumn{2}{c}{\textbf{MAE}} & \multicolumn{2}{c}{\textbf{RMSE}} & \multicolumn{2}{c}{\textbf{SERA}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & \textbf{Rare} & \textbf{Normal} & \textbf{Rare} & \textbf{Normal} & \textbf{Rare} & \textbf{Normal} \\
+\midrule
+\texttt{UNDERB} & \textbf{+9.4} & -33.7 & \textbf{+1.6} & -32.0 & \textbf{+4.6} & -32.2 \\
+\texttt{UNDERT} & \textbf{+8.6} & -34.0 & \textbf{+1.7} & -32.4 & \textbf{+3.8} & -34.1 \\
+\texttt{UNDERTPhi} & \textbf{+9.5} & -39.2 & \textbf{+3.3} & -37.4 & \textbf{+5.1} & -33.3 \\
+\texttt{OVERB} & \textbf{+2.8} & -25.9 & \textbf{+0.5} & -27.0 & \textbf{+1.1} & -22.4 \\
+\texttt{OVERT} & \textbf{+2.3} & -26.3 & \textbf{+0.4} & -26.2 & \textbf{+0.5} & -24.9 \\
+\texttt{OVERTPhi} & \textbf{+2.1} & -26.3 & \textbf{+0.3} & -26.3 & \textbf{+0.3} & -24.6 \\
+\texttt{SMOTEB} & \textbf{+10.4} & -39.6 & \textbf{+2.9} & -38.7 & \textbf{+4.3} & -41.9 \\
+\texttt{SMOTET} & \textbf{+7.4} & -42.5 & -0.2 & -41.7 & -0.9 & -43.7 \\
+\texttt{SMOTETPhi} & \textbf{+10.5} & -48.1 & \textbf{+0.3} & -45.9 & -0.4 & -46.7 \\
+\midrule
+\textbf{All strategies} & \textbf{+6.8} & -34.7 & \textbf{+0.6} & -33.8 & \textbf{+0.8} & -35.1 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
