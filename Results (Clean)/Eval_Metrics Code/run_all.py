@@ -42,7 +42,12 @@ CODE = Path(__file__).resolve().parent
 PIPELINE = [
     (1, "RMSE Metric", "generate_rmse_tables.py"),
     (1, "SERA Metric", "generate_sera_tables.py"),
+    (1, "Region Analysis", "run_region_analysis.py"),
     (2, "F1 Metric", "generate_f1_tables.py"),
+    # verify_region checks the region split against stage 1's published RMSE,
+    # so it must follow it; generate_region_tables consumes both.
+    (2, "Region Analysis", "verify_region.py"),
+    (3, "Region Analysis", "generate_region_tables.py"),
     (3, "CD Metrics", "generate_cd_diagrams.py"),
     (3, "Bayes Signed-Rank", "generate_bayes_diagrams.py"),
     (3, "Summary Tables", "generate_summary_tables.py"),

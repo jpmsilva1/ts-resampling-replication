@@ -1,0 +1,39 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{How much rare region there is to score on.} Per dataset: test points per Monte Carlo fold, the share of them with $\phi(y) \ge 0.9$, the smallest and largest per-fold rare count, and the number of folds holding no rare case at all. Those folds are dropped from the dataset's paired vector, from both sides at once, so the pairing stays exact.}
+\label{tab:exp002_region_diag}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Dataset} & \textbf{Test points/fold} & \textbf{Rare (\%)} & \textbf{Min rare} & \textbf{Max rare} & \textbf{Empty folds} \\
+\midrule
+DS01 & 180 & 7.82 & 6 & 34 & 0 \\
+DS02 & 180 & 4.49 & 5 & 11 & 0 \\
+DS03 & 180 & 4.89 & 3 & 17 & 0 \\
+DS04 & 180 & 18.98 & 22 & 44 & 0 \\
+DS05 & 4342 & 3.64 & 143 & 174 & 0 \\
+DS06 & 4342 & 5.13 & 183 & 326 & 0 \\
+DS07 & 4342 & 12.75 & 504 & 591 & 0 \\
+DS08 & 4342 & 29.38 & 1114 & 1357 & 0 \\
+DS09 & 271 & 22.51 & 39 & 77 & 0 \\
+DS10 & 361 & 4.73 & 12 & 19 & 0 \\
+DS11 & 361 & 9.85 & 29 & 42 & 0 \\
+DS12 & 361 & 11.00 & 24 & 47 & 0 \\
+DS13 & 274 & 14.16 & 12 & 49 & 0 \\
+DS14 & 131 & 13.63 & 10 & 32 & 0 \\
+DS15 & 131 & 5.34 & 3 & 11 & 0 \\
+DS16 & 131 & 9.22 & 6 & 15 & 0 \\
+DS17 & 131 & 9.66 & 6 & 19 & 0 \\
+DS18 & 131 & 8.82 & 5 & 17 & 0 \\
+DS19 & 131 & 7.65 & 3 & 15 & 0 \\
+DS20 & 131 & 2.73 & 1 & 6 & 0 \\
+DS21 & 11979 & 1.83 & 7 & 613 & 0 \\
+DS22 & 11979 & 10.11 & 208 & 5559 & 0 \\
+DS23 & 4969 & 23.98 & 0 & 4969 & 7 \\
+DS24 & 5119 & 5.22 & 7 & 450 & 0 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

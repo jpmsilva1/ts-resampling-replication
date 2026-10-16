@@ -1,0 +1,24 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{RMSE on the rare region only.} Paired Wilcoxon signed-rank test of each strategy against its own un-resampled baseline, over the Monte Carlo folds of each of the 24 datasets, counted as Wins (significant) / Losses (significant) at $\alpha = 0.05$. A win means the strategy has the \emph{lower} RMSE inside the region. The region is fixed by $\phi(y)$, so both sides are scored on exactly the same points. Ties are omitted, so a row need not sum to 24.}
+\label{tab:exp002_region_wl_rmse_rare}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Model} & \textbf{\texttt{UNDERB}} & \textbf{\texttt{UNDERT}} & \textbf{\texttt{UNDERTPhi}} & \textbf{\texttt{OVERB}} & \textbf{\texttt{OVERT}} & \textbf{\texttt{OVERTPhi}} & \textbf{\texttt{SMOTEB}} & \textbf{\texttt{SMOTET}} & \textbf{\texttt{SMOTETPhi}} \\
+\midrule
+Linear Model (LM) & 14 (14) / 10 (9) & 14 (14) / 10 (9) & 15 (15) / 9 (8) & 15 (15) / 9 (7) & 16 (14) / 8 (7) & 16 (14) / 8 (7) & 15 (14) / 9 (8) & 16 (15) / 8 (8) & 16 (14) / 8 (7) \\
+SVM & 13 (10) / 11 (9) & 12 (9) / 12 (8) & 13 (12) / 11 (9) & 12 (11) / 12 (9) & 13 (12) / 11 (9) & 13 (12) / 11 (9) & 11 (10) / 13 (12) & 10 (7) / 14 (11) & 11 (8) / 13 (10) \\
+MARS & 16 (12) / 8 (6) & 16 (15) / 8 (6) & 16 (14) / 8 (4) & 13 (13) / 11 (8) & 14 (13) / 10 (7) & 13 (13) / 11 (9) & 13 (13) / 11 (10) & 12 (11) / 12 (11) & 13 (11) / 11 (9) \\
+Random Forest (RF) & 14 (13) / 10 (5) & 15 (13) / 9 (5) & 16 (14) / 8 (6) & 12 (9) / 12 (8) & 12 (11) / 12 (7) & 11 (7) / 13 (8) & 16 (16) / 8 (8) & 14 (13) / 10 (6) & 13 (13) / 11 (6) \\
+CART (RPART) & 13 (9) / 11 (10) & 12 (10) / 12 (10) & 10 (9) / 14 (11) & 10 (5) / 14 (9) & 8 (6) / 16 (8) & 8 (6) / 16 (9) & 12 (7) / 12 (9) & 11 (7) / 13 (10) & 9 (5) / 15 (10) \\
+\midrule
+\textbf{Total} & \textbf{70 (58) / 50 (39)} & \textbf{69 (61) / 51 (38)} & \textbf{70 (64) / 50 (38)} & \textbf{62 (53) / 58 (41)} & \textbf{63 (56) / 57 (38)} & \textbf{61 (52) / 59 (42)} & \textbf{67 (60) / 53 (47)} & \textbf{63 (53) / 57 (46)} & \textbf{62 (51) / 58 (42)} \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table}

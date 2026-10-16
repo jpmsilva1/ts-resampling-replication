@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{Bayesian signed-rank test: posterior probability that the strategy practically wins}, averaged over the five model families. The test of \citet{benavoli2017time} is run on the per-dataset log ratio against the baseline, with a region of practical equivalence of $\pm5\%$. A value near $0$ means the baseline practically wins, a value near $1$ means the strategy does, and the remaining probability mass sits in the draw band. Read alongside Table~\ref{tab:exp002_region_flip}: the Wilcoxon test asks whether a difference exists, this one asks whether it is large enough to matter.}
+\label{tab:exp002_region_bayes}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{llccccccccc}
+\toprule
+\textbf{Metric} & \textbf{Region} & \textbf{\texttt{UNDERB}} & \textbf{\texttt{UNDERT}} & \textbf{\texttt{UNDERTPhi}} & \textbf{\texttt{OVERB}} & \textbf{\texttt{OVERT}} & \textbf{\texttt{OVERTPhi}} & \textbf{\texttt{SMOTEB}} & \textbf{\texttt{SMOTET}} & \textbf{\texttt{SMOTETPhi}} \\
+\midrule
+MAE & rare & 0.95 & 0.95 & 0.98 & 0.63 & 0.62 & 0.62 & 0.94 & 0.85 & 0.95 \\
+MAE & normal & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+RMSE & rare & 0.36 & 0.36 & 0.51 & 0.32 & 0.28 & 0.26 & 0.29 & 0.22 & 0.33 \\
+RMSE & normal & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+SERA & rare & 0.66 & 0.64 & 0.68 & 0.43 & 0.46 & 0.42 & 0.43 & 0.35 & 0.39 \\
+SERA & normal & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table}

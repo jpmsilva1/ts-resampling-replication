@@ -1,0 +1,26 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{Which rare cases improve.} Quantiles of the absolute error inside the rare region, strategy divided by its baseline, median over the 1080 (dataset $\times$ model family $\times$ strategy) comparisons. \textbf{A ratio below $1$ means the strategy is better}, and bold marks those cells. The ratio rises monotonically with the quantile and crosses $1$ between the 75th and 90th percentile: resampling shrinks the smaller rare-case errors and enlarges the largest ones. This is the mechanism behind the gap between the MAE and RMSE columns of Table~\ref{tab:exp002_region_effect}. Errors are pooled over a cell's folds, so the table describes the error distribution rather than anything the fold-level tests rank, and the two right-hand columns rest on few points per cell.}
+\label{tab:exp002_region_quantiles}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Strategy} & \textbf{25th} & \textbf{50th} & \textbf{75th} & \textbf{90th} & \textbf{99th} & \textbf{Max} \\
+\midrule
+\texttt{UNDERB} & \textbf{0.724} & \textbf{0.915} & 1.001 & 1.047 & 1.115 & 1.182 \\
+\texttt{UNDERT} & \textbf{0.710} & \textbf{0.903} & 1.017 & 1.046 & 1.118 & 1.189 \\
+\texttt{UNDERTPhi} & \textbf{0.665} & \textbf{0.895} & 1.018 & 1.036 & 1.118 & 1.235 \\
+\texttt{OVERB} & \textbf{0.878} & \textbf{0.952} & \textbf{0.990} & 1.010 & 1.078 & 1.129 \\
+\texttt{OVERT} & \textbf{0.866} & \textbf{0.956} & \textbf{0.996} & 1.022 & 1.075 & 1.145 \\
+\texttt{OVERTPhi} & \textbf{0.867} & \textbf{0.951} & \textbf{0.998} & 1.021 & 1.078 & 1.171 \\
+\texttt{SMOTEB} & \textbf{0.674} & \textbf{0.895} & 1.011 & 1.078 & 1.157 & 1.300 \\
+\texttt{SMOTET} & \textbf{0.707} & \textbf{0.901} & 1.045 & 1.116 & 1.173 & 1.361 \\
+\texttt{SMOTETPhi} & \textbf{0.642} & \textbf{0.869} & 1.050 & 1.112 & 1.187 & 1.339 \\
+\midrule
+\textbf{All strategies} & \textbf{0.735} & \textbf{0.918} & 1.007 & 1.047 & 1.114 & 1.203 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

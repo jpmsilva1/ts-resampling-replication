@@ -1,0 +1,24 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{RMSE on the normal region only.} Paired Wilcoxon signed-rank test of each strategy against its own un-resampled baseline, over the Monte Carlo folds of each of the 24 datasets, counted as Wins (significant) / Losses (significant) at $\alpha = 0.05$. A win means the strategy has the \emph{lower} RMSE inside the region. The region is fixed by $\phi(y)$, so both sides are scored on exactly the same points. Ties are omitted, so a row need not sum to 24.}
+\label{tab:exp002_region_wl_rmse_normal}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Model} & \textbf{\texttt{UNDERB}} & \textbf{\texttt{UNDERT}} & \textbf{\texttt{UNDERTPhi}} & \textbf{\texttt{OVERB}} & \textbf{\texttt{OVERT}} & \textbf{\texttt{OVERTPhi}} & \textbf{\texttt{SMOTEB}} & \textbf{\texttt{SMOTET}} & \textbf{\texttt{SMOTETPhi}} \\
+\midrule
+Linear Model (LM) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) \\
+SVM & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) \\
+MARS & 2 (1) / 22 (22) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) \\
+Random Forest (RF) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 1 (1) / 23 (23) & 2 (2) / 22 (22) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) \\
+CART (RPART) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 3 (0) / 21 (21) & 2 (2) / 22 (19) & 1 (1) / 23 (18) & 1 (0) / 23 (23) & 1 (0) / 23 (23) & 0 (0) / 24 (24) \\
+\midrule
+\textbf{Total} & \textbf{2 (1) / 118 (118)} & \textbf{0 (0) / 120 (120)} & \textbf{0 (0) / 120 (120)} & \textbf{3 (0) / 117 (117)} & \textbf{3 (3) / 117 (114)} & \textbf{3 (3) / 117 (112)} & \textbf{1 (0) / 119 (119)} & \textbf{1 (0) / 119 (119)} & \textbf{0 (0) / 120 (120)} \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table}

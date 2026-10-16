@@ -1,0 +1,24 @@
+\begin{table}[!htbp]
+\centering
+\caption{\textbf{SERA on the normal region only.} Paired Wilcoxon signed-rank test of each strategy against its own un-resampled baseline, over the Monte Carlo folds of each of the 24 datasets, counted as Wins (significant) / Losses (significant) at $\alpha = 0.05$. A win means the strategy has the \emph{lower} SERA inside the region. The region is fixed by $\phi(y)$, so both sides are scored on exactly the same points. Ties are omitted, so a row need not sum to 24.}
+\label{tab:exp002_region_wl_sera_normal}
+\vspace{4pt}
+\noindent
+\makebox[\textwidth][c]{%
+\resizebox{1.15\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Model} & \textbf{\texttt{UNDERB}} & \textbf{\texttt{UNDERT}} & \textbf{\texttt{UNDERTPhi}} & \textbf{\texttt{OVERB}} & \textbf{\texttt{OVERT}} & \textbf{\texttt{OVERTPhi}} & \textbf{\texttt{SMOTEB}} & \textbf{\texttt{SMOTET}} & \textbf{\texttt{SMOTETPhi}} \\
+\midrule
+Linear Model (LM) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (2) / 21 (21) & 3 (3) / 21 (21) \\
+SVM & 1 (1) / 23 (22) & 1 (0) / 23 (22) & 2 (2) / 22 (22) & 0 (0) / 24 (24) & 0 (0) / 24 (24) & 1 (1) / 23 (23) & 0 (0) / 24 (24) & 1 (1) / 23 (23) & 3 (2) / 21 (21) \\
+MARS & 2 (1) / 22 (22) & 1 (0) / 23 (23) & 5 (3) / 19 (19) & 1 (0) / 23 (22) & 1 (1) / 23 (22) & 1 (1) / 23 (22) & 1 (1) / 23 (21) & 0 (0) / 24 (22) & 2 (2) / 22 (20) \\
+Random Forest (RF) & 2 (2) / 22 (22) & 2 (2) / 22 (22) & 3 (2) / 21 (21) & 3 (3) / 21 (21) & 3 (3) / 21 (20) & 4 (4) / 20 (19) & 2 (1) / 22 (21) & 1 (1) / 23 (23) & 2 (2) / 22 (22) \\
+CART (RPART) & 1 (1) / 23 (23) & 1 (1) / 23 (23) & 2 (2) / 22 (20) & 4 (3) / 20 (19) & 4 (1) / 20 (18) & 4 (2) / 20 (19) & 2 (0) / 22 (22) & 1 (0) / 23 (22) & 3 (2) / 21 (20) \\
+\midrule
+\textbf{Total} & \textbf{9 (7) / 111 (110)} & \textbf{8 (5) / 112 (111)} & \textbf{15 (11) / 105 (103)} & \textbf{11 (8) / 109 (107)} & \textbf{11 (7) / 109 (105)} & \textbf{13 (10) / 107 (104)} & \textbf{8 (4) / 112 (109)} & \textbf{6 (4) / 114 (111)} & \textbf{13 (11) / 107 (104)} \\
+\bottomrule
+\end{tabular}%
+}%
+}
+\end{table}
